@@ -1,0 +1,7 @@
+<h1>Invitation to {{ invite.store.name }}</h1>
+<p>You have been invited as {{ invite.role }}.</p>
+
+<form method="post" action="{% url 'store:confirm_invite' invite.token %}">
+    {% csrf_token %}
+    <button type="submit">Accept Invite</button>
+</form>

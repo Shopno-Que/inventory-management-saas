@@ -1,0 +1,7 @@
+<h1>Create Store</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Store Name" required>
+    <button type="submit">Create</button>
+</form>
+<a href="{% url 'user:profile' %}">Back to Profile</a>

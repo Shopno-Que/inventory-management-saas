@@ -1,0 +1,11 @@
+<h1>Invite Staff to {{ store.name }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="Email" required>
+    <select name="role">
+        <option value="staff">Staff</option>
+        <option value="owner">Owner</option>
+    </select>
+    <button type="submit">Send Invite</button>
+</form>
+<a href="{% url 'store:store_detail' store.id %}">Back to Store</a>

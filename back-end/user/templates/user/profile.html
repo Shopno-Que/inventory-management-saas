@@ -1,0 +1,20 @@
+<h1>User Profile</h1>
+
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>First name:</strong> {{ user.first_name }}</p>
+<p><strong>Last name:</strong> {{ user.last_name }}</p>
+
+<h1>My Stores</h1>
+<ul>
+    {% for team in teams %}
+    <li><a href="{% url 'store:store_detail' team.store.id %}">{{ team.store.name }} ({{ team.role }})</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'store:create_store' %}">Create New Store</a>
+
+<p><a href="{% url 'user:password_change' %}">Change Password</a></p>
+<form action="{% url 'user:signout' %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Signout</button>
+</form>
