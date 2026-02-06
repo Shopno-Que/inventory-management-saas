@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import profile, signup
+from .views import settings, signup, stores
 from django.urls import reverse_lazy
 
 app_name = "user"
@@ -17,7 +17,8 @@ urlpatterns = [
         name='signout'
     ),
     path("signup/", signup, name="signup"),
-    path('profile/', profile, name='profile'),
+    path('settings/', settings, name='settings'),
+    path('stores/', stores, name='stores'),
     path('password_change/',
         auth_views.PasswordChangeView.as_view(
           template_name='user/password_change.html', 

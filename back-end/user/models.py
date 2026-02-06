@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
-
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -28,14 +27,16 @@ class User(AbstractUser):
         ('saas_staff', 'SaaS Staff'),
         ('user', 'Regular User'),
     ]
-
+    first_name = None
+    last_name = None
+    name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    objects = UserManager()   # ⭐ VERY IMPORTANT
+    objects = UserManager()
 
     def __str__(self):
         return self.email

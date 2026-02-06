@@ -1,0 +1,91 @@
+<!-- Floating Chat Button -->
+<button id="chatToggle"
+    class="fixed bottom-6 right-6 bg-indigo-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-indigo-700 transition z-50">
+    💬
+</button>
+
+<!-- Chat Window -->
+<div id="chatBox"
+    class="hidden fixed inset-0 md:inset-auto md:bottom-24 md:right-6 md:w-80 md:h-[500px] bg-white shadow-2xl border border-slate-200 flex flex-col overflow-hidden z-50">
+    {% comment %}  {% endcomment %}
+    <!-- Header -->
+    <div class="bg-indigo-600 text-white px-4 py-3 flex justify-between items-center">
+        <h3 class="font-semibold text-sm">Quick Chat</h3>
+        <button id="chatClose" class="text-white/80 hover:text-white">✕</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="chatMessages"
+        class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50 text-sm">
+
+        <!-- Example message -->
+        <div class="flex">
+            <div class="bg-white px-3 py-2 rounded-xl shadow text-slate-700">
+                Hello 👋 How can I help?
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Input -->
+    <form id="chatForm" class="border-t p-3 flex gap-2 bg-white">
+        <input id="chatInput"
+            type="text"
+            placeholder="Type a message..."
+            class="flex-1 border border-slate-200 px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+
+        <button
+            class="bg-indigo-600 text-white px-4 py-2 rounded-2xl mt-1 hover:bg-indigo-700 transition">
+            Send
+        </button>
+    </form>
+</div>
+
+<!-- JS -->
+<script>
+const toggleBtn = document.getElementById('chatToggle');
+const chatBox = document.getElementById('chatBox');
+const closeBtn = document.getElementById('chatClose');
+const form = document.getElementById('chatForm');
+const input = document.getElementById('chatInput');
+const messages = document.getElementById('chatMessages');
+
+toggleBtn.onclick = () => chatBox.classList.toggle('hidden');
+closeBtn.onclick = () => chatBox.classList.add('hidden');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    // user bubble
+    const div = document.createElement('div');
+    div.className = "flex justify-end";
+
+    div.innerHTML = `
+        <div class="bg-indigo-600 text-white px-3 py-2 rounded-xl shadow max-w-[75%]">
+            ${text}
+        </div>
+    `;
+
+    messages.appendChild(div);
+    input.value = "";
+    messages.scrollTop = messages.scrollHeight;
+
+    // fake bot reply (demo)
+    setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = "flex";
+
+        reply.innerHTML = `
+            <div class="bg-white px-3 py-2 rounded-xl shadow text-slate-700">
+                Got it 👍
+            </div>
+        `;
+
+        messages.appendChild(reply);
+        messages.scrollTop = messages.scrollHeight;
+    }, 500);
+});
+</script>

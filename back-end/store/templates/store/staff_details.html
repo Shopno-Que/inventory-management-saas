@@ -1,0 +1,122 @@
+{% extends "layouts/store_settings_base.html" %}
+{% block subtitle %}Staff{% endblock subtitle %}
+{% block store_setting %}
+<a href="{% url 'store:store_staff' store.id %}" class="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors group">
+    <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    ফিরে যান
+</a>
+<div class="bg-white rounded-[2.5rem] border border-slate-200 p-8 text-center shadow-sm">
+    <div class="relative inline-block mb-4">
+        <div class="w-32 h-32 bg-indigo-50 rounded-[2.5rem] flex items-center justify-center text-indigo-600 text-4xl font-black italic border-4 border-white shadow-xl mx-auto">
+              {% if staff.user.name %}
+                  {{ staff.user.name|first|upper }}
+              {% else %}
+                  {{ staff.user.email|first|upper }}
+              {% endif %}
+        </div>
+    </div>
+    <h3 class="text-2xl font-bold text-slate-900">
+      {% if staff.user.name %}
+          {{ staff.user.name }}
+      {% else %}
+          {{ staff.user.email }}
+      {% endif %}
+    </h3>
+    <p class="text-sm font-bold text-indigo-600 uppercase tracking-widest mt-1 italic">
+      {{ staff.role }}
+    </p>
+    
+    <div class="mt-8 pt-8 border-t border-slate-50 space-y-4">
+        <div class="flex items-center justify-between text-sm">
+            <span class="text-slate-400">স্টাফ আইডি</span>
+            <span class="font-bold text-slate-700">#{{ staff.id }}</span>
+        </div>
+        {% comment %} <div class="flex items-center justify-between text-sm">
+            <span class="text-slate-400">যোগদানের তারিখ</span>
+            <span class="font-bold text-slate-700">{{ staff.created_at|date:"d M, Y" }}</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+            <span class="text-slate-400">ফোন</span>
+            <span class="font-bold text-slate-700">০১৭০০-১১২২৩৩</span>
+        </div> {% endcomment %}
+    </div>
+</div>
+
+  <div class="bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden shadow-sm">
+      <div class="p-6 border-b border-slate-50 flex items-center justify-between bg-slate-50/50">
+          <h3 class="font-bold text-slate-900 italic uppercase text-sm tracking-wider">বিস্তারিত তথ্য</h3>
+      </div>
+      <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-1">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">পূর্ণ নাম</p>
+              <p class="text-slate-700 font-bold">
+                {% if staff.user.name %}
+                    {{ staff.user.name }}
+                {% else %}
+                    {{ staff.user.email }}
+                {% endif %}
+          </div>
+          <div class="space-y-1">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ইমেইল ঠিকানা</p>
+              <p class="text-slate-700 font-bold">{{ staff.user.email }}</p>
+          </div>
+          {% comment %} <div class="space-y-1">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ঠিকানা</p>
+              <p class="text-slate-700 font-bold">উত্তরা সেক্টর ৭, ঢাকা</p>
+          </div>
+          <div class="space-y-1">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">জরুরি যোগাযোগ</p>
+              <p class="text-slate-700 font-bold">০১৯১১-২২৩৩৪৪ (ভাই)</p>
+          </div> {% endcomment %}
+      </div>
+  </div>
+
+  <!-- এক্সেস কন্ট্রোল কার্ড -->
+  {% comment %} <div class="bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden shadow-sm">
+      <div class="p-6 border-b border-slate-50 flex items-center justify-between">
+          <h3 class="font-bold text-slate-900 italic uppercase text-sm tracking-wider">এক্সেস ও পারমিশন</h3>
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-lg uppercase italic">ম্যানেজার লেভেল</span>
+      </div>
+      <div class="p-8 space-y-6">
+          <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 shadow-sm">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                  </div>
+                  <div>
+                      <p class="text-sm font-bold text-slate-800">ইনভেন্টরি ম্যানেজমেন্ট</p>
+                      <p class="text-[10px] text-slate-400">প্রোডাক্ট যোগ করা ও এডিট করার ক্ষমতা</p>
+                  </div>
+              </div>
+              <div class="w-12 h-6 bg-indigo-600 rounded-full relative cursor-pointer shadow-inner shadow-black/10">
+                  <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-md"></div>
+              </div>
+          </div>
+
+          <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 shadow-sm">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                  </div>
+                  <div>
+                      <p class="text-sm font-bold text-slate-800">সেলস রিপোর্ট রিপোর্ট</p>
+                      <p class="text-[10px] text-slate-400">প্রতিদিনের সেলস রিপোর্ট দেখার অনুমতি</p>
+                  </div>
+              </div>
+              <div class="w-12 h-6 bg-slate-200 rounded-full relative cursor-pointer">
+                  <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md"></div>
+              </div>
+          </div>
+      </div>
+  </div> {% endcomment %}
+
+  <!-- অ্যাকাউন্ট স্ট্যাটাস (বিপজ্জনক এলাকা) -->
+  {% comment %} <div class="bg-rose-50 rounded-[2.5rem] border border-rose-100 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="text-center md:text-left">
+          <h4 class="text-rose-900 font-bold text-lg italic uppercase">অ্যাকাউন্ট রেস্ট্রিকশন</h4>
+          <p class="text-rose-600/70 text-sm mt-1">সাময়িকভাবে এই স্টাফের লগইন এক্সেস বন্ধ করতে চাইলে নিচের বাটনটি চাপুন।</p>
+      </div>
+      <button class="px-8 py-4 bg-rose-600 text-white rounded-2xl font-bold hover:bg-rose-700 shadow-xl shadow-rose-100 transition-all whitespace-nowrap uppercase text-xs tracking-widest italic">সাসপেন্ড স্টাফ</button>
+  </div> {% endcomment %}
+</div>
+{% endblock store_setting %}

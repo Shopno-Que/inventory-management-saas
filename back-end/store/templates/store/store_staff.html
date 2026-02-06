@@ -1,0 +1,47 @@
+{% extends "layouts/store_settings_base.html" %}
+{% block subtitle %}Staff{% endblock subtitle %}
+{% block store_setting %}
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+    <h1 class="text-xl font-bold text-slate-900 tracking-tight">টিম মেম্বার্স</h1>
+    <p class="text-slate-500 mt-1">আপনার টিমের সকল মেম্বারদের পরিচালনা করুন</p>
+</div>
+<div class="flex gap-2">
+    <a href="{% url 'store:invite_staff' store.id %}" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        নতুন মেম্বার
+    </a>
+</div>
+</div>
+<div class="flex-1 space-y-4">
+    {% for member in members %}
+        <div class="bg-white rounded-3xl border border-slate-200 p-5 flex flex-col sm:flex-row items-center justify-between gap-4 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 font-bold text-xl italic border border-indigo-100">
+                    {% if member.user.name %}
+                        {{ member.user.name|first|upper }}
+                    {% else %}
+                        {{ member.user.email|first|upper }}
+                    {% endif %}
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900">
+                        {% if member.user.name %}
+                            {{ member.user.name }}
+                        {% else %}
+                            {{ member.user.email }}
+                        {% endif %}
+                    </h4>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-tighter">{{ member.role }}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="{% url 'store:staff_details' store.id member.id %}" class="px-5 py-2.5 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl text-sm font-bold transition-colors italic underline">বিস্তারিত দেখুন</a>
+                {% comment %} <button class="p-2.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button> {% endcomment %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock store_setting %}

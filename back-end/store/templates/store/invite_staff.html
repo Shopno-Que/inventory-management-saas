@@ -1,11 +1,33 @@
-<h1>Invite Staff to {{ store.name }}</h1>
-<form method="post">
-    {% csrf_token %}
-    <input type="email" name="email" placeholder="Email" required>
-    <select name="role">
-        <option value="staff">Staff</option>
-        <option value="owner">Owner</option>
-    </select>
-    <button type="submit">Send Invite</button>
-</form>
-<a href="{% url 'store:store_detail' store.id %}">Back to Store</a>
+{% extends "layouts/store_settings_base.html" %}
+{% block subtitle %}New Staff{% endblock subtitle %}
+{% block store_setting %}
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <!-- ব্যাক বাটন ও টাইটেল -->
+    <div class="">
+        <a href="{% url 'store:store_staff' store.id %}" class="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors mb-4 group">
+            <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            ফিরে যান
+        </a>
+        <h3 class="text-xl font-bold text-slate-900 tracking-tight">নতুন স্টাফ আমন্ত্রণ করুন</h3>
+        <p class="text-slate-500 mt-1">আপনার স্টোরে নতুন স্টাফদের আমন্ত্রণ করুন</p>
+    </div>
+</div>
+
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <h3 class="font-bold text-slate-800">তথ্য</h3>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{ form }}
+        </div>
+        <div class="flex px-6 pb-6 gap-3 w-full md:w-auto col-span-full">
+            <button type="submit" class="flex-1 md:flex-none px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
+                আমন্ত্রণ করুন
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock store_setting %}
