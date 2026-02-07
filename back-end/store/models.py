@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.conf import settings
 import uuid
+from datetime import timedelta
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -58,3 +60,10 @@ class Invitation(models.Model):
 
     def __str__(self):
         return f"{self.email} invited as {self.role}"
+
+    @property
+    def effective_status(self):
+        """Return current status taking expiry into account."""
+        if self.status == "pending" and self.created_at < timezone.now() - timedelta(days=7):
+            return "expired"
+        return self.status

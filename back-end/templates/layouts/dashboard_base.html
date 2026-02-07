@@ -35,6 +35,53 @@
         <!-- Right -->
         <div class="flex items-center gap-4">
             {% block top_bar %}{% endblock top_bar %}
+            <div class="relative inline-block text-left">
+                <!-- Trigger -->
+                <button id="userMenuBtn"
+                    class="flex items-center gap-3 px-3 py-2 rounded-xl
+                        hover:bg-slate-100 active:scale-95
+                        transition cursor-pointer focus:outline-none">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-slate-900 leading-none">
+                            {% if user.name %}
+                                {{ user.name }}
+                            {% else %}
+                                {{ user.email }}
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
+                        {% if user.name %}
+                            {{ user.name|first|upper }}
+                        {% else %}
+                            {{ user.email|first|upper }}
+                        {% endif %}
+                    </div>
+                </button>
+
+                <!-- Dropdown -->
+                <div id="userMenu"
+                    class="hidden absolute right-0 mt-2 w-44 rounded-xl bg-white shadow-lg border border-slate-200 py-2">
+
+                    <a href="{% url 'user:stores' %}"
+                    class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
+                        অন্যান্য স্টোরসমূহ
+                    </a>
+
+                    <a href="{% url 'user:settings' %}"
+                    class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
+                        প্রোফাইল
+                    </a>
+                    <form action="{% url 'user:signout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 w-full rounded-xl transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            লগ আউট
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -96,6 +143,7 @@
             }
         });
     </script>
+    <script src="{%static 'js/avatar-dropdown.js' %}" defer></script>
     {% include "partials/chatbox.html" %}
 </body>
 

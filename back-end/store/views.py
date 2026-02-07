@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from .models import Store, Team, Invitation
 from django.contrib.auth import get_user_model
@@ -9,7 +10,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponse
 from datetime import timedelta
-from .forms import StoreCreateForm, InviteStaffForm, StoreEditForm
+from .forms import StoreCreateForm, InviteStaffForm, StoreEditForm, EditStaffForm
 
 User = get_user_model()
 
@@ -110,26 +111,59 @@ def store_staff(request, store_id):
     if not team:
         return redirect("user:stores")
     members = store.team_members.all()
+    pending_invites = [i for i in store.invitations.all() if i.effective_status == 'pending']
     context = {
         "store": store, 
+        "pending_invites": pending_invites, 
         "members": members
     }
     return render(request, "store/store_staff.html", context)
 
 @login_required
+@require_POST
+def cancel_staff_invite(request, store_id, invite_id):
+    store = get_object_or_404(Store, id=store_id)
+    me = Team.objects.filter(user=request.user, store=store, role="owner").first()
+    if not me:
+        return HttpResponse("You do not have permission to cancel invitations.")
+
+    invite = get_object_or_404(Invitation, id=invite_id, store=store)
+
+    if invite.status == "pending":
+        invite.delete()
+        return redirect("store:store_staff", store_id=store.id)
+    else:
+        return HttpResponse("This invitation cannot be canceled.")
+
+@login_required
 def staff_details(request, store_id, staff_id):
     store = get_object_or_404(Store, id=store_id)
-    team = Team.objects.filter(user=request.user, store=store).first()
-    if not team:
-        return redirect("user:stores")
-    members = store.team_members.all()
+
+    me = Team.objects.filter(user=request.user, store=store).first()
+    if not me:
+        return HttpResponse("You do not have permission to view staff details.")
+
     staff = get_object_or_404(Team, id=staff_id, store=store)
-    context = {
-        "store": store, 
-        "members": members,
-        "staff": staff
-    }
-    return render(request, "store/staff_details.html", context)
+
+    # 🚫 block editing if not owner OR editing self
+    if request.method == "POST":
+        if me.role != "owner":
+            return HttpResponse("You do not have permission to edit this member.")
+        elif staff.user == request.user:
+            return HttpResponse("You cannot edit your own permissions.")
+
+        form = EditStaffForm(request.POST)
+        if form.is_valid():
+            staff.role = form.cleaned_data["role"]
+            staff.save()
+    else:
+        form = EditStaffForm(initial={"role": staff.role})
+
+    return render(request, "store/staff_details.html", {
+        "store": store,
+        "staff": staff,
+        "form": form,
+    })
 
 @login_required
 def invite_staff(request, store_id):
@@ -145,6 +179,9 @@ def invite_staff(request, store_id):
         form = InviteStaffForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data["email"]
+            if Team.objects.filter(user__email=email, store=store).exists():
+                return HttpResponse("This user is already a member of the store.")
+
             role = form.cleaned_data["role"]
 
             # Remove existing pending invites
@@ -168,7 +205,7 @@ def invite_staff(request, store_id):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
             )
-            return HttpResponse(f"Invitation link sent to {email}")
+            return redirect("store:store_staff", store_id=store.id)
     else:
         form = InviteStaffForm()
 
@@ -181,12 +218,30 @@ def accept_invite(request, token):
     if not request.user.email == invite.email:
         return HttpResponse("This invitation is not for your account.")
 
-    if invite.created_at < timezone.now() - timedelta(days=7):
-        invite.status = "expired"
-        invite.save()
+    if invite.status == "expired":
         return render(request, "store/invite_invalid.html")
 
     return render(request, "store/accept_invite_page.html", {"invite": invite})
+
+@login_required
+def remove_team_member(request, store_id, team_id):
+    store = get_object_or_404(Store, id=store_id)
+
+    # current user must be owner
+    me = Team.objects.filter(user=request.user, store=store).first()
+    if not me or me.role != "owner":
+        return HttpResponse("You do not have permission to remove team members.")
+
+    member = get_object_or_404(Team, id=team_id, store=store)
+
+    # safety: owner cannot remove himself
+    if member.user == request.user:
+        return HttpResponse("You cannot remove yourself from the team.")
+
+    if request.method == "POST":
+        member.delete()
+
+    return redirect("store:store_staff", store_id=store.id)
 
 @login_required
 def confirm_invite(request, token):

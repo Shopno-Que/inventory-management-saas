@@ -15,15 +15,15 @@
 
 <!-- স্ট্যাটাস সামারি -->
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">আপনার নিজস্ব স্টোর</p>
         <h3 class="text-2xl font-black text-slate-900 leading-none">{{ own_stores_count|stringformat:"02d" }}</h3>
     </div>
-    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">অন্যের স্টোরের টিম মেম্বার</p>
         <h3 class="text-2xl font-black text-slate-900 leading-none">{{ staff_stores_count|stringformat:"02d" }}</h3>
     </div>
-    <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 shadow-sm">
+    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 shadow-sm">
         <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">নিজস্ব স্টোরের বাকি কোটা</p>
         <h3 class="text-2xl font-black text-indigo-700 leading-none">০২</h3>
     </div>
@@ -33,9 +33,9 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     
     {% for team in teams %}
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all group">
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-all group">
             <div class="h-32 bg-gradient-to-r {{ team.bg_class }} relative">
-                <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-2xl shadow-lg flex items-center justify-center {{ team.text_class }} border border-slate-100">
+                <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-xl shadow-lg flex items-center justify-center {{ team.text_class }} border border-slate-100">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                     </svg>

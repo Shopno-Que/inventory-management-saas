@@ -13,8 +13,10 @@ urlpatterns = [
     path('<int:store_id>/expenses/', views.expenses, name='expenses'),
     path('<int:store_id>/settings/info', views.store_info_settings, name='store_info_settings'),
     path('<int:store_id>/settings/staff', views.store_staff, name='store_staff'),
+    path("<int:store_id>/team/<int:team_id>/remove/", views.remove_team_member, name="remove_team_member"),
     path('<int:store_id>/settings/staff/invite', views.invite_staff, name='invite_staff'),
     path('<int:store_id>/settings/staff/<int:staff_id>', views.staff_details, name='staff_details'),
+    path('<int:store_id>/staff/invite/<int:invite_id>/cancel', views.cancel_staff_invite, name='cancel_staff_invite'),
     path('accept-invite/<uuid:token>/', views.accept_invite, name='accept_invite'),
     path('accept-invite/<uuid:token>/confirm/', views.confirm_invite, name='confirm_invite'),
 ]

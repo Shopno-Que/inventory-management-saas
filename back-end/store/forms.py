@@ -1,5 +1,5 @@
 from django import forms
-from .models import Store, Invitation
+from .models import Store, Invitation, Team
 
 class StoreCreateForm(forms.ModelForm):
     class Meta:
@@ -26,7 +26,15 @@ class InviteStaffForm(forms.Form):
     )
     role = forms.ChoiceField(
         label="Role",
-        choices=Invitation.ROLE_CHOICES,  # use the same choices as model
+        choices=Team.ROLE_CHOICES,  # use the same choices as model
+        widget=forms.Select(attrs={
+        })
+    )
+
+class EditStaffForm(forms.Form):
+    role = forms.ChoiceField(
+        label="Role",
+        choices=Team.ROLE_CHOICES,  # use the same choices as model
         widget=forms.Select(attrs={
         })
     )
