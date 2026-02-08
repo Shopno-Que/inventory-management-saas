@@ -11,12 +11,16 @@ urlpatterns = [
     path('<int:store_id>/customers/', views.customers, name='customers'),
     path('<int:store_id>/sales/', views.sales, name='sales'),
     path('<int:store_id>/expenses/', views.expenses, name='expenses'),
+
+    # settings
     path('<int:store_id>/settings/info', views.store_info_settings, name='store_info_settings'),
-    path('<int:store_id>/settings/staff', views.store_staff, name='store_staff'),
-    path("<int:store_id>/team/<int:team_id>/remove/", views.remove_team_member, name="remove_team_member"),
-    path('<int:store_id>/settings/staff/invite', views.invite_staff, name='invite_staff'),
-    path('<int:store_id>/settings/staff/<int:staff_id>', views.staff_details, name='staff_details'),
+    
+    # staff
+    path('<int:store_id>/staff', views.store_staff, name='store_staff'),
+    path('<int:store_id>/staff/invite', views.invite_staff, name='invite_staff'),
     path('<int:store_id>/staff/invite/<int:invite_id>/cancel', views.cancel_staff_invite, name='cancel_staff_invite'),
-    path('accept-invite/<uuid:token>/', views.accept_invite, name='accept_invite'),
-    path('accept-invite/<uuid:token>/confirm/', views.confirm_invite, name='confirm_invite'),
+    path('<int:store_id>/staff/<int:staff_id>', views.staff_details, name='staff_details'),
+    path("<int:store_id>/staff/<int:staff_id>/remove/", views.remove_staff, name="remove_staff"),
+    path('invites/<uuid:token>/accept', views.accept_invite, name='accept_invite'),
+    path('invites/<uuid:token>/confirm/', views.confirm_invite, name='confirm_invite'),
 ]
