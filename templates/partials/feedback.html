@@ -1,0 +1,78 @@
+{% load static %}
+!-- Floating Feedback Button -->
+<button id="feedbackToggle"
+    class="fixed bottom-6 right-6 bg-indigo-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-indigo-700 transition z-50">
+    📝
+</button>
+
+
+<!-- Feedback Box -->
+<div id="feedbackBox"
+    class="hidden fixed bottom-0 left-0 right-0
+md:inset-auto md:bottom-24 md:right-6 md:w-96
+w-full max-h-[85vh]
+bg-white shadow-2xl md:rounded-xl
+flex flex-col overflow-hidden z-50
+">
+
+    <!-- Header -->
+    <div class="bg-indigo-600 text-white flex justify-between items-center shrink-0">
+        <h3 class="font-semibold p-4 text-sm">Send Feedback</h3>
+        <button id="feedbackClose" class="text-white/80 p-4 bg-indigo-700 hover:text-white">✕</button>
+    </div>
+
+
+    <!-- Scrollable Content -->
+    <form id="feedbackForm"
+        method="POST"
+        action="{% url 'feedback:post' %}"
+        enctype="multipart/form-data"
+        class="flex-1 justify-end overflow-y-auto p-4 flex flex-col gap-4 text-sm">
+        {% csrf_token %}
+        <!-- Text -->
+        <textarea
+            id="feedbackText"
+            rows="4"
+            placeholder="Write your feedback or report a bug..."
+            class="border border-slate-200 rounded-lg px-3 py-2 resize-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+
+
+        <!-- Drag & Drop Upload Area -->
+        <label id="dropArea"
+            class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center cursor-pointer hover:border-indigo-500 hover:bg-indigo-50 transition">
+
+            <p class="text-xs text-slate-500">
+                Drag & drop screenshots here<br>
+                or <span class="text-indigo-600 font-medium">click to upload</span>
+            </p>
+
+            <input
+                type="file"
+                hidden
+                id="feedbackImages"
+                multiple
+                accept="image/*"
+                class="hidden">
+        </label>
+
+
+        <!-- Preview thumbnails -->
+        <div id="previewGrid" class="flex flex-wrap gap-2"></div>
+
+
+        <!-- Submit -->
+        <button
+            class="mt-2 bg-indigo-600 text-white py-2 rounded-xl hover:bg-indigo-700 transition">
+            Submit Feedback
+        </button>
+    </form>
+
+
+    <!-- Success -->
+    <div id="successMsg"
+        class="hidden p-3 text-center text-green-600 text-sm border-t bg-green-50 shrink-0">
+        ✅ Feedback submitted (demo only)
+    </div>
+</div>
+
+<script src="{%static 'js/feedback-box.js' %}" defer></script>
