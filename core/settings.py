@@ -93,6 +93,14 @@ DATABASES = {
     }
 }
 
+STORAGES = {
+    "default": {
+        "BACKEND": "core.storage.supabase.SupabaseStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -125,5 +133,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR/'static']
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+SUPABASE_BUCKET = os.getenv('SUPABASE_BUCKET')
+# MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL = "/media/"
