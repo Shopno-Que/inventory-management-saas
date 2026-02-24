@@ -21,7 +21,7 @@ def create_store(request):
             role="owner"
         )
 
-        return redirect("user:stores")
+        return redirect("store:dashboard", store_id=store.id)
     
     context = {
         "form": form
