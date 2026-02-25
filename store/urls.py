@@ -7,7 +7,6 @@ urlpatterns = [
     path('create/', views.create_store, name='create_store'),
     path('<int:store_id>/delete/', views.delete_store, name='delete_store'),
     path('<int:store_id>/dashboard/', views.dashboard, name='dashboard'),
-    path('<int:store_id>/products/', views.products, name='products'),
     path('<int:store_id>/customers/', views.customers, name='customers'),
     path('<int:store_id>/sales/', views.sales, name='sales'),
     path('<int:store_id>/expenses/', views.expenses, name='expenses'),

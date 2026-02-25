@@ -1,0 +1,37 @@
+{% extends "layouts/store_base.html" %}
+{% block title %}{{store.name}} Product List{% endblock %}
+{% block main_content %}
+<!-- টপবার -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <!-- ব্যাক বাটন ও টাইটেল -->
+    <div class="mb-8">
+        <a href="{% url 'catalog:product_list' store.id %}" class="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors mb-4 group">
+            <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            ফিরে যান
+        </a>
+        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">নতুন প্রোডাক্ট যুক্ত করুন</h1>
+        <p class="text-slate-500 mt-1">প্রোডাক্ট এর তথ্য দিন</p>
+    </div>
+</header>
+<section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <form method="post">
+        {% csrf_token %}
+        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{ form }}
+        </div>
+        <div class="flex px-6 pb-6 gap-3 w-full justify-between md:w-auto col-span-full">
+            <button type="submit" name="action" value="save" class="flex-1 md:flex-none px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
+                সেভ করুন
+            </button>
+            {% if product %}
+            <button name="action" value="delete" 
+                    class="flex-1 md:flex-none px-5 py-2.5 bg-rose-600 text-white rounded-xl text-sm font-semibold hover:bg-rose-700 shadow-lg shadow-rose-100 transition-all text-center"
+                    onclick="return confirm('আপনি কি নিশ্চিত এই প্রোডাক্ট ডিলিট করতে চান?');">
+                ডিলিট করুন
+            </button>
+            {% endif %}
+        </div>
+    </form>
+</section>
+{% endblock %}
+

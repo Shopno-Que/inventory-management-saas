@@ -22,6 +22,7 @@ form .errorlist li {
 form textarea,
 form input[type="text"],
 form input[type="password"],
+form input[type="number"],
 form input[type="email"]{
   @apply block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm transition mt-1
 }
