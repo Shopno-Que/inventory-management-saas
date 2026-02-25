@@ -20,9 +20,42 @@ form .errorlist li {
   @apply leading-relaxed;
 }
 form textarea,
-form input {
+form input[type="text"],
+form input[type="password"],
+form input[type="email"]{
   @apply block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm transition mt-1
 }
+form input[type="checkbox"] {
+  @apply appearance-none h-5 w-5 rounded-md
+         border border-slate-300
+         bg-white
+         align-middle
+         cursor-pointer
+         transition
+         m-2;
+}
+form input[type="checkbox"]:checked {
+  @apply bg-indigo-600 border-indigo-600;
+}
+form input[type="checkbox"]:checked::after {
+  content: "✓";
+  @apply text-white font-bold
+         flex items-center justify-center;
+}
+form input[type="checkbox"]:focus {
+  @apply outline-none ring-2 ring-indigo-500;
+}
 form select {
-  @apply block w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm transition mt-1
+  @apply block w-full rounded-xl border border-slate-200
+         px-4 pr-10 py-3
+         shadow-sm
+         focus:border-indigo-500 focus:outline-none focus:ring-indigo-500
+         sm:text-sm transition mt-1
+         appearance-none bg-no-repeat bg-right;
+}
+
+form select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='gray'%3E%3Cpath d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
+  background-position: right 0.75rem center; /* move arrow */
+  background-size: 1rem;
 }

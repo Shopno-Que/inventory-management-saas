@@ -17,11 +17,25 @@ class Store(models.Model):
         return self.name
 
 
+class StorePermission(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+
 class Team(models.Model):
     ROLE_CHOICES = [
         ('owner', 'Owner'),
         ('staff', 'Staff'),
     ]
+
+    permissions = models.ManyToManyField(
+        StorePermission,
+        blank=True,
+        related_name="teams"
+    )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teams')
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='team_members')
@@ -34,6 +48,17 @@ class Team(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.store.name} ({self.role})"
+    
+    def has_perms(self, *codes):
+        if self.role == "owner":
+            return True
+        return self.permissions.filter(code__in=codes).count() == len(codes)
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.role == "owner":
+            self.permissions.set(StorePermission.objects.all())
 
 
 class Invitation(models.Model):

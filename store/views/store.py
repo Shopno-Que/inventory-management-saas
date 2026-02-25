@@ -1,9 +1,10 @@
-from store.decorators import store_member_required
+from store.decorators import store_member_required, store_permission_required
 from store.forms import StoreCreateForm, StoreEditForm
 from store.models import Team
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.db import transaction
+from django.http import HttpResponseForbidden
 
 @login_required
 def create_store(request):
@@ -38,6 +39,8 @@ def dashboard(request, store, team):
 @store_member_required
 def store_info_settings(request, store, team):
     if request.method == "POST":
+        if not team.has_perms("store_settings"):
+            return HttpResponseForbidden("Permission denied.")
         form = StoreEditForm(request.POST, instance=store)
         if form.is_valid():
             form.save()
@@ -49,6 +52,7 @@ def store_info_settings(request, store, team):
 
 @login_required
 @store_member_required
+@store_permission_required("delete_store")
 def delete_store(request, store, team):
     if request.method == "POST":
         store.delete()

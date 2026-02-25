@@ -1,5 +1,5 @@
 from django import forms
-from .models import Store, Invitation, Team
+from .models import Store, Invitation, Team, StorePermission
 
 class StoreCreateForm(forms.ModelForm):
     class Meta:
@@ -37,4 +37,9 @@ class EditStaffForm(forms.Form):
         choices=Team.ROLE_CHOICES,  # use the same choices as model
         widget=forms.Select(attrs={
         })
+    )
+    permissions = forms.ModelMultipleChoiceField(
+        queryset=StorePermission.objects.all(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple
     )

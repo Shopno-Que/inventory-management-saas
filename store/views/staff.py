@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
-from store.decorators import store_member_required
+from store.decorators import store_member_required, store_permission_required
 from store.models import Team, Invitation
 from store.forms import InviteStaffForm, EditStaffForm
 
@@ -26,6 +26,7 @@ def store_staff(request, store, team):
 
 @login_required
 @store_member_required
+@store_permission_required("manage_staff")
 @require_POST
 def cancel_staff_invite(request, store, team, invite_id):
     invite = get_object_or_404(Invitation, id=invite_id, store=store, status="pending")
@@ -40,13 +41,20 @@ def staff_details(request, store, team, staff_id):
     if request.method == "POST":
         if staff.user == request.user:
             return HttpResponseForbidden("You cannot edit your own permissions.")
+        
+        if not team.has_perms("manage_staff"):
+            return HttpResponseForbidden("Permission denied.")
 
         form = EditStaffForm(request.POST)
         if form.is_valid():
             staff.role = form.cleaned_data["role"]
             staff.save()
+            staff.permissions.set(form.cleaned_data["permissions"])
     else:
-        form = EditStaffForm(initial={"role": staff.role})
+        form = EditStaffForm(initial={
+            "role": staff.role,
+            "permissions": staff.permissions.all()
+        })
 
     return render(request, "store/staff_details.html", {
         "store": store,
@@ -56,6 +64,7 @@ def staff_details(request, store, team, staff_id):
 
 @login_required
 @store_member_required
+@store_permission_required("manage_staff")
 def invite_staff(request, store, team):    
     if request.method == "POST":
         form = InviteStaffForm(request.POST)
@@ -111,6 +120,7 @@ def accept_invite(request, token):
 
 @login_required
 @store_member_required
+@store_permission_required("manage_staff")
 def remove_staff(request, store, team, staff_id):
     member = get_object_or_404(Team, id=staff_id, store=store)
 
