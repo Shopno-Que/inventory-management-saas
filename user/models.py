@@ -22,16 +22,10 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    ROLE_CHOICES = [
-        ('saas_admin', 'SaaS Admin'),
-        ('saas_staff', 'SaaS Staff'),
-        ('user', 'Regular User'),
-    ]
     first_name = None
     last_name = None
     name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
