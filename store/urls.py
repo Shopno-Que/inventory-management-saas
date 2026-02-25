@@ -22,5 +22,4 @@ urlpatterns = [
     path('<int:store_id>/staff/<int:staff_id>', views.staff_details, name='staff_details'),
     path("<int:store_id>/staff/<int:staff_id>/remove/", views.remove_staff, name="remove_staff"),
     path('invites/<uuid:token>/accept', views.accept_invite, name='accept_invite'),
-    path('invites/<uuid:token>/confirm/', views.confirm_invite, name='confirm_invite'),
 ]
