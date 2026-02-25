@@ -1,3 +1,4 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product
 from .forms import ProductForm
@@ -10,6 +11,7 @@ from django.core.paginator import Paginator
 # Product List
 @login_required
 @store_member_required
+@store_permission_required("manage_products")
 def product_list(request, store, team):
     products = Product.objects.filter(store=store).order_by("-created_at")
     paginator = Paginator(products, 10)
@@ -19,6 +21,7 @@ def product_list(request, store, team):
 
 @login_required
 @store_member_required
+@store_permission_required("manage_products")
 def product_create_or_edit(request, store, team, product_id=None):
     # If product_id is provided, fetch it; else None for create
     product = None
@@ -48,6 +51,8 @@ def product_create_or_edit(request, store, team, product_id=None):
                 return redirect("catalog:product_list", store_id=store.id)
 
         elif action == "delete" and product:
+            if not team.has_perms("delete_products"):
+                return HttpResponseForbidden("Permission denied.")
             product.delete()
             return redirect("catalog:product_list", store_id=store.id)
 
