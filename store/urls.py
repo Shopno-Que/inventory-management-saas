@@ -8,7 +8,6 @@ urlpatterns = [
     path('<int:store_id>/delete/', views.delete_store, name='delete_store'),
     path('<int:store_id>/dashboard/', views.dashboard, name='dashboard'),
     path('<int:store_id>/customers/', views.customers, name='customers'),
-    path('<int:store_id>/sales/', views.sales, name='sales'),
     path('<int:store_id>/expenses/', views.expenses, name='expenses'),
 
     # settings

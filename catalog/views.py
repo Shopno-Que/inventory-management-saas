@@ -6,18 +6,20 @@ from django.contrib.auth.decorators import login_required
 from store.decorators import store_member_required, store_permission_required
 import random
 import string
-from django.core.paginator import Paginator
-
+from core.utils import paginated_list_view
 # Product List
 @login_required
 @store_member_required
 @store_permission_required("manage_products")
 def product_list(request, store, team):
-    products = Product.objects.filter(store=store).order_by("-created_at")
-    paginator = Paginator(products, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, "products/list.html", {"store": store, "page_obj": page_obj,})
+    qs = Product.objects.filter(store=store)
+    return paginated_list_view(
+        request,
+        queryset=qs,
+        template_name="products/list.html",
+        search_field=["name", "sku"],
+        extra_context={"store": store},
+    )
 
 @login_required
 @store_member_required

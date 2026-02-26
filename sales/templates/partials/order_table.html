@@ -1,0 +1,110 @@
+<table class="w-full text-left border-collapse">
+  <thead>
+    <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">অর্ডার #</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">তারিখ</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-center">আইটেম</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">মোট (টাকা)</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-center">স্ট্যাটাস</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-center">অ্যাকশন</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y divide-slate-100">
+      {% for order in page_obj.object_list %}
+        <tr class="hover:bg-slate-50/50 transition-colors">
+
+            <!-- Order ID -->
+            <td class="px-6 py-4 font-bold text-slate-900">
+                #{{ order.id }}
+            </td>
+
+            <!-- Date -->
+            <td class="px-6 py-4 text-sm text-slate-600">
+                {{ order.created_at|date:"d M Y, h:i A" }}
+            </td>
+
+            <!-- Items count -->
+            <td class="px-6 py-4 text-center font-semibold text-slate-700">
+                {{ order.items.count }} টি
+            </td>
+
+            <!-- Total -->
+            <td class="px-6 py-4 text-right font-bold text-slate-900">
+                {{ order.total_amount|floatformat:2 }}
+            </td>
+
+            <!-- Status -->
+            <td class="px-6 py-4 text-center">
+                {% if order.status == 'paid' %}
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-lg uppercase italic">Paid</span>
+                {% elif order.status == 'draft' %}
+                    <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-black rounded-lg uppercase italic">Draft</span>
+                {% else %}
+                    <span class="px-3 py-1 bg-rose-100 text-rose-700 text-[10px] font-black rounded-lg uppercase italic">Cancelled</span>
+                {% endif %}
+            </td>
+
+            <!-- Actions -->
+            <td class="px-6 py-4 text-center flex items-center justify-center gap-2">
+
+                {% if order.status == 'draft' %}
+                    <!-- Edit -->
+                    <a href="{% url 'sales:order_edit' store.id order.id %}"
+                      class="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </a>
+                {% else %}
+                    <span class="text-xs text-slate-400 italic">Locked</span>
+                {% endif %}
+
+            </td>
+        </tr>
+      {% empty %}
+        <tr>
+            <td colspan="6" class="px-6 py-4 text-center text-sm text-slate-500">
+                কোন অর্ডার পাওয়া যায়নি।
+            </td>
+        </tr>
+      {% endfor %}
+  </tbody>
+</table>
+<div class="flex justify-between items-center px-6 py-4 bg-slate-50 border-t border-slate-100">
+  <span class="text-sm text-slate-500">
+      পৃষ্ঠা {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+  </span>
+  <div class="flex gap-2">
+      {% if page_obj.has_previous %}
+          <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}" class="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </a>
+          {% else %}
+          <button class="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+              <span class="px-3 py-1 bg-indigo-600 border text-white rounded-lg">{{ num }}</span>
+          {% else %}
+              <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ num }}" class="px-3 py-1 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-indigo-600 transition-colors">
+                  {{ num }}
+              </a>
+          {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+          <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}" class="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </a>
+          {% else %}
+          <button class="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
+      {% endif %}
+  </div>
+</div>

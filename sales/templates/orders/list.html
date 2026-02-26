@@ -1,13 +1,12 @@
 {% extends "layouts/store_base.html" %}
 {% block title %}{{store.name}} Product List{% endblock %}
 {% block main_content %}
-
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
   <div>
-      <h1 class="text-3xl font-bold text-slate-900 tracking-tight">প্রোডাক্টস</h1>
-      <p class="text-slate-500 mt-1">আপনার স্টোরের প্রোডাক্ট লিস্ট দেখুন।</p>
-    
-      <form method="get" action="{% url 'catalog:product_list' store.id %}" class="relative w-full md:w-96 mt-3" role="search" aria-label="Search products">
+      <h1 class="text-3xl font-bold text-slate-900 tracking-tight">অর্ডারসমূহ</h1>
+      <p class="text-slate-500 mt-1">আপনার স্টোরের সকল সেলস অর্ডার দেখুন।</p>
+
+    <form method="get" action="{% url 'sales:order_list' store.id %}" class="relative w-full md:w-96 mt-3" role="search" aria-label="Search products">
         <label for="product-search" hidden class="sr-only">Search</label>
 
         <input 
@@ -19,7 +18,7 @@
             {% endif %}
             id="product-search" 
             value="{{ request.GET.q|default:'' }}"
-            placeholder="প্রোডাক্টের নাম বা SKU দিয়ে খুঁজুন..." 
+            placeholder="অর্ডার আইডি / প্রাইস দিয়ে খুঁজুন..." 
             class="w-full pl-11 pr-12 py-3 block appearance-none rounded-xl border border-slate-200 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 transition"
         >
 
@@ -33,20 +32,21 @@
     </form>
 
   </div>
-  <div class="flex gap-2">
 
-      <a href="{% url 'catalog:product_create' store.id %}" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
+  <div class="flex gap-2">
+      <a href="{% url 'sales:order_create' store.id %}"
+         class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
-          নতুন প্রোডাক্ট
+          নতুন অর্ডার
       </a>
   </div>
 </div>
-<!-- প্রোডাক্ট টেবিল -->
+<!-- ORDER TABLE -->
 <div class="bg-white table-container rounded-xl border border-slate-200 shadow-sm">
     <div class="overflow-x-auto">
-        {% include "partials/product_table.html" %}
+        {% include "partials/order_table.html" %}
     </div>
 </div>
 
