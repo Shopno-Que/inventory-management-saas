@@ -19,6 +19,15 @@
     </div>
 </header>
 <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    {% if messages %}
+    <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-t-xl mb-4">
+        {% for message in messages %}
+            <div>
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -31,7 +40,8 @@
             {% if product %}
             <button name="action" value="delete" 
                     class="flex-1 md:flex-none px-5 py-2.5 bg-rose-600 text-white rounded-xl text-sm font-semibold hover:bg-rose-700 shadow-lg shadow-rose-100 transition-all text-center"
-                    onclick="return confirm('আপনি কি নিশ্চিত এই প্রোডাক্ট ডিলিট করতে চান?');">
+                    onclick="return confirm('আপনি কি নিশ্চিত এই প্রোডাক্ট ডিলিট করতে চান?');"
+                    >
                 ডিলিট করুন
             </button>
             {% endif %}

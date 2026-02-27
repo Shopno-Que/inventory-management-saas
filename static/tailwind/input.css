@@ -26,6 +26,7 @@ form input[type="number"],
 form input[type="email"]{
   @apply block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm transition mt-1
 }
+.designed-checkbox,
 form input[type="checkbox"] {
   @apply appearance-none h-5 w-5 rounded-md
          border border-slate-300
@@ -35,14 +36,17 @@ form input[type="checkbox"] {
          transition
          m-2;
 }
+.designed-checkbox:checked,
 form input[type="checkbox"]:checked {
   @apply bg-indigo-600 border-indigo-600;
 }
+.designed-checkbox:checked::after,
 form input[type="checkbox"]:checked::after {
   content: "✓";
   @apply text-white font-bold
          flex items-center justify-center;
 }
+.designed-checkbox:focus,
 form input[type="checkbox"]:focus {
   @apply outline-none ring-2 ring-indigo-500;
 }

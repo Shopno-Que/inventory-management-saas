@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.db.models import Q
 
-def paginated_list_view(request, queryset, template_name, extra_context=None, search_field=None):
+def paginated_list_view(request, queryset, template_name, partial_template_name, extra_context=None, search_field=None):
     query = request.GET.get("q", "")
     
     if search_field and query:
@@ -20,6 +20,6 @@ def paginated_list_view(request, queryset, template_name, extra_context=None, se
         context.update(extra_context)
 
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-        return render(request, f"partials/{template_name}", context)
+        return render(request, f"partials/{partial_template_name}", context)
 
     return render(request, template_name, context)

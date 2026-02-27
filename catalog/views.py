@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.db.models import ProtectedError
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product
@@ -17,6 +19,7 @@ def product_list(request, store, team):
         request,
         queryset=qs,
         template_name="products/list.html",
+        partial_template_name="product_table.html",
         search_field=["name", "sku"],
         extra_context={"store": store},
     )
@@ -55,7 +58,11 @@ def product_create_or_edit(request, store, team, product_id=None):
         elif action == "delete" and product:
             if not team.has_perms("delete_products"):
                 return HttpResponseForbidden("Permission denied.")
-            product.delete()
+            try:
+                product.delete()
+            except ProtectedError:
+                messages.error(request, "Cannot delete product because it is associated with existing orders.")
+                return redirect("catalog:product_update", store_id=store.id, product_id=product.id)
             return redirect("catalog:product_list", store_id=store.id)
 
     else:
