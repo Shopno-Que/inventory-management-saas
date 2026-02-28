@@ -13,5 +13,9 @@ class Customer(models.Model):
         ordering = ["name"]
         unique_together = ("store", "phone")
 
+    @property
+    def total_spent(self):
+        return sum(order.total_amount for order in self.orders.all())
+
     def __str__(self):
         return self.name

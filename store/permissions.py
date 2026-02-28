@@ -6,6 +6,7 @@ DEFAULT_STORE_PERMISSIONS = [
     {"code": "delete_products", "name": "Delete products"},
     {"code": "manage_products", "name": "Manage products"},
     {"code": "manage_orders", "name": "Manage orders"},
+    {"code": "manage_customers", "name": "Manage customers"},
 ]
 
 def ensure_permissions():
