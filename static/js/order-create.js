@@ -178,3 +178,124 @@ selectedBody.addEventListener('input', (e) => {
   }
   updateTotal();
 });
+
+/* -------------------------
+Customer Search
+------------------------- */
+
+const customerSearchForm = document.querySelector("[aria-label='Search customers']");
+const customerSearchInput = customerSearchForm.querySelector("input[name='q']");
+const customerSearchAction = customerSearchForm.action;
+const customerSearchMethod = customerSearchForm.method;
+const customerSearchResultArea = document.querySelector(".customer-search-result");
+const customerResultLoader = customerSearchResultArea.querySelector(".customer-result-loader");
+const customerResultListArea = customerSearchResultArea.querySelector(".customer-search-result-list");
+const customerName = document.getElementById("customer_name");
+const customerPhone = document.getElementById("customer_phone");
+
+function debounce(fn, delay = 300) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
+}
+async function searchCustomers() {
+    const q = customerSearchInput.value.trim();
+    if (!q) {
+        customerSearchResultArea.classList.add("hidden");
+        return;
+    }
+    customerResultListArea.innerHTML = "";
+    customerSearchResultArea.classList.remove("hidden");
+    customerResultLoader.classList.remove("hidden");
+    const url = `${customerSearchAction}?q=${encodeURIComponent(q)}`;
+    try {
+        const res = await fetch(url, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
+        const data = await res.json();
+        renderCustomerResults(data);
+        customerResultLoader.classList.add("hidden");
+    } catch (err) {
+        console.error(err);
+    } finally {
+        customerResultLoader.classList.add("hidden");
+    }
+}
+customerSearchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    searchCustomers();
+});
+customerSearchInput.addEventListener("input", debounce(searchCustomers, 300));
+function renderCustomerResults(customers) {
+    if (customers.length === 0) {
+        customerSearchResultArea.classList.add("hidden");
+        return;
+    }
+    customerResultLoader.classList.add("hidden");
+    customerSearchResultArea.classList.remove("hidden");
+    customers.forEach(c => {
+        const item = document.createElement("div");
+        item.className = "px-3 py-2 border-b-1 cursor-pointer hover:bg-slate-50/50 text-sm border-b-slate-200";
+        item.innerHTML = `
+            <div class="font-medium text-slate-800">${c.name}</div>
+            <div class="text-xs text-slate-400">${c.phone}</div>
+        `;
+        item.onclick = () => selectCustomer(c);
+        customerResultListArea.appendChild(item);
+    });
+}
+function selectCustomer(customer) {
+    customerResultListArea.innerHTML = "";
+    customerSearchResultArea.classList.add("hidden");
+    customerName.value = customer.name;
+    customerPhone.value = customer.phone;
+}
+/* 
+searchInput.addEventListener("input", () => {
+
+    const keyword = searchInput.value.trim().toLowerCase();
+
+    resultsBox.innerHTML = "";
+
+    if (!keyword) {
+        resultsBox.classList.add("hidden");
+        return;
+    }
+
+    const matches = customers.filter(c =>
+        c.phone.includes(keyword) ||
+        c.name.toLowerCase().includes(keyword)
+    );
+
+    if (matches.length === 0) {
+        resultsBox.classList.add("hidden");
+        return;
+    }
+
+    resultsBox.classList.remove("hidden");
+
+    matches.forEach(c => {
+        const item = document.createElement("div");
+
+        item.className =
+            "px-3 py-2 cursor-pointer hover:bg-indigo-50 text-sm border-b last:border-none";
+
+        item.innerHTML =
+            `<div class="font-semibold text-slate-800">${c.name}</div>
+             <div class="text-xs text-slate-500">${c.phone}</div>`;
+
+        item.onclick = () => selectCustomer(c);
+
+        resultsBox.appendChild(item);
+    });
+});
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".relative")) {
+        resultsBox.classList.add("hidden");
+    }
+});
+*/

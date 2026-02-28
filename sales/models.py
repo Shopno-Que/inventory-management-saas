@@ -1,6 +1,7 @@
 from django.db import models
 from catalog.models import Product
 from store.models import Store
+from customers.models import Customer
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -14,6 +15,16 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.PROTECT,
+        related_name="orders",
+        null=True,
+        blank=True
+    )
+    customer_name = models.CharField(max_length=255, blank=True)
+    customer_phone = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
         return f"Order #{self.id} - {self.status}"

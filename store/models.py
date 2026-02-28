@@ -54,6 +54,11 @@ class Team(models.Model):
             return True
         return self.permissions.filter(code__in=codes).count() == len(codes)
     
+    def has_perm(self, code):
+        if self.role == "owner":
+            return True
+        return self.permissions.filter(code=code).exists()
+    
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 

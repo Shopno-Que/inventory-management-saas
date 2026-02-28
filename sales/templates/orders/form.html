@@ -153,7 +153,8 @@
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">         
             <form id="order-form" method="post" {% if order %}action="{% url 'sales:order_edit' store.id order.id %}"{% else %}action="{% url 'sales:order_create' store.id %}"{% endif %} class="">
                 {% csrf_token %}
-                {{ form }}
+                {{ form.status.label_tag }}
+                {{ form.status }}
             </form>
         </div>
 
@@ -187,6 +188,79 @@
                 </div>
             </div>
         </div> {% endcomment %}
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 italic">
+                কাস্টমার ইনফরমেশন
+            </h3>
+
+            <div class="space-y-4">
+                <!-- Search box -->
+                <div class="relative">
+
+                    <form autocomplete="off" method="get" action="{% url "customers:customer_search" store.id %}" class="relative w-full  mb-3" role="search" aria-label="Search customers">
+                        <label for="customer-search" class="sr-only">কাস্টমার খুঁজুন</label>
+
+                        <input 
+                            type="search" 
+                            name="q"
+                            id="customer-search"
+                            placeholder="017... অথবা নাম লিখুন" 
+                            class="w-full pl-11  py-3 block appearance-none rounded-xl border border-slate-200 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+                        >
+
+                        <svg class="w-5 h-5 text-slate-400 absolute left-4 top-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </form>
+
+                    <!-- Dropdown -->
+                    <div class="customer-search-result absolute hidden z-20 left-0 right-0 -mt-3 bg-white rounded-b-lg shadow max-h-48 overflow-y-auto">
+                        <div class="customer-search-result-list">
+                            <!-- Results will be injected here -->
+                        </div>
+                        <div class="customer-result-loader hidden flex items-center justify-center py-4">
+                            <div class="animate-spin">
+                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Name -->
+                <label hidden for="customer_name" class="text-xs font-bold text-slate-400 uppercase mb-2 block">
+                    কাস্টমারের নাম
+                </label>
+                <input
+                    type="text"
+                    name="customer_name"
+                    form="order-form"
+                    id="customer_name"
+                    {% if order %}
+                    value="{{ order.customer_name }}"
+                    {% endif %}
+                    placeholder="কাস্টমারের নাম"
+                    class="block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm mt-1"
+                >
+                <!-- Phone -->
+                 <label hidden for="customer_phone" class="text-xs font-bold text-slate-400 uppercase mb-2 block">
+                    ফোন নাম্বার
+                </label>
+                <input
+                    type="tel"
+                    id="customer_phone"
+                    name="customer_phone"
+                    form="order-form"
+                    {% if order %}
+                    value="{{ order.customer_phone }}"
+                    {% endif %}
+                    placeholder="মোবাইল নাম্বার"
+                    class="block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm mt-1"
+                >
+            </div>
+        </div>
 
         <!-- ইন্টারনাল নোট -->
         {% comment %} <div class="bg-amber-50 rounded-xl border border-amber-100 p-6">

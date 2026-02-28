@@ -24,7 +24,7 @@ form input[type="text"],
 form input[type="password"],
 form input[type="number"],
 form input[type="email"]{
-  @apply block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm transition mt-1
+  @apply block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm mt-1
 }
 .designed-checkbox,
 form input[type="checkbox"] {
@@ -33,7 +33,6 @@ form input[type="checkbox"] {
          bg-white
          align-middle
          cursor-pointer
-         transition
          m-2;
 }
 .designed-checkbox:checked,
@@ -55,7 +54,7 @@ form select {
          px-4 pr-10 py-3
          shadow-sm
          focus:border-indigo-500 focus:outline-none focus:ring-indigo-500
-         sm:text-sm transition mt-1
+         sm:text-sm mt-1
          appearance-none bg-no-repeat bg-right;
 }
 

@@ -4,11 +4,10 @@ from catalog.models import Product
 from sales.forms import OrderCreateForm
 from store.decorators import store_member_required, store_permission_required
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Order, OrderItem
+from .models import Order
 from django.contrib import messages
 from core.utils import paginated_list_view
-from django.db.models import Q
-from django.core.paginator import Paginator
+from .utils import handle_order_customer, save_order_items, get_products_for_order
 
 # List Orders
 @login_required
@@ -40,14 +39,10 @@ def order_view(request, store, team, order_id):
 @store_member_required
 @store_permission_required("manage_orders")
 def order_create(request, store, team):
-    qs = Product.objects.filter(store=store, active=True).order_by("created_at")
-
     q = request.GET.get("q", "")
-    if q:
-        qs = qs.filter(Q(name__icontains=q) | Q(sku__icontains=q))
+    page_number = request.GET.get("page", 1)
+    page_obj = get_products_for_order(store, query=q, page=page_number)
 
-    paginator = Paginator(qs, 3)
-    page_obj = paginator.get_page(int(request.GET.get("page", 1)))
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         return render(request, f"partials/order_item_list.html", {"page_obj": page_obj,"q": q,})
 
@@ -61,8 +56,8 @@ def order_create(request, store, team):
 
     if request.method == "POST" and form.is_valid():
         with transaction.atomic():
-            product_ids = request.POST.getlist('product_id')
-            quantities = request.POST.getlist('qty')
+            product_ids = request.POST.getlist("product_id")
+            quantities = request.POST.getlist("qty")
 
             if not product_ids:
                 messages.error(request, "Please add at least one product.")
@@ -70,32 +65,19 @@ def order_create(request, store, team):
 
             order = form.save(commit=False)
             order.store = store
-            order.total_amount = 0
+
+            # handle customer
+            name = (request.POST.get("customer_name") or "").strip()
+            phone = (request.POST.get("customer_phone") or "").strip()
+            handle_order_customer(order, store, name, phone)
+
             order.save()
 
-            total = 0
-            for pid, qty_str in zip(product_ids, quantities):
-                qty = int(qty_str)
-                if qty <= 0:
-                    continue
-
-                product = get_object_or_404(Product, id=pid, store=store)
-                subtotal = product.price * qty
-
-                OrderItem.objects.create(
-                    order=order,
-                    product=product,
-                    product_name=product.name,
-                    price_at_sale=product.price,
-                    qty=qty,
-                    subtotal=subtotal
-                )
-
-                total += subtotal
-
+            total = save_order_items(order, product_ids, quantities, store)
             order.total_amount = total
             order.save(update_fields=["total_amount"])
-            return redirect('sales:order_list', store.id)
+
+            return redirect("sales:order_list", store.id)
 
     return render(request, "orders/form.html", context)
 
@@ -103,19 +85,14 @@ def order_create(request, store, team):
 @login_required
 @store_member_required
 @store_permission_required("manage_orders")
-@transaction.atomic
 def order_edit(request, store, team, order_id):
     order = get_object_or_404(Order, id=order_id, store=store)
     if order.status != 'draft':
         return redirect("sales:order_view", store.id, order.id)
-    qs = Product.objects.filter(store=store, active=True).order_by("created_at")
-
+    
     q = request.GET.get("q", "")
-    if q:
-        qs = qs.filter(Q(name__icontains=q) | Q(sku__icontains=q))
-
-    paginator = Paginator(qs, 3)
-    page_obj = paginator.get_page(int(request.GET.get("page", 1)))
+    page_number = request.GET.get("page", 1)
+    page_obj = get_products_for_order(store, query=q, page=page_number)
     selected_product_ids = list(order.items.values_list('product_id', flat=True))
 
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -139,7 +116,6 @@ def order_edit(request, store, team, order_id):
     if request.method == "POST" and form.is_valid():
         with transaction.atomic():
             action = request.POST.get("action")
-
             if action == "delete":
                 order.delete()
                 return redirect("sales:order_list", store.id)
@@ -153,48 +129,15 @@ def order_edit(request, store, team, order_id):
 
             order = form.save(commit=False)
             order.store = store
-            order.total_amount = 0
+
+            # customer
+            name = (request.POST.get("customer_name") or "").strip()
+            phone = (request.POST.get("customer_phone") or "").strip()
+            handle_order_customer(order, store, name, phone)
+
             order.save()
 
-            existing_items = {item.product_id: item for item in order.items.all()}
-            new_items = []
-            total = 0
-
-            for pid, qty_str in zip(product_ids, quantities):
-                qty = int(qty_str)
-                if qty <= 0:
-                    continue
-
-                product = get_object_or_404(Product, id=pid, store=store)
-                subtotal = product.price * qty
-                total += subtotal
-
-                if int(pid) in existing_items:
-                    item = existing_items[int(pid)]
-                    item.qty = qty
-                    item.subtotal = subtotal
-                    item.price_at_sale = product.price
-                    item.save(update_fields=["qty", "subtotal", "price_at_sale"])
-                    existing_items.pop(int(pid))
-                else:
-                    new_items.append(
-                        OrderItem(
-                            order=order,
-                            product=product,
-                            product_name=product.name,
-                            price_at_sale=product.price,
-                            qty=qty,
-                            subtotal=subtotal,
-                        )
-                    )
-
-            # remove unchecked items
-            for item in existing_items.values():
-                item.delete()
-
-            # add new items
-            OrderItem.objects.bulk_create(new_items)
-
+            total = save_order_items(order, product_ids, quantities, store)
             order.total_amount = total
             order.save(update_fields=["total_amount"])
 
