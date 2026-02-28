@@ -64,6 +64,8 @@ searchForm.addEventListener("submit", async (e) => {
 const selectedBody = document.querySelector('.order-create-page .selected-items-body');
 const noItemsRow = selectedBody.querySelector('.no-selection');
 const orderTotal = document.getElementById('order-total');
+const orderSubTotal = document.getElementById('order-sub-total');
+const selectedItemsCount = document.querySelector('.selected-items-count');
 
 function updateTotal() {
   let total = 0;
@@ -79,7 +81,9 @@ function updateTotal() {
     total += price * qty;
   });
 
+  selectedItemsCount.textContent = selectedBody.querySelectorAll('tr:not(.no-selection)').length;
   orderTotal.textContent = total.toLocaleString();
+  orderSubTotal.textContent = total.toLocaleString();
 }
 
 function updateNoItemsState() {
