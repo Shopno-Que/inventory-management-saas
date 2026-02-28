@@ -31,12 +31,6 @@ def create_store(request):
 
 @login_required
 @store_member_required
-def dashboard(request, store, team):
-    members = Team.objects.filter(store=store).select_related("user")
-    return render(request, "store/dashboard.html", {"store": store, "members": members, "team": team})
-
-@login_required
-@store_member_required
 def store_info_settings(request, store, team):
     if request.method == "POST":
         if not team.has_perms("store_settings"):
