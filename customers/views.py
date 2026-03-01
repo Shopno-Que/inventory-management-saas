@@ -1,12 +1,11 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import Customer
-from django.db.models import Q, ProtectedError
+from django.db.models import Q
 from django.http import JsonResponse
 from core.utils import paginated_list_view
 from store.decorators import store_member_required, store_permission_required
 from .forms import CustomerForm
-from django.contrib import messages
 
 # customers list with search
 @login_required
@@ -46,12 +45,8 @@ def customer_edit(request, store, team, customer_id):
     if request.method == "POST" and form.is_valid():
         action = request.POST.get("action")
         if action == "delete":
-            try:            
-                customer.delete()
-                return redirect("customers:customer_list", store.id)
-            except ProtectedError:
-                messages.error(request, "Cannot delete customer with existing orders.")
-                return render(request, "customers/form.html", {"form": form, "store": store, "customer": customer,})
+            customer.delete()
+            return redirect("customers:customer_list", store.id)
         customer = form.save(commit=False)
         customer.store = store
         customer.save()

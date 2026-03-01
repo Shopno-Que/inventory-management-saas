@@ -1,7 +1,12 @@
 {% extends "layouts/dashboard_base.html" %}
-{% block dashboard_title %}ড্যাশবোর্ড / প্রোফাইল{% endblock dashboard_title %}
+{% block dashboard_title %}
+<a href="{% url 'user:stores' %}" class="md:flex hidden items-center gap-2">
+    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">K</div>
+    <span class="text-xl font-bold text-slate-800 tracking-tight">Hishab Khata</span>
+</a>
+{% endblock dashboard_title %}
 {% block logo %}
-<a href="{% url 'user:stores' %}" class="flex items-center gap-2">
+<a href="{% url 'user:stores' %}" class="flex md:hidden items-center gap-2">
     <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">K</div>
     <span class="text-xl font-bold text-slate-800 tracking-tight">Hishab Khata</span>
 </a>
