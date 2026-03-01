@@ -1,58 +1,66 @@
 <table class="w-full text-left border-collapse">
+
   <thead>
-      <tr class="bg-slate-50 border-b border-slate-200">
-          <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">প্রোডাক্টের নাম</th>
-          <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest ">SKU</th>
-          <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest ">মূল্য (টাকা)</th>
-          <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest ">স্টক</th>
-          <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest ">স্ট্যাটাস</th>
-          <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest ">অ্যাকশন</th>
-      </tr>
+    <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase">তারিখ</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase">খরচের নাম</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase">নোট</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase text-right">পরিমাণ (৳)</th>
+        <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase text-center">অ্যাকশন</th>
+    </tr>
   </thead>
+
   <tbody class="divide-y divide-slate-100">
-      {% for product in page_obj.object_list %}
+
+      {% for expense in page_obj.object_list %}
       <tr class="hover:bg-slate-50/50 transition-colors">
-          <td class="px-6 py-4">
-              <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400">
-                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                  </div>
-                  <div>
-                      <p class="font-bold text-slate-900">{{ product.name }}</p>
-                      <p class="text-xs text-slate-400 italic font-medium">SKU: {{ product.sku }}</p>
-                  </div>
-              </div>
+
+          <!-- Date -->
+          <td class="px-6 py-4 text-sm text-slate-600">
+              {{ expense.date|date:"d M Y" }}
           </td>
-          <td class="px-6 py-4 text-sm font-medium text-slate-600">-</td>
-          <td class="px-6 py-4 text-sm font-bold text-slate-900">{{ product.price|floatformat:2 }}</td>
-          <td class="px-6 py-4 text-sm font-bold text-slate-700">{{ product.stock_qty }} টি</td>
-          <td class="px-6 py-4">
-              {% if product.stock_qty > 5 %}
-              <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-lg uppercase italic">স্টক আছে</span>
-              {% elif product.stock_qty > 0 %}
-              <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-black rounded-lg uppercase italic">স্টক শেষ পর্যায়ে</span>
-              {% else %}
-              <span class="px-3 py-1 bg-rose-100 text-rose-700 text-[10px] font-black rounded-lg uppercase italic">স্টক নেই</span>
-              {% endif %}
+
+          <!-- Title -->
+          <td class="px-6 py-4 font-semibold text-slate-800">
+              {{ expense.title }}
           </td>
-          <td class="px-6 py-4">
-              <a href="{% url 'catalog:product_update' store.id product.id %}" class=" text-slate-400 hover:text-indigo-600 transition-colors">
+
+          <!-- Note -->
+          <td class="px-6 py-4 text-sm text-slate-500">
+              {{ expense.note|default:"—" }}
+          </td>
+
+          <!-- Amount -->
+          <td class="px-6 py-4 text-right font-bold text-rose-600">
+              ৳ {{ expense.amount|floatformat:2 }}
+          </td>
+
+          <!-- Actions -->
+          <td class="px-6 py-4 text-center flex justify-center gap-2">
+
+              <a href="{% url 'expenses:edit' store.id expense.id %}"
+                class="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                   </svg>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
               </a>
+
+          </td>
+
+      </tr>
+
+      {% empty %}
+      <tr>
+          <td colspan="6" class="px-6 py-4 text-center text-sm text-slate-500">
+              কোন খরচ পাওয়া যায়নি।
           </td>
       </tr>
-      {% empty %}
-        <tr>
-            <td colspan="6" class="px-6 py-4 text-center text-sm text-slate-500">
-                কোন প্রোডাক্ট পাওয়া যায়নি।
-            </td>
-        </tr>
       {% endfor %}
+
   </tbody>
+
 </table>
 <div class="flex justify-between items-center px-6 py-4 bg-slate-50 border-t border-slate-100">
   <span class="text-sm text-slate-500">

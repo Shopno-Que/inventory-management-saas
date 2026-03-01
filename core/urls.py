@@ -26,6 +26,7 @@ urlpatterns = [
     path('store/<int:store_id>/catalog/', include('catalog.urls')),
     path('store/<int:store_id>/sales/', include('sales.urls')),
     path('store/<int:store_id>/customer/', include('customers.urls')),
+    path('store/<int:store_id>/expenses/', include('expenses.urls')),
     path("", include("main.urls")),
     path("feedback/", include("feedback.urls")),
 ]
