@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'sales.apps.SalesConfig',
     'customers.apps.CustomersConfig',
     'expenses.apps.ExpensesConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
