@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 load_dotenv()
 
@@ -24,13 +25,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2el2n&kcu$qxo_wr!sea2yfge1(k4pl&!(#tt-yg!o8znip*r='
-
-# SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = os.getenv("PRODUCTION", "False") == "True"
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-2el2n&kcu$qxo_wr!sea2yfge1(k4pl&!(#tt-yg!o8znip*r=")
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not PRODUCTION
-ALLOWED_HOSTS = ['*'] if not PRODUCTION else ['yourdomain.com']
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    ".onrender.com,localhost,127.0.0.1" if PRODUCTION else "*",
+).split(",")
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "https://*.onrender.com").split(",")
+    if origin.strip()
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = PRODUCTION
+SESSION_COOKIE_SECURE = PRODUCTION
+CSRF_COOKIE_SECURE = PRODUCTION
+SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0"))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = PRODUCTION and SECURE_HSTS_SECONDS > 0
+SECURE_HSTS_PRELOAD = PRODUCTION and SECURE_HSTS_SECONDS > 0
 
 
 # Application definition
@@ -63,6 +82,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if PRODUCTION:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
@@ -85,7 +107,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-if PRODUCTION:
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
+    }
+elif PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -104,27 +130,21 @@ else:
         }
     }
 
-if PRODUCTION:
-    STORAGES = {
-        "default": {
-            "BACKEND": "core.storage.supabase.SupabaseStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-else:
-    MEDIA_ROOT = BASE_DIR / "media"
-    MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
 
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": (
+            "whitenoise.storage.CompressedManifestStaticFilesStorage"
+            if PRODUCTION
+            else "django.contrib.staticfiles.storage.StaticFilesStorage"
+        ),
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -157,6 +177,4 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR/'static']
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
-SUPABASE_BUCKET = os.getenv('SUPABASE_BUCKET')
+STATIC_ROOT = BASE_DIR / "staticfiles"
