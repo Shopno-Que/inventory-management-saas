@@ -76,7 +76,7 @@ The build script runs:
 
 ```bash
 pip install -r requirements.txt
-python manage.py collectstatic --no-input
+python manage.py collectstatic --no-input --ignore tailwind/input.css
 python manage.py migrate
 python manage.py create_store_permissions
 ```
@@ -158,7 +158,7 @@ If you need to run commands in Render Shell:
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py create_store_permissions
-python manage.py collectstatic --no-input
+python manage.py collectstatic --no-input --ignore tailwind/input.css
 ```
 
 ## Quick Checklist
