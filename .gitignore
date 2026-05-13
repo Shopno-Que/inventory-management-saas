@@ -1,57 +1,7 @@
-# -----------------------------
-# Python / Django
-# -----------------------------
-*.pyc
-*.pyo
-__pycache__/
-*.pyd
-*.swp
-*.swo
-
-# Virtual environment
-venv/
-.venv/
-env/
-ENV/
-
-# Django files
-*.log
-*.pot
-*.py[cod]
-*.sqlite3
-db.sqlite3
-media/
-staticfiles/
-coverage/
-*.cover
-htmlcov/
-
-# Secrets / settings
-*.env
+.venv
 .env
-
-# Migrations (optional if you track them)
-# apps/*/migrations/  # track only __init__.py, ignore others if you want
-# */migrations/*.pyc
-
-# MacOS
-.DS_Store
-
-# Node / Frontend
-node_modules/
-dist/
-build/
-npm-debug.log*
-yarn-error.log*
-yarn-debug.log*
-package-lock.json
-
-# Optional: log files
-*.log
-
-# Coverage reports
-.coverage
-coverage.xml
-nosetests.xml
-pytest_cache/
-.pytest_cache/
+node_modules
+staticfiles
+__pycache__
+*.pyc
+db.sqlite3
