@@ -3,7 +3,7 @@
 {% block main_content %}
 <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 
-    <!-- ব্যাক বাটন ও টাইটেল -->
+    <!-- Back Button and Title -->
     <div class="mb-8">
 
         <a href="{% url 'expenses:expense_list' store.id %}"
@@ -15,23 +15,23 @@
                       d="M15 19l-7-7 7-7"></path>
             </svg>
 
-            ফিরে যান
+            Go Back
         </a>
 
 
         {% if expense %}
         <h1 class="text-3xl font-bold text-slate-900 tracking-tight">
-            খরচ আপডেট করুন
+            Update Expense
         </h1>
         <p class="text-slate-500 mt-1">
-            খরচের তথ্য আপডেট করুন
+            Update the expense information
         </p>
         {% else %}
         <h1 class="text-3xl font-bold text-slate-900 tracking-tight">
-            নতুন খরচ যুক্ত করুন
+            Add New Expense
         </h1>
         <p class="text-slate-500 mt-1">
-            খরচের তথ্য দিন
+            Enter the expense information
         </p>
         {% endif %}
 
@@ -67,8 +67,7 @@
                     name="action"
                     value="save"
                     class="flex-1 md:flex-none px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
-                সেভ করুন
-            </button>
+                save</button>
 
 
             {% if expense %}
@@ -76,9 +75,8 @@
                     value="delete"
                     type="submit"
                     class="flex-1 md:flex-none px-5 py-2.5 bg-rose-600 text-white rounded-xl text-sm font-semibold hover:bg-rose-700 shadow-lg shadow-rose-100 transition-all text-center"
-                    onclick="return confirm('আপনি কি নিশ্চিত এই খরচ ডিলিট করতে চান?');">
-                ডিলিট করুন
-            </button>
+                    onclick="return confirm('Are you sure you want to delete this expense?BDT');">
+                Delete</button>
             {% endif %}
 
         </div>

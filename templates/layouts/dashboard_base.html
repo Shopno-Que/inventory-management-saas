@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{% block title %}{% endblock %} - Hishab Khata - আপনার ব্যবসার আধুনিক সমাধান</title>
+    <title>{% block title %}{% endblock %} - Hishab Khata - Modern solutions for your business</title>
     <!--
         <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     -->
@@ -17,7 +17,7 @@
 </head>
 <body class="h-screen bg-gray-50 text-gray-800 flex flex-col overflow-hidden">
 
-    <!-- ================= HEADER ================= -->
+    <!-- ================ HEADER ================= -->
     <header
         class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 sticky top-0 z-40">
 
@@ -68,19 +68,16 @@
 
                     <a href="{% url 'user:stores' %}"
                     class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
-                        অন্যান্য স্টোরসমূহ
-                    </a>
+                        Other stores</a>
 
                     <a href="{% url 'user:settings' %}"
                     class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
-                        প্রোফাইল
-                    </a>
+                        profile</a>
                     <form action="{% url 'user:signout' %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 w-full rounded-xl transition-all">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                            লগ আউট
-                        </button>
+                            log out</button>
                     </form>
                 </div>
             </div>
@@ -98,7 +95,7 @@
         </div>
 
 
-        <!-- ================= SIDEBAR ================= -->
+        <!-- ================ SIDEBAR ================= -->
         <aside id="sidebar"
             class="fixed md:sticky top-0 md:top-16 left-0
                    w-64 h-full md:h-[calc(100vh-64px)]
@@ -118,7 +115,7 @@
         </aside>
 
 
-        <!-- ================= MAIN CONTENT ================= -->
+        <!-- ================ MAIN CONTENT ================= -->
         <main class="flex-1 overflow-y-auto p-6">
             {% block main_content %}{% endblock main_content %}
         </main>
@@ -127,7 +124,7 @@
 
 
 
-    <!-- ================= SCRIPT ================= -->
+    <!-- ================ SCRIPT ================= -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');

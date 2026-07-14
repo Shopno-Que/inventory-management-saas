@@ -2,20 +2,19 @@
 {% load static %}
 {% block title %}{{store.name}} Product List{% endblock %}
 {% block main_content %}
-<!-- টপবার -->
+<!-- top bar-->
 <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-    <!-- ব্যাক বাটন ও টাইটেল -->
+    <!-- Back button and title-->
     <div class="mb-8">
         <a href="{% url 'sales:order_list' store.id %}" class="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors mb-4 group">
             <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            ফিরে যান
-        </a>
+            go back</a>
         {% if order %}
-        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">অর্ডার এডিট করুন</h1>
-        <p class="text-slate-500 mt-1">অর্ডার নং: {{ order.id }}</p>
+        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Edit the order</h1>
+        <p class="text-slate-500 mt-1">Order no: {{ order.id }}</p>
         {% else %}
-        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">নতুন অর্ডার তৈরি করুন</h1>
-        <p class="text-slate-500 mt-1">প্রোডাক্ট নির্বাচন করে সেল তৈরি করুন</p>
+        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Create a new order</h1>
+        <p class="text-slate-500 mt-1">Create cell by selecting product</p>
         {% endif %}
     </div>
     <div class="flex gap-2">
@@ -25,8 +24,7 @@
             name="action"
             value="save"
             class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
-            সেভ করুন
-        </button>
+            save</button>
 
         {% if order and order.status == 'draft' %}
         <button
@@ -34,10 +32,9 @@
             form="order-form"
             name="action"
             value="delete"
-            onclick="return confirm('আপনি কি নিশ্চিত এই অর্ডার ডিলিট করতে চান?');"
+            onclick="return confirm('Aপনি কি নিশ্চিত এই অর্ডার ডিলিট করতে চানBDT');"
             class="px-5 py-2.5 bg-rose-600 text-white rounded-xl text-sm font-semibold hover:bg-rose-700 shadow-lg shadow-rose-100 transition-all">
-            ডিলিট করুন
-        </button>
+            Delete</button>
         {% endif %}
     </div>
 </header>
@@ -64,7 +61,7 @@
                 {% endif %}
                 id="product-search" 
                 value="{{ request.GET.q|default:'' }}"
-                placeholder="প্রোডাক্টের নাম বা SKU দিয়ে খুঁজুন..." 
+                placeholder="Product name orSKU Find with..." 
                 class="w-full pl-11 pr-12 py-3 block appearance-none rounded-xl border border-slate-200 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 transition"
             >
 
@@ -81,15 +78,15 @@
                 {% include "partials/order_item_list.html" %}
             </div>
         </div>
-        <!-- প্রোডাক্ট টেবিল -->
+        <!-- Product table-->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                <h3 class="font-bold text-slate-700 italic uppercase text-sm tracking-wider">সিলেক্টেড আইটেম</h3>
+                <h3 class="font-bold text-slate-700 italic uppercase text-sm tracking-wider">Selected items</h3>
                 <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold">
                     <span class="selected-items-count">
                         {% if order %}{{ order.items.count }}{% else %}0{% endif %}
                     </span> 
-                    টি আইটেম
+                    Items
                 </span>
             </div>
             <div class="overflow-x-auto">
@@ -97,15 +94,15 @@
                     <thead class="bg-slate-50 text-slate-400 uppercase text-xs">
                         <tr>
                             <th class="px-4 py-3 w-10"></th>
-                            <th class="px-4 py-3 text-left">প্রোডাক্ট</th>
-                            <th class="px-4 py-3 text-center w-32">পরিমাণ</th>
+                            <th class="px-4 py-3 text-left">product</th>
+                            <th class="px-4 py-3 text-center w-32">Amount</th>
                         </tr>
                     </thead>
 
                     <tbody class="selected-items-body divide-y divide-slate-100">
                         <tr {% if order %}style="display: none;"{% endif %} class="no-selection">
                             <td colspan="3" class="px-4 py-3 text-center text-slate-400">
-                                কোন আইটেম সিলেক্টেড হয়নি
+                                No Item Selected
                             </td>
                         </tr>
                         {% for item in order.items.all %}
@@ -115,7 +112,7 @@
                                 </td>
                                 <td class="px-4 py-3">
                                 <div class="font-semibold text-slate-800">{{ item.product.name }}</div>
-                                <div class="text-xs text-slate-400">৳ {{ item.product.price }}</div>
+                                <div class="text-xs text-slate-400">৳{{ item.product.price }}</div>
                                 <input form="order-form" type="hidden" name="product_id" value="{{ item.product.id }}">
                                 </td>
                                 <td>
@@ -129,27 +126,25 @@
             </div>
         </div>
 
-        <!-- সামারি কার্ড -->
+        <!-- Summary card-->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <div class="max-w-xs ml-auto space-y-3">
                 <div class="flex justify-between text-slate-500">
-                    <span class="text-sm">সাব-টোটাল</span>
+                    <span class="text-sm">Sub-total</span>
                     <div>
-                        ৳
-                        <span id="order-sub-total" class="font-medium">{% if order %}{{ order.total_amount|floatformat:2 }}{% else %}0{% endif %}</span>
+                        ৳<span id="order-sub-total" class="font-medium">{% if order %}{{ order.total_amount|floatformat:2 }}{% else %}0{% endif %}</span>
                     </div>
                 </div>
                 <div class="pt-3 border-t border-slate-100 flex justify-between items-center">
-                    <span class="font-bold text-slate-900 italic">সর্বমোট</span>
-                    <span class="text-xl font-black text-indigo-600">৳ 
-                        <span id="order-total" >{% if order %}{{ order.total_amount|floatformat:2 }}{% else %}0{% endif %}</span>
+                    <span class="font-bold text-slate-900 italic">total</span>
+                    <span class="text-xl font-black text-indigo-600">৳<span id="order-total" >{% if order %}{{ order.total_amount|floatformat:2 }}{% else %}0{% endif %}</span>
                     </span>
                 </div>
             </div>
         </div>
     </div>
     <div class="space-y-6">
-        <!-- স্ট্যাটাস কার্ড -->
+        <!-- Status card-->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">         
             <form id="order-form" method="post" {% if order %}action="{% url 'sales:order_edit' store.id order.id %}"{% else %}action="{% url 'sales:order_create' store.id %}"{% endif %} class="">
                 {% csrf_token %}
@@ -158,54 +153,51 @@
             </form>
         </div>
 
-        <!-- কাস্টমার ডিটেইলস -->
+        <!-- Customer Details-->
         {% comment %} <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 italic">কাস্টমার ইনফরমেশন</h3>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 italic">Customer Information</h3>
             
             <div class="space-y-4">
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg">আ</div>
+                    <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg">A</div>
                     <div>
-                        <div class="font-bold text-slate-900">আরিফুল ইসলাম</div>
+                        <div class="font-bold text-slate-900">Ariful Islam</div>
                         <div class="text-sm text-slate-500">ariful@email.com</div>
                     </div>
                 </div>
                 
                 <div class="pt-4 border-t border-slate-50">
-                    <div class="text-xs font-bold text-slate-400 uppercase mb-2">শিপিং অ্যাড্রেস</div>
+                    <div class="text-xs font-bold text-slate-400 uppercase mb-2">Shipping address</div>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        বাড়ি নং ১২, রোড নং ৫, ব্লক-বি,<br>
-                        বনানী, ঢাকা - ১২১৩
-                    </p>
+                        House No. 12, Road No. 5, Block-b,<br>
+                        Banani, Dhaka- 1213</p>
                 </div>
 
                 <div class="pt-4 border-t border-slate-50">
-                    <div class="text-xs font-bold text-slate-400 uppercase mb-2">যোগাযোগ</div>
+                    <div class="text-xs font-bold text-slate-400 uppercase mb-2">communication</div>
                     <div class="flex items-center gap-2 text-sm text-indigo-600 font-bold">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                        ০১৭০০-০০০০০০
-                    </div>
+                        01700-000000</div>
                 </div>
             </div>
         </div> {% endcomment %}
 
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 italic">
-                কাস্টমার ইনফরমেশন
-            </h3>
+                Customer Information</h3>
 
             <div class="space-y-4">
                 <!-- Search box -->
                 <div class="relative">
 
                     <form autocomplete="off" method="get" action="{% url "customers:customer_search" store.id %}" class="relative w-full  mb-3" role="search" aria-label="Search customers">
-                        <label for="customer-search" class="sr-only">কাস্টমার খুঁজুন</label>
+                        <label for="customer-search" class="sr-only">Find customers</label>
 
                         <input 
                             type="search" 
                             name="q"
                             id="customer-search"
-                            placeholder="017... অথবা নাম লিখুন" 
+                            placeholder="017... Or enter the name" 
                             class="w-full pl-11  py-3 block appearance-none rounded-xl border border-slate-200 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
                         >
 
@@ -231,7 +223,7 @@
 
                 <!-- Name -->
                 <label hidden for="customer_name" class="text-xs font-bold text-slate-400 uppercase mb-2 block">
-                    কাস্টমারের নাম
+                    Customer Name
                 </label>
                 <input
                     type="text"
@@ -241,13 +233,12 @@
                     {% if order %}
                     value="{{ order.customer_name }}"
                     {% endif %}
-                    placeholder="কাস্টমারের নাম"
+                    placeholder="Customer Name"
                     class="block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm mt-1"
                 >
                 <!-- Phone -->
                  <label hidden for="customer_phone" class="text-xs font-bold text-slate-400 uppercase mb-2 block">
-                    ফোন নাম্বার
-                </label>
+                    phone number</label>
                 <input
                     type="tel"
                     id="customer_phone"
@@ -256,16 +247,16 @@
                     {% if order %}
                     value="{{ order.customer_phone }}"
                     {% endif %}
-                    placeholder="মোবাইল নাম্বার"
+                    placeholder="mobile number"
                     class="block w-full appearance-none rounded-xl border border-slate-200 px-4 py-3 placeholder-slate-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm mt-1"
                 >
             </div>
         </div>
 
-        <!-- ইন্টারনাল নোট -->
+        <!-- ইন্টারনাল Note-->
         {% comment %} <div class="bg-amber-50 rounded-xl border border-amber-100 p-6">
-            <h3 class="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2 italic">নোট (Internal)</h3>
-            <p class="text-sm text-amber-800">কাস্টমার দ্রুত ডেলিভারি চেয়েছেন। পেমেন্ট গেটওয়ের মাধ্যমে সফলভাবে সম্পন্ন হয়েছে।</p>
+            <h3 class="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2 italic">Note(Internal)</h3>
+            <p class="text-sm text-amber-800">Customer asked for fast delivery. Successfully completed through payment gateway.</p>
         </div> {% endcomment %}
     </div>
 </section>

@@ -3,91 +3,87 @@
 {% block main_content %}
 {% comment %} <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
     <div>
-        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">শুভ অপরাহ্ন, আরিফ!</h1>
-        <p class="text-slate-500 mt-1">আপনার মদিনা জেনারেল স্টোরের আজকের পারফরম্যান্স দেখুন।</p>
+        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Good afternoon, Arif!</h1>
+        <p class="text-slate-500 mt-1">Check today's performance of your Medina General Store.</p>
     </div>
     <div class="flex gap-2">
         <button class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 flex items-center gap-2 hover:bg-slate-50 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            আজকের রিপোর্ট
-        </button>
+            Today's report</button>
         <button class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            নতুন ইনভয়েস
-        </button>
+            New invoice</button>
     </div>
     </div>
 
-    <!-- স্ট্যাটাস কার্ডস -->
+    <!-- Status কার্ডস -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-4">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         </div>
-        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">মোট বিক্রয় (আজ)</p>
-        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">৳ ২৪,৫০০</h3>
+        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Total sales(today)</p>
+        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">৳২৪,৫০০</h3>
         <div class="flex items-center gap-1 text-emerald-500 text-xs font-bold mt-2">
             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"></path></svg>
-            ১২% বৃদ্ধি
-        </div>
+            12% growth</div>
     </div>
 
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-4">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
         </div>
-        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">মোট অর্ডার</p>
-        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">৪২টি</h3>
-        <p class="text-xs text-slate-400 mt-2">গড় অর্ডার মূল্য: ৳ ৫৮৩</p>
+        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">total order</p>
+        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">42</h3>
+        <p class="text-xs text-slate-400 mt-2">Average order value: ৳583</p>
     </div>
 
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center mb-4">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
         </div>
-        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">স্টক আউট প্রোডাক্ট</p>
-        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">০৮টি</h3>
+        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Out of stock product</p>
+        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">08</h3>
         <div class="flex items-center gap-1 text-amber-500 text-xs font-bold mt-2 underline cursor-pointer">
-            লিস্ট দেখুন
-        </div>
+            See the list</div>
     </div>
 
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center mb-4">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         </div>
-        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">মোট খরচ (মাস)</p>
-        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">৳ ৫,২০০</h3>
-        <p class="text-xs text-slate-400 mt-2">বাজেট বাকি: ৳ ৮০০</p>
+        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">total cost(months)</p>
+        <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">৳৫,২০০</h3>
+        <p class="text-xs text-slate-400 mt-2">বাজেট the rest: ৳800</p>
     </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-    <!-- সাম্প্রতিক সেলস টেবিল -->
+    <!-- Recent Sales Table-->
     <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-            <h3 class="font-bold text-slate-900 italic text-lg">সাম্প্রতিক বিক্রয়</h3>
-            <button class="text-xs font-bold text-indigo-600 hover:underline">সবগুলো দেখুন</button>
+            <h3 class="font-bold text-slate-900 italic text-lg">Recent sales</h3>
+            <button class="text-xs font-bold text-indigo-600 hover:underline">See all</button>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead class="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
                     <tr>
-                        <th class="px-6 py-4">ইনভয়েস</th>
-                        <th class="px-6 py-4">কাস্টমার</th>
-                        <th class="px-6 py-4">পরিমাণ</th>
-                        <th class="px-6 py-4">স্ট্যাটাস</th>
-                        <th class="px-6 py-4 text-right">অ্যাকশন</th>
+                        <th class="px-6 py-4">Invoice</th>
+                        <th class="px-6 py-4">customer</th>
+                        <th class="px-6 py-4">Amount</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-right">action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     <tr class="hover:bg-slate-50/50 transition-colors">
                         <td class="px-6 py-4 font-bold text-sm text-slate-700">#INV-8821</td>
-                        <td class="px-6 py-4 text-sm">করিম উদ্দীন</td>
-                        <td class="px-6 py-4 font-bold text-sm">৳ ১,২০০</td>
+                        <td class="px-6 py-4 text-sm">Karim Uddin</td>
+                        <td class="px-6 py-4 font-bold text-sm">৳1,200</td>
                         <td class="px-6 py-4">
-                            <span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold uppercase">পেইড</span>
+                            <span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold uppercase">paid</span>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <button class="p-2 text-slate-400 hover:text-indigo-600">
@@ -97,10 +93,10 @@
                     </tr>
                     <tr class="hover:bg-slate-50/50 transition-colors">
                         <td class="px-6 py-4 font-bold text-sm text-slate-700">#INV-8820</td>
-                        <td class="px-6 py-4 text-sm">ফারুক আহমেদ</td>
-                        <td class="px-6 py-4 font-bold text-sm">৳ ৩,৫০০</td>
+                        <td class="px-6 py-4 text-sm">Farooq Ahmed</td>
+                        <td class="px-6 py-4 font-bold text-sm">৳3,500</td>
                         <td class="px-6 py-4">
-                            <span class="px-2 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-bold uppercase">বাকি</span>
+                            <span class="px-2 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-bold uppercase">the rest</span>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <button class="p-2 text-slate-400 hover:text-indigo-600">
@@ -113,53 +109,52 @@
         </div>
     </div>
 
-    <!-- টপ সেলিং প্রোডাক্টস -->
+    <!-- Top selling products-->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-        <h3 class="font-bold text-slate-900 italic text-lg mb-6">সেরা বিক্রিত পণ্য</h3>
+        <h3 class="font-bold text-slate-900 italic text-lg mb-6">Best selling products</h3>
         <div class="space-y-6">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
                 <div class="flex-1">
-                    <h4 class="text-sm font-bold text-slate-800 leading-none">লাক্স সাবান ১০০ গ্রাম</h4>
-                    <p class="text-xs text-slate-400 mt-1">বিক্রিত: ১৫০ পিস</p>
+                    <h4 class="text-sm font-bold text-slate-800 leading-none">Lux soap 100 grams</h4>
+                    <p class="text-xs text-slate-400 mt-1">sold out: 150 pcs</p>
                 </div>
-                <div class="text-right font-bold text-sm text-indigo-600">৳ ৫,২৫০</div>
+                <div class="text-right font-bold text-sm text-indigo-600">৳5,250</div>
             </div>
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
                 <div class="flex-1">
-                    <h4 class="text-sm font-bold text-slate-800 leading-none">মিনিকেট চাল ২৫ কেজি</h4>
-                    <p class="text-xs text-slate-400 mt-1">বিক্রিত: ১২ ব্যাগ</p>
+                    <h4 class="text-sm font-bold text-slate-800 leading-none">Miniket rice 25 kg</h4>
+                    <p class="text-xs text-slate-400 mt-1">sold out: 12 ব্যাগ</p>
                 </div>
-                <div class="text-right font-bold text-sm text-indigo-600">৳ ১৫,৮০০</div>
+                <div class="text-right font-bold text-sm text-indigo-600">৳15,800</div>
             </div>
         </div>
-        <button class="w-full mt-8 py-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition-all">ইনভেন্টরি রিপোর্ট দেখুন</button>
+        <button class="w-full mt-8 py-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition-all">View Inventory Report</button>
     </div>
 
 </div> {% endcomment %}
-<!-- ================= HEADER ================= -->
+<!-- ================ HEADER ================= -->
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
     <div>
         <h1 class="text-3xl font-bold text-slate-900 tracking-tight">
-            শুভ অপরাহ্ন!
+            Good Afternoon!
         </h1>
         <p class="text-slate-500 mt-1">
-            আপনার {{ store.name }} স্টোরের আজকের পারফরম্যান্স দেখুন।
+            View today's performance of your {{ store.name }} store.
         </p>
     </div>
 
     <div class="flex gap-2">
         {% comment %} <button class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50">
-            আজকের রিপোর্ট
-        </button> {% endcomment %}
+            Today's report</button> {% endcomment %}
 
         <a href="{% url "sales:order_create" store.pk %}" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100">
-            নতুন অর্ডার
+            New Order
         </a>
     </div>
 </div>
@@ -171,36 +166,35 @@
 
     <!-- Today Sales -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-sm font-medium text-slate-500 uppercase">মোট বিক্রয় (আজ)</p>
+        <p class="text-sm font-medium text-slate-500 uppercase">Total sales(today)</p>
         <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">
-            ৳ {{ today_sales|default:0|floatformat:2 }}
+            ৳{{ today_sales|default:0|floatformat:2 }}
         </h3>
     </div>
 
     <!-- Orders -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-sm font-medium text-slate-500 uppercase">মোট অর্ডার</p>
+        <p class="text-sm font-medium text-slate-500 uppercase">total order</p>
         <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">
-            {{ today_order_count|default:0 }} টি
-        </h3>
+            {{ today_order_count|default:0 }} </h3>
         <p class="text-xs text-slate-400 mt-2">
-            গড় অর্ডার মূল্য: ৳ {{ avg_order_value|default:0|floatformat:2 }}
+            Average order value: ৳{{ avg_order_value|default:0|floatformat:2 }}
         </p>
     </div>
 
     <!-- Monthly Sales -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-sm font-medium text-slate-500 uppercase">মাসিক বিক্রয়</p>
+        <p class="text-sm font-medium text-slate-500 uppercase">Monthly Sales</p>
         <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">
-            ৳ {{ monthly_sales|default:0|floatformat:2 }}
+            ৳{{ monthly_sales|default:0|floatformat:2 }}
         </h3>
     </div>
 
     <!-- Monthly Expense -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-sm font-medium text-slate-500 uppercase">মাসিক খরচ</p>
+        <p class="text-sm font-medium text-slate-500 uppercase">Monthly expenses</p>
         <h3 class="text-2xl font-bold text-slate-900 mt-1 italic">
-            ৳ {{ monthly_expense|default:0|floatformat:2 }}
+            ৳{{ monthly_expense|default:0|floatformat:2 }}
         </h3>
     </div>
 
@@ -208,24 +202,24 @@
 
 
 
-<!-- ================= MAIN GRID ================= -->
+<!-- ================ MAIN GRID ================= -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-    <!-- ================= RECENT ORDERS ================= -->
+    <!-- ================ RECENT ORDERS ================= -->
     <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
 
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-            <h3 class="font-bold text-slate-900 italic text-lg">সাম্প্রতিক বিক্রয়</h3>
+            <h3 class="font-bold text-slate-900 italic text-lg">Recent sales</h3>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead class="bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
                     <tr>
-                        <th class="px-6 py-4">ইনভয়েস</th>
-                        <th class="px-6 py-4">কাস্টমার</th>
-                        <th class="px-6 py-4">পরিমাণ</th>
-                        <th class="px-6 py-4">তারিখ</th>
+                        <th class="px-6 py-4">Invoice</th>
+                        <th class="px-6 py-4">customer</th>
+                        <th class="px-6 py-4">Amount</th>
+                        <th class="px-6 py-4">the date</th>
                     </tr>
                 </thead>
 
@@ -242,7 +236,7 @@
                         </td>
 
                         <td class="px-6 py-4 font-bold text-sm">
-                            ৳ {{ order.total_amount|floatformat:2 }}
+                            ৳{{ order.total_amount|floatformat:2 }}
                         </td>
 
                         <td class="px-6 py-4 text-xs text-slate-500">
@@ -252,8 +246,7 @@
                     {% empty %}
                     <tr>
                         <td colspan="4" class="px-6 py-6 text-center text-slate-400">
-                            কোন বিক্রয় পাওয়া যায়নি
-                        </td>
+                            No sales found</td>
                     </tr>
                     {% endfor %}
 
@@ -264,12 +257,11 @@
 
 
 
-    <!-- ================= TOP PRODUCTS ================= -->
+    <!-- ================ TOP PRODUCTS ================= -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
 
         <h3 class="font-bold text-slate-900 italic text-lg mb-6">
-            সেরা বিক্রিত পণ্য
-        </h3>
+            Best selling products</h3>
 
         <div class="space-y-6">
 
@@ -282,18 +274,16 @@
                     </h4>
 
                     <p class="text-xs text-slate-400 mt-1">
-                        বিক্রিত: {{ product.sold_qty|default:0 }} পিস
-                    </p>
+                        sold out: {{ product.sold_qty|default:0 }} the piece</p>
                 </div>
 
                 <div class="text-right font-bold text-sm text-indigo-600">
-                    ৳ {{ product.revenue|default:0|floatformat:2 }}
+                    ৳{{ product.revenue|default:0|floatformat:2 }}
                 </div>
             </div>
             {% empty %}
             <p class="text-sm text-slate-400 text-center">
-                কোন ডাটা নেই
-            </p>
+                There is no data</p>
             {% endfor %}
 
         </div>

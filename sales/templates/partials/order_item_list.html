@@ -2,8 +2,8 @@
   <thead class="bg-slate-50 text-slate-400 uppercase text-xs">
       <tr>
           <th class="px-4 py-3 w-10"></th>
-          <th class="px-4 py-3 text-left">প্রোডাক্ট</th>
-          <th class="px-4 py-3 text-center w-32">পরিমাণ</th>
+          <th class="px-4 py-3 text-left">Product</th>
+          <th class="px-4 py-3 text-center w-32">Quantity</th>
       </tr>
   </thead>
 
@@ -26,7 +26,7 @@
           <td>
               <label for="label_{{ product.id }}" class="flex px-4 py-3 flex-col">
                   <span class="product-name font-semibold text-slate-800">{{ product.name }}</span>
-                  <span class="product-price text-xs text-slate-400">৳ {{ product.price }}</span>
+                  <span class="product-price text-xs text-slate-400">৳{{ product.price }}</span>
               </label>
           </td>
 
@@ -50,19 +50,19 @@
       </tr>
       {% empty %}
       <tr>
-          <td colspan="2" class="px-4 py-3 text-center text-slate-500">কোন প্রোডাক্ট পাওয়া যায়নি</td>
+          <td colspan="2" class="px-4 py-3 text-center text-slate-500">No products found</td>
       </tr>
       {% endfor %}
   </tbody>
 </table>
-<!-- ===== Pagination with numbers ===== -->
+<!-- =====Pagination with numbers ===== -->
 <div class="flex justify-between items-center px-4 py-3  bg-slate-50 border-t border-slate-100">
   <span class="text-sm text-slate-500">
-      পৃষ্ঠা {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+      Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
   </span>
   <div class="flex gap-1">
       {% if page_obj.has_previous %}
-          <a href="?{% if q %}q={{ q }}&{% endif %}page={{ page_obj.previous_page_number }}" class="page-link p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
+          <a href="BDT{% if q %}q={{ q }}&{% endif %}page={{ page_obj.previous_page_number }}" class="page-link p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </a>
       {% else %}
@@ -75,14 +75,14 @@
           {% if num == page_obj.number %}
               <span class="px-3 py-1 bg-indigo-600 border text-white rounded-lg">{{ num }}</span>
           {% else %}
-              <a href="?{% if q %}q={{ q }}&{% endif %}page={{ num }}" class="page-link px-3 py-1 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-indigo-600 transition-colors">
+              <a href="BDT{% if q %}q={{ q }}&{% endif %}page={{ num }}" class="page-link px-3 py-1 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-indigo-600 transition-colors">
                   {{ num }}
               </a>
           {% endif %}
       {% endfor %}
 
       {% if page_obj.has_next %}
-          <a href="?{% if q %}q={{ q }}&{% endif %}page={{ page_obj.next_page_number }}" class="page-link p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
+          <a href="BDT{% if q %}q={{ q }}&{% endif %}page={{ page_obj.next_page_number }}" class="page-link p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-indigo-600">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </a>
       {% else %}

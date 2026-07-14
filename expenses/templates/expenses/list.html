@@ -4,8 +4,8 @@
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
 
   <div>
-      <h1 class="text-3xl font-bold text-slate-900 tracking-tight">খরচসমূহ</h1>
-      <p class="text-slate-500 mt-1">আপনার স্টোরের সকল খরচের তালিকা দেখুন।</p>
+      <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Expenses</h1>
+      <p class="text-slate-500 mt-1">View the list of all expenses for your store.</p></p>
 
       <!-- Search -->
       <form method="get" action="{% url 'expenses:expense_list' store.id %}"
@@ -15,7 +15,7 @@
               type="search"
               name="q"
               value="{{ request.GET.q|default:'' }}"
-              placeholder="খরচের পরিমাণ দিয়ে খুঁজুন..."
+              placeholder="Search by expense amount..."
               class="w-full pl-11 pr-12 py-3 rounded-xl border border-slate-200 shadow-sm focus:border-indigo-500 focus:outline-none"
           >
 
@@ -37,7 +37,7 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
-          নতুন খরচ
+          New Expense
       </a>
   </div>
 

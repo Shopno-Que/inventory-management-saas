@@ -6,7 +6,7 @@
         <svg class="w-5 h-5 transform group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
-        <span>হোমে ফিরে যান</span>
+        <span>Back to Home</span>
     </a>
 </div>
 
@@ -15,10 +15,10 @@
     <div class="flex justify-center items-center gap-2 mb-6">
         {% include "partials/white_logo.html" %}
     </div>
-    <h2 class="text-center text-3xl font-bold tracking-tight text-slate-900">ফ্রি অ্যাকাউন্ট তৈরি করুন</h2>
+    <h2 class="text-center text-3xl font-bold tracking-tight text-slate-900">Create Free Account</h2>
     <p class="mt-2 text-center text-sm text-slate-600">
-        ইতিমধ্যেই অ্যাকাউন্ট আছে? 
-        <a href="{% url 'user:signin' %}" class="font-medium text-indigo-600 hover:text-indigo-500 transition">লগইন করুন</a>
+        Already have an account? 
+        <a href="{% url 'user:signin' %}" class="font-medium text-indigo-600 hover:text-indigo-500 transition">Sign In</a>
     </p>
 </div>
 
@@ -32,7 +32,7 @@
             <div>
                 <button type="submit" 
                     class="flex w-full justify-center rounded-xl bg-indigo-600 px-4 py-3 text-md font-semibold text-white shadow-lg shadow-indigo-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition transform active:scale-[0.98]">
-                    অ্যাকাউন্ট তৈরি করুন
+                    Create Account
                 </button>
             </div>
         </form>
