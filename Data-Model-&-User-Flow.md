@@ -68,7 +68,7 @@ Anyone can submit text feedback along with screenshots directly to platform admi
 
 The following entity relationship diagram illustrates the application's data model and the relationships between the core entities.
 
-![Database Design](static/images/hishab-khata-db-design.png)
+![Database Design](https://raw.githubusercontent.com/osama2kabdullah/hishab-khata/production/static/images/hishab-khata-db-deign.png)
 ---
 
 # **User Flow**
