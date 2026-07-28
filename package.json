@@ -1,10 +1,29 @@
 {
-  "dependencies": {
-    "@tailwindcss/cli": "^4.1.18",
-    "tailwindcss": "^4.1.18"
-  },
+  "name": "hishab-khata-v2",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "tailwind:watch": "npx @tailwindcss/cli -i ./static/tailwind/input.css -o ./static/tailwind/output.css --watch",
-    "tailwind:build": "npx @tailwindcss/cli -i ./static/tailwind/input.css -o ./static/tailwind/output.css"
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "biome check",
+    "format": "biome format --write"
+  },
+  "dependencies": {
+    "next": "16.2.6",
+    "nextjs-toploader": "^3.9.17",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-icons": "^5.6.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "daisyui": "^5.5.19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

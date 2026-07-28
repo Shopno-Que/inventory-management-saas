@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--next-font-hind-siliguri);
+  --font-hind-siliguri: var(--next-font-hind-siliguri);
+  --font-noto-sans-bengali: var(--next-font-noto-sans-bengali);
+}
+
+@plugin "daisyui" {
+  /* biome-ignore lint/correctness/noUnknownProperty: DaisyUI Tailwind plugin option */
+  themes: light --default;
+}
