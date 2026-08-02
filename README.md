@@ -49,3 +49,10 @@ This project follows a consistent development workflow and folder structure. Ple
    * All reusable components are located in the root-level `components/` directory.
    * Components are organized into subdirectories based on the feature or section where they are used.
    * Keep components modular, reusable, and easy to locate.
+
+
+### How to contribute
+1. Clone the `master` branch
+2. create a new branch. and do you changes. 
+3. put commits for each small paces changes
+4. make a PR
