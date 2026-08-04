@@ -1,65 +1,125 @@
 "use client";
 
+import { useState, useRef } from "react";
 import Link from "next/link";
-import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 
-// Client Component: form controls and future submit handlers belong in the
-// smallest possible client boundary.
 export default function LoginForm() {
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const formRef = useRef(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const supabase = createClient();
+
+    setLoading(true);
+    setMessage(null);
+
+    const form = new FormData(e.currentTarget);
+
+    const email = form.get("email");
+    const password = form.get("password");
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+      // Update this route to redirect to an authenticated route. The user already has an active session.
+      formRef.current?.reset();
+      router.push("/");
+    } catch (error) {
+      setMessage({ type: "error", text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।" })
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="w-full max-w-md space-y-6">
-      <header className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold text-base-content">সাইন ইন করুন</h1>
-        <p className="text-sm text-base-content/60">আপনার অ্যাকাউন্টে প্রবেশ করুন</p>
-      </header>
-
-      <form className="grid gap-5">
-        <label className="form-control w-full">
-          <span className="label mb-1">
+    <form ref={formRef} onSubmit={handleSubmit}>
+      {message && (
+        <div
+          role="alert"
+          className={`alert mb-5 ${message.type === "success"
+              ? "alert-success"
+              : "alert-error"
+            }`}
+        >
+          <span>{message.text}</span>
+        </div>
+      )}
+      
+      <fieldset className="grid gap-5" disabled={loading}>
+        <div className="form-control w-full">
+          <label htmlFor="email" className="label mb-1">
             <span className="label-text font-medium">ইমেইল</span>
-          </span>
-          <input
-            className="input input-bordered w-full"
-            placeholder="you@example.com"
-            type="email"
-          />
-        </label>
+          </label>
 
-        <label className="form-control w-full">
-          <span className="label mb-1 flex items-center justify-between">
-            <span className="label-text font-medium">পাসওয়ার্ড</span>
-            <Link className="link link-primary text-sm" href="/forgot-password">
+          <div className="input validator w-full">
+            <FaEnvelope
+              className="text-base-content/50"
+              aria-hidden="true"
+            />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <p className="validator-hint hidden">
+            একটি সঠিক ইমেইল ঠিকানা লিখুন।
+          </p>
+        </div>
+
+        <div className="form-control w-full">
+          <div className="label mb-1 flex justify-between">
+            <label htmlFor="password" className="label-text font-medium">
+              পাসওয়ার্ড
+            </label>
+
+            <Link
+              href="/user/forgot-password"
+              className="link link-primary text-sm"
+            >
               ভুলে গেছেন?
             </Link>
-          </span>
-          <input
-            className="input input-bordered w-full"
-            placeholder="••••••••"
-            type="password"
-          />
-        </label>
+          </div>
 
-        <button className="btn btn-primary w-full" type="button">
-          সাইন ইন
+          <div className="input validator w-full">
+            <FaLock className="text-base-content/50" aria-hidden="true" />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              required
+              minLength={6}
+            />
+          </div>
+
+          <p className="validator-hint hidden">
+            পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।
+          </p>
+        </div>
+
+        <button
+          className="btn btn-primary w-full"
+          type="submit"
+          disabled={loading}
+        >
+          {loading && <span className="loading loading-bars loading-sm"></span>}
+          সাইন ইন করুন
         </button>
-      </form>
-
-      <div className="divider">অথবা</div>
-
-      <button
-        className="btn btn-outline flex w-full items-center justify-center gap-3"
-        type="button"
-      >
-        <FcGoogle aria-hidden="true" className="text-xl" />
-        Google দিয়ে সাইন ইন করুন
-      </button>
-
-      <p className="text-center text-sm text-base-content/60">
-        নতুন অ্যাকাউন্ট দরকার?{" "}
-        <Link className="link link-primary font-medium" href="/signup">
-          সাইন আপ করুন
-        </Link>
-      </p>
-    </div>
+      </fieldset>
+    </form>
   );
 }

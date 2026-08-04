@@ -1,66 +1,179 @@
 "use client";
 
-import Link from "next/link";
+import { useRef, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 
-// Client Component: future validation and submit state stay here instead of
-// making the page or shared layout client-side.
 export default function SignupForm() {
+  const router = useRouter();
+  
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const formRef = useRef(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const supabase = createClient();
+
+    setLoading(true);
+    setMessage(null);
+
+    const form = new FormData(e.currentTarget);
+
+    const email = form.get("email");
+    const password = form.get("password");
+    const fullName = form.get("fullName");
+    const confirmPassword = form.get("confirmPassword");
+
+    if (password !== confirmPassword) {
+      setMessage({ type: "error", text: "পাসওয়ার্ড মেলেনি।" });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/protected`,
+          // more data could be pass
+        },
+      });
+      if (error) throw error;
+      formRef.current?.reset();
+      router.push("/user/register-success");
+    } catch (error) {
+      setMessage({ type: "error", text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।" })
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="w-full max-w-md space-y-6">
-      <header className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold text-base-content">
-          নতুন অ্যাকাউন্ট তৈরি করুন
-        </h1>
-        <p className="text-sm text-base-content/60">
-          আপনার ব্যবসার তথ্য দিয়ে শুরু করুন
-        </p>
-      </header>
+    <form ref={formRef} onSubmit={handleSubmit}>
+      {message && (
+        <div
+          role="alert"
+          className={`alert mb-5 ${message.type === "success"
+              ? "alert-success"
+              : "alert-error"
+            }`}
+        >
+          <span>{message.text}</span>
+        </div>
+      )}
 
-      <form className="grid gap-5">
-        <label className="form-control w-full">
-          <span className="label mb-1">
+      <fieldset className="grid gap-5" disabled={loading}>
+        {/* Full Name */}
+        <div className="form-control w-full">
+          <label htmlFor="fullName" className="label mb-1">
             <span className="label-text font-medium">পূর্ণ নাম</span>
-          </span>
-          <input
-            className="input input-bordered w-full"
-            placeholder="আপনার নাম"
-            type="text"
-          />
-        </label>
+          </label>
 
-        <label className="form-control w-full">
-          <span className="label mb-1">
+          <div className="input validator w-full">
+            <FaUser className="text-base-content/50" aria-hidden="true" />
+
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              placeholder="আপনার নাম"
+              minLength={2}
+              maxLength={100}
+            />
+          </div>
+
+          <p className="validator-hint hidden">
+            আপনার পূর্ণ নাম লিখুন।
+          </p>
+        </div>
+
+        {/* Email */}
+        <div className="form-control w-full">
+          <label htmlFor="email" className="label mb-1">
             <span className="label-text font-medium">ইমেইল</span>
-          </span>
-          <input
-            className="input input-bordered w-full"
-            placeholder="you@example.com"
-            type="email"
-          />
-        </label>
+          </label>
 
-        <label className="form-control w-full">
-          <span className="label mb-1">
+          <div className="input validator w-full">
+            <FaEnvelope className="text-base-content/50" aria-hidden="true" />
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <p className="validator-hint hidden">
+            একটি সঠিক ইমেইল ঠিকানা লিখুন।
+          </p>
+        </div>
+
+        {/* Password */}
+        <div className="form-control w-full">
+          <label htmlFor="password" className="label mb-1">
             <span className="label-text font-medium">পাসওয়ার্ড</span>
-          </span>
-          <input
-            className="input input-bordered w-full"
-            placeholder="••••••••"
-            type="password"
-          />
-        </label>
+          </label>
 
-        <button className="btn btn-primary w-full" type="button">
+          <div className="input validator w-full">
+            <FaLock className="text-base-content/50" aria-hidden="true" />
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              required
+              minLength={6}
+              title="পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে"
+            />
+          </div>
+
+          <p className="validator-hint hidden">
+            পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।
+          </p>
+        </div>
+
+        {/* Re-write Password */}
+        <div className="form-control w-full">
+          <label htmlFor="confirmPassword" className="label mb-1">
+            <span className="label-text font-medium">পাসওয়ার্ড পুনরায় লিখুন</span>
+          </label>
+
+          <div className="input validator w-full">
+            <FaLock className="text-base-content/50" aria-hidden="true" />
+
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="••••••••"
+              required
+              minLength={6}
+              title="একই পাসওয়ার্ড পুনরায় লিখুন"
+            />
+          </div>
+
+          <p className="validator-hint hidden">
+            একই পাসওয়ার্ড পুনরায় লিখুন।
+          </p>
+        </div>
+
+        <button
+          className="btn btn-primary w-full"
+          type="submit"
+          disabled={loading}
+        >
+          {loading && (
+            <span className="loading loading-bars loading-sm"></span>
+          )}
           অ্যাকাউন্ট তৈরি করুন
         </button>
-      </form>
-
-      <p className="text-center text-sm text-base-content/60">
-        আগে থেকেই অ্যাকাউন্ট আছে?{" "}
-        <Link className="link link-primary font-medium" href="/login">
-          সাইন ইন করুন
-        </Link>
-      </p>
-    </div>
+      </fieldset>
+    </form>
   );
 }

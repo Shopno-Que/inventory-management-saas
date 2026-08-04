@@ -1,43 +1,95 @@
 "use client";
 
-import Link from "next/link";
+import { useRef, useState } from "react";
+import { FaEnvelope } from "react-icons/fa";
+import { createClient } from "@/lib/supabase/client";
 
-// Client Component: isolated for future submit state and field validation.
 export default function ForgotPasswordForm() {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const formRef = useRef(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const supabase = createClient();
+
+    setLoading(true);
+    setMessage(null);
+
+    const form = new FormData(e.currentTarget);
+    const email = form.get("email");
+
+    try {
+      // The url which will be included in the email. This URL needs to be configured in your redirect URLs in the Supabase dashboard at https://supabase.com/dashboard/project/_/auth/url-configuration
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/user/reset-password`,
+      });
+      if (error) throw error;
+      setMessage({
+        type: "success",
+        text:
+          "পাসওয়ার্ড রিসেটের নির্দেশনা আপনার ইমেইলে পাঠানো হয়েছে। ইমেইল না পেলে স্প্যাম ফোল্ডারও দেখে নিন।",
+      });
+    } catch (error) {
+      setMessage({ type: "error", text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।" })
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="w-full max-w-md space-y-6">
-      <header className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold text-base-content">
-          পাসওয়ার্ড রিসেট করুন
-        </h1>
-        <p className="text-sm text-base-content/60">
-          আপনার ইমেইল দিন, আমরা রিসেট নির্দেশনা পাঠাব।
-        </p>
-      </header>
+    <form ref={formRef} onSubmit={handleSubmit}>
+      {message && (
+        <div
+          role="alert"
+          className={`alert mb-5 ${message.type === "success"
+              ? "alert-success"
+              : "alert-error"
+            }`}
+        >
+          <span>{message.text}</span>
+        </div>
+      )}
 
-      <form className="grid gap-5">
-        <label className="form-control w-full">
-          <span className="label mb-1">
-            <span className="label-text font-medium">ইমেইল</span>
-          </span>
-          <input
-            className="input input-bordered w-full"
-            placeholder="you@example.com"
-            type="email"
-          />
-        </label>
+      <fieldset className="grid gap-5" disabled={loading}>
+        <div className="form-control w-full">
+          <label htmlFor="email" className="label mb-1">
+            <span className="label-text font-medium">
+              ইমেইল
+            </span>
+          </label>
 
-        <button className="btn btn-primary w-full" type="button">
+          <div className="input validator w-full">
+            <FaEnvelope
+              className="text-base-content/50"
+              aria-hidden="true"
+            />
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <p className="validator-hint hidden">
+            একটি সঠিক ইমেইল ঠিকানা লিখুন।
+          </p>
+        </div>
+
+        <button
+          className="btn btn-primary w-full"
+          type="submit"
+          disabled={loading}
+        >
+          {loading && (
+            <span className="loading loading-bars loading-sm"></span>
+          )}
           রিসেট লিংক পাঠান
         </button>
-      </form>
-
-      <p className="text-center text-sm text-base-content/60">
-        পাসওয়ার্ড মনে পড়েছে?{" "}
-        <Link className="link link-primary font-medium" href="/login">
-          সাইন ইন করুন
-        </Link>
-      </p>
-    </div>
+      </fieldset>
+    </form>
   );
 }

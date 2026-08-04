@@ -46,7 +46,7 @@ Any of these makes a RED untrustworthy. None of them is "the navigation isn't in
 | **Empty state**              | the marker only exists when data does; the CI account is empty                             | pick a marker present in the empty state (a layout element such as the page header), or seed data |
 | **Timeout / flake**          | a slow API or transient infrastructure error                                               | re-run; separate infrastructure flake from a real signal                                          |
 | **Streamed marker**          | the marker is behind `<Suspense>`, so it is never in the shell                             | choose a sync shell element; verify it sits outside every `<Suspense>`                            |
-| **Auth redirect**            | unauthenticated → `/login`                                                                 | confirm login succeeded before the navigation                                                     |
+| **Auth redirect**            | unauthenticated → `/user/login`                                                                 | confirm login succeeded before the navigation                                                     |
 | **Stale deployment**         | the test ran against the previous build (the URL under test still serves the prior deploy) | poll the deployment for a marker from the latest commit before trusting any verdict               |
 | **Hidden / off-screen**      | the testid is on a hover-overlay or off-screen list item                                   | put the marker on an always-visible node; `.filter({ visible: true }).first()` for lists          |
 

@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "components/auth/signup-form.jsx", "components/auth/reset-password-form.jsx", "components/auth/login-form.jsx", "components/auth/forgot-password-form.jsx", "components/auth/auth-form-skeleton.jsx", "components/auth/auth-banner.jsx", "app/page.jsx", "app/layout.jsx", "app/(auth)/forgot-password/page.jsx", "app/(auth)/login/page.jsx", "app/(auth)/reset-password/page.jsx", "app/(auth)/signup/page.jsx", "app/(auth)/layout.jsx", "app/(auth)/loading.jsx"  ],
+, "next.config.js", "lib/utils.js", "lib/supabase/client.js", "lib/supabase/proxy.ts", "lib/supabase/server.ts"  ],
   "exclude": ["node_modules"]
 }

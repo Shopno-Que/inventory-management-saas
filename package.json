@@ -7,11 +7,18 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "biome check",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
     "format": "biome format --write"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.111.0",
+    "drizzle-orm": "^0.45.2",
     "next": "16.2.6",
     "nextjs-toploader": "^3.9.17",
+    "postgres": "^3.4.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-icons": "^5.6.0"
@@ -23,6 +30,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "daisyui": "^5.5.19",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
