@@ -13,22 +13,20 @@ export default async function LoginPage() {
   } = await supabase.auth.getUser();
 
   if (user) {
-    redirect("/");
+    redirect("/user/profile");
   }
 
   return (
     <div className="w-full max-w-md space-y-6">
       <header className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold text-base-content">
-          সাইন ইন করুন
-        </h1>
+        <h1 className="text-2xl font-semibold text-base-content">সাইন ইন করুন</h1>
       </header>
 
       <LoginForm />
 
       <div className="divider">অথবা</div>
 
-      <GoogleButton/>
+      <GoogleButton />
 
       <p className="text-center text-sm text-base-content/60">
         নতুন অ্যাকাউন্ট দরকার?{" "}

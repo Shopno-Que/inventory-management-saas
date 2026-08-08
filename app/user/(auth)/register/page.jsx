@@ -12,7 +12,7 @@ export default async function SignupPage() {
   } = await supabase.auth.getUser();
 
   if (user) {
-    redirect("/");
+    redirect("/user/profile");
   }
 
   return (
@@ -23,7 +23,7 @@ export default async function SignupPage() {
         </h1>
       </header>
 
-      <SignupForm/>
+      <SignupForm />
 
       <div className="divider">অথবা</div>
 
@@ -35,5 +35,6 @@ export default async function SignupPage() {
           সাইন ইন করুন
         </Link>
       </p>
-    </div>);
+    </div>
+  );
 }

@@ -1,6 +1,6 @@
 import AuthBanner from "@/components/auth/auth-banner";
 
-export default function AuthLayout({children}) {
+export default function AuthLayout({ children }) {
   return (
     // Route groups keep auth URLs clean (/user/login, /user/register) while this shared
     // Server Component layout removes duplicated banner and spacing markup.

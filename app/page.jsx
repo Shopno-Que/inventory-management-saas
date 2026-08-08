@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
 import LogoutButton from "@/components/auth/logout-btn";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -14,8 +14,8 @@ export default async function Home() {
       <div className="flex min-h-screen items-center justify-center gap-4">
         {user ? (
           <>
-            <Link className="btn btn-primary" href="/dashboard">
-              Dashboard
+            <Link className="btn btn-primary" href="/user/profile">
+              Profile
             </Link>
 
             <LogoutButton />

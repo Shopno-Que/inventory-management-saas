@@ -1,11 +1,71 @@
 {
-  "id": "75ce362b-8542-4daa-b560-7169e8fdf3a1",
+  "id": "685789ca-fb7d-4586-a407-c28cf7c4f34b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.activity_logs": {
-      "name": "activity_logs",
+    "public.saas_member_roles": {
+      "name": "saas_member_roles",
+      "schema": "",
+      "columns": {
+        "member_id": {
+          "name": "member_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "saas_member_roles_member_id_saas_members_id_fk": {
+          "name": "saas_member_roles_member_id_saas_members_id_fk",
+          "tableFrom": "saas_member_roles",
+          "tableTo": "saas_members",
+          "columnsFrom": [
+            "member_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "saas_member_roles_role_id_saas_roles_id_fk": {
+          "name": "saas_member_roles_role_id_saas_roles_id_fk",
+          "tableFrom": "saas_member_roles",
+          "tableTo": "saas_roles",
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "saas_member_roles_pk": {
+          "name": "saas_member_roles_pk",
+          "columns": [
+            "member_id",
+            "role_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.saas_members": {
+      "name": "saas_members",
       "schema": "",
       "columns": {
         "id": {
@@ -18,47 +78,17 @@
           "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "scope_type": {
-          "name": "scope_type",
+        "status": {
+          "name": "status",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "scope_id": {
-          "name": "scope_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "action": {
-          "name": "action",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "entity_type": {
-          "name": "entity_type",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "entity_id": {
-          "name": "entity_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "ip_address": {
-          "name": "ip_address",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "user_agent": {
-          "name": "user_agent",
-          "type": "text",
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
         },
@@ -71,10 +101,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "activity_logs_user_id_users_id_fk": {
-          "name": "activity_logs_user_id_users_id_fk",
-          "tableFrom": "activity_logs",
-          "tableTo": "users",
+        "saas_members_user_id_supabase_auth_user_id_fk": {
+          "name": "saas_members_user_id_supabase_auth_user_id_fk",
+          "tableFrom": "saas_members",
+          "tableTo": "supabase_auth_user",
           "columnsFrom": [
             "user_id"
           ],
@@ -86,13 +116,21 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "saas_members_user_unique": {
+          "name": "saas_members_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.permissions": {
-      "name": "permissions",
+    "public.saas_permissions": {
+      "name": "saas_permissions",
       "schema": "",
       "columns": {
         "id": {
@@ -101,43 +139,25 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "code": {
           "name": "code",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "scope": {
-          "name": "scope",
+        "name": {
+          "name": "name",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "permissions_code_unique": {
-          "name": "permissions_code_unique",
+        "saas_permissions_code_unique": {
+          "name": "saas_permissions_code_unique",
           "nullsNotDistinct": false,
           "columns": [
             "code"
@@ -148,8 +168,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.role_permissions": {
-      "name": "role_permissions",
+    "public.saas_role_permissions": {
+      "name": "saas_role_permissions",
       "schema": "",
       "columns": {
         "role_id": {
@@ -163,20 +183,14 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "role_permissions_role_id_roles_id_fk": {
-          "name": "role_permissions_role_id_roles_id_fk",
-          "tableFrom": "role_permissions",
-          "tableTo": "roles",
+        "saas_role_permissions_role_id_saas_roles_id_fk": {
+          "name": "saas_role_permissions_role_id_saas_roles_id_fk",
+          "tableFrom": "saas_role_permissions",
+          "tableTo": "saas_roles",
           "columnsFrom": [
             "role_id"
           ],
@@ -186,10 +200,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "role_permissions_permission_id_permissions_id_fk": {
-          "name": "role_permissions_permission_id_permissions_id_fk",
-          "tableFrom": "role_permissions",
-          "tableTo": "permissions",
+        "saas_role_permissions_permission_id_saas_permissions_id_fk": {
+          "name": "saas_role_permissions_permission_id_saas_permissions_id_fk",
+          "tableFrom": "saas_role_permissions",
+          "tableTo": "saas_permissions",
           "columnsFrom": [
             "permission_id"
           ],
@@ -201,8 +215,8 @@
         }
       },
       "compositePrimaryKeys": {
-        "role_permissions_role_id_permission_id_pk": {
-          "name": "role_permissions_role_id_permission_id_pk",
+        "saas_role_permissions_pk": {
+          "name": "saas_role_permissions_pk",
           "columns": [
             "role_id",
             "permission_id"
@@ -214,8 +228,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.roles": {
-      "name": "roles",
+    "public.saas_roles": {
+      "name": "saas_roles",
       "schema": "",
       "columns": {
         "id": {
@@ -224,20 +238,14 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "code": {
           "name": "code",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
-        "scope": {
-          "name": "scope",
+        "name": {
+          "name": "name",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -247,20 +255,14 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "roles_code_unique": {
-          "name": "roles_code_unique",
+        "saas_roles_code_unique": {
+          "name": "saas_roles_code_unique",
           "nullsNotDistinct": false,
           "columns": [
             "code"
@@ -271,8 +273,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.staff_invitations": {
-      "name": "staff_invitations",
+    "public.store_invitations": {
+      "name": "store_invitations",
       "schema": "",
       "columns": {
         "id": {
@@ -281,17 +283,11 @@
           "primaryKey": true,
           "notNull": true
         },
-        "scope_type": {
-          "name": "scope_type",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "scope_id": {
-          "name": "scope_id",
+        "store_id": {
+          "name": "store_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "email": {
           "name": "email",
@@ -309,7 +305,7 @@
           "name": "status",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "expires_at": {
           "name": "expires_at",
@@ -332,10 +328,23 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "staff_invitations_invited_by_users_id_fk": {
-          "name": "staff_invitations_invited_by_users_id_fk",
-          "tableFrom": "staff_invitations",
-          "tableTo": "users",
+        "store_invitations_store_id_stores_id_fk": {
+          "name": "store_invitations_store_id_stores_id_fk",
+          "tableFrom": "store_invitations",
+          "tableTo": "stores",
+          "columnsFrom": [
+            "store_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "store_invitations_invited_by_supabase_auth_user_id_fk": {
+          "name": "store_invitations_invited_by_supabase_auth_user_id_fk",
+          "tableFrom": "store_invitations",
+          "tableTo": "supabase_auth_user",
           "columnsFrom": [
             "invited_by"
           ],
@@ -352,12 +361,12 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.staff_roles": {
-      "name": "staff_roles",
+    "public.store_member_roles": {
+      "name": "store_member_roles",
       "schema": "",
       "columns": {
-        "staff_id": {
-          "name": "staff_id",
+        "member_id": {
+          "name": "member_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -367,28 +376,16 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
-        },
-        "assigned_by": {
-          "name": "assigned_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "staff_roles_staff_id_staffs_id_fk": {
-          "name": "staff_roles_staff_id_staffs_id_fk",
-          "tableFrom": "staff_roles",
-          "tableTo": "staffs",
+        "store_member_roles_member_id_store_members_id_fk": {
+          "name": "store_member_roles_member_id_store_members_id_fk",
+          "tableFrom": "store_member_roles",
+          "tableTo": "store_members",
           "columnsFrom": [
-            "staff_id"
+            "member_id"
           ],
           "columnsTo": [
             "id"
@@ -396,25 +393,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "staff_roles_role_id_roles_id_fk": {
-          "name": "staff_roles_role_id_roles_id_fk",
-          "tableFrom": "staff_roles",
-          "tableTo": "roles",
+        "store_member_roles_role_id_store_roles_id_fk": {
+          "name": "store_member_roles_role_id_store_roles_id_fk",
+          "tableFrom": "store_member_roles",
+          "tableTo": "store_roles",
           "columnsFrom": [
             "role_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "staff_roles_assigned_by_users_id_fk": {
-          "name": "staff_roles_assigned_by_users_id_fk",
-          "tableFrom": "staff_roles",
-          "tableTo": "users",
-          "columnsFrom": [
-            "assigned_by"
           ],
           "columnsTo": [
             "id"
@@ -424,10 +408,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "staff_roles_staff_id_role_id_pk": {
-          "name": "staff_roles_staff_id_role_id_pk",
+        "store_member_roles_pk": {
+          "name": "store_member_roles_pk",
           "columns": [
-            "staff_id",
+            "member_id",
             "role_id"
           ]
         }
@@ -437,8 +421,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.staffs": {
-      "name": "staffs",
+    "public.store_members": {
+      "name": "store_members",
       "schema": "",
       "columns": {
         "id": {
@@ -447,17 +431,11 @@
           "primaryKey": true,
           "notNull": true
         },
-        "scope_type": {
-          "name": "scope_type",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "scope_id": {
-          "name": "scope_id",
+        "store_id": {
+          "name": "store_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "user_id": {
           "name": "user_id",
@@ -465,15 +443,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "invited_by": {
-          "name": "invited_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
         "status": {
           "name": "status",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invited_by": {
+          "name": "invited_by",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -492,10 +470,23 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "staffs_user_id_users_id_fk": {
-          "name": "staffs_user_id_users_id_fk",
-          "tableFrom": "staffs",
-          "tableTo": "users",
+        "store_members_store_id_stores_id_fk": {
+          "name": "store_members_store_id_stores_id_fk",
+          "tableFrom": "store_members",
+          "tableTo": "stores",
+          "columnsFrom": [
+            "store_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "store_members_user_id_supabase_auth_user_id_fk": {
+          "name": "store_members_user_id_supabase_auth_user_id_fk",
+          "tableFrom": "store_members",
+          "tableTo": "supabase_auth_user",
           "columnsFrom": [
             "user_id"
           ],
@@ -505,10 +496,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "staffs_invited_by_users_id_fk": {
-          "name": "staffs_invited_by_users_id_fk",
-          "tableFrom": "staffs",
-          "tableTo": "users",
+        "store_members_invited_by_supabase_auth_user_id_fk": {
+          "name": "store_members_invited_by_supabase_auth_user_id_fk",
+          "tableFrom": "store_members",
+          "tableTo": "supabase_auth_user",
           "columnsFrom": [
             "invited_by"
           ],
@@ -520,7 +511,160 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "store_members_store_user_unique": {
+          "name": "store_members_store_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "store_id",
+            "user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.store_permissions": {
+      "name": "store_permissions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "store_permissions_code_unique": {
+          "name": "store_permissions_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.store_role_permissions": {
+      "name": "store_role_permissions",
+      "schema": "",
+      "columns": {
+        "role_id": {
+          "name": "role_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "permission_id": {
+          "name": "permission_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "store_role_permissions_role_id_store_roles_id_fk": {
+          "name": "store_role_permissions_role_id_store_roles_id_fk",
+          "tableFrom": "store_role_permissions",
+          "tableTo": "store_roles",
+          "columnsFrom": [
+            "role_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "store_role_permissions_permission_id_store_permissions_id_fk": {
+          "name": "store_role_permissions_permission_id_store_permissions_id_fk",
+          "tableFrom": "store_role_permissions",
+          "tableTo": "store_permissions",
+          "columnsFrom": [
+            "permission_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "store_role_permissions_pk": {
+          "name": "store_role_permissions_pk",
+          "columns": [
+            "role_id",
+            "permission_id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.store_roles": {
+      "name": "store_roles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_system": {
+          "name": "is_system",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "store_roles_code_unique": {
+          "name": "store_roles_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -533,12 +677,6 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
-        },
-        "owner_id": {
-          "name": "owner_id",
-          "type": "uuid",
-          "primaryKey": false,
           "notNull": true
         },
         "name": {
@@ -559,8 +697,20 @@
           "primaryKey": false,
           "notNull": false
         },
-        "country": {
-          "name": "country",
+        "currency_code": {
+          "name": "currency_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timezone": {
+          "name": "timezone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "country_code": {
+          "name": "country_code",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -568,107 +718,6 @@
         "is_active": {
           "name": "is_active",
           "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "stores_owner_id_users_id_fk": {
-          "name": "stores_owner_id_users_id_fk",
-          "tableFrom": "stores",
-          "tableTo": "users",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "stores_slug_unique": {
-          "name": "stores_slug_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.users": {
-      "name": "users",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "password_hash": {
-          "name": "password_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "full_name": {
-          "name": "full_name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "avatar_url": {
-          "name": "avatar_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "phone": {
-          "name": "phone",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "is_email_verified": {
-          "name": "is_email_verified",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_login_at": {
-          "name": "last_login_at",
-          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
         },
@@ -689,14 +738,84 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_email_unique": {
-          "name": "users_email_unique",
+        "stores_slug_unique": {
+          "name": "stores_slug_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "email"
+            "slug"
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.profiles": {
+      "name": "profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "profiles_id_supabase_auth_user_id_fk": {
+          "name": "profiles_id_supabase_auth_user_id_fk",
+          "tableFrom": "profiles",
+          "tableTo": "supabase_auth_user",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.supabase_auth_user": {
+      "name": "supabase_auth_user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

@@ -14,7 +14,7 @@ export default function ResetPasswordForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const supabase = createClient();
-    
+
     setLoading(true);
     setMessage(null);
 
@@ -32,9 +32,12 @@ export default function ResetPasswordForm() {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       formRef.current?.reset();
-      router.push("/");
+      router.replace("/user/profile");
     } catch (error) {
-      setMessage({ type: "error", text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।" })
+      setMessage({
+        type: "error",
+        text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+      });
     } finally {
       setLoading(false);
     }
@@ -105,5 +108,5 @@ export default function ResetPasswordForm() {
         </button>
       </fieldset>
     </form>
-  )
+  );
 }

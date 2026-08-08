@@ -1,12 +1,22 @@
-import { pgTable, uuid, varchar, text, boolean, timestamp } from "drizzle-orm/pg-core";
+import {pgTable,uuid,varchar,text,timestamp,boolean,unique} from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
-export const users = pgTable("users", {
+export const supabaseAuthUser = pgTable("supabase_auth_user", {
     id: uuid("id").primaryKey(),
-    email: varchar("email").unique().notNull(),
-    fullName: varchar("full_name"),
-    avatarUrl: text("avatar_url"),
-    phone: varchar("phone"),
-    isActive: boolean("is_active"),
-    createdAt: timestamp("created_at", { withTimezone: true }),
-    updatedAt: timestamp("updated_at", { withTimezone: true }),
+});
+
+export const profiles = pgTable("profiles", {
+    id: uuid("id")
+        .primaryKey()
+        .references(() => supabaseAuthUser.id),
+
+    displayName: varchar("display_name"),
+
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+    }),
+
+    updatedAt: timestamp("updated_at", {
+        withTimezone: true,
+    }),
 });

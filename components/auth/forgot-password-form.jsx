@@ -27,11 +27,13 @@ export default function ForgotPasswordForm() {
       if (error) throw error;
       setMessage({
         type: "success",
-        text:
-          "পাসওয়ার্ড রিসেটের নির্দেশনা আপনার ইমেইলে পাঠানো হয়েছে। ইমেইল না পেলে স্প্যাম ফোল্ডারও দেখে নিন।",
+        text: "পাসওয়ার্ড রিসেটের নির্দেশনা আপনার ইমেইলে পাঠানো হয়েছে। ইমেইল না পেলে স্প্যাম ফোল্ডারও দেখে নিন।",
       });
     } catch (error) {
-      setMessage({ type: "error", text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।" })
+      setMessage({
+        type: "error",
+        text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+      });
     } finally {
       setLoading(false);
     }
@@ -42,10 +44,9 @@ export default function ForgotPasswordForm() {
       {message && (
         <div
           role="alert"
-          className={`alert mb-5 ${message.type === "success"
-              ? "alert-success"
-              : "alert-error"
-            }`}
+          className={`alert mb-5 ${
+            message.type === "success" ? "alert-success" : "alert-error"
+          }`}
         >
           <span>{message.text}</span>
         </div>
@@ -54,16 +55,11 @@ export default function ForgotPasswordForm() {
       <fieldset className="grid gap-5" disabled={loading}>
         <div className="form-control w-full">
           <label htmlFor="email" className="label mb-1">
-            <span className="label-text font-medium">
-              ইমেইল
-            </span>
+            <span className="label-text font-medium">ইমেইল</span>
           </label>
 
           <div className="input validator w-full">
-            <FaEnvelope
-              className="text-base-content/50"
-              aria-hidden="true"
-            />
+            <FaEnvelope className="text-base-content/50" aria-hidden="true" />
 
             <input
               id="email"
@@ -74,9 +70,7 @@ export default function ForgotPasswordForm() {
             />
           </div>
 
-          <p className="validator-hint hidden">
-            একটি সঠিক ইমেইল ঠিকানা লিখুন।
-          </p>
+          <p className="validator-hint hidden">একটি সঠিক ইমেইল ঠিকানা লিখুন।</p>
         </div>
 
         <button
@@ -84,9 +78,7 @@ export default function ForgotPasswordForm() {
           type="submit"
           disabled={loading}
         >
-          {loading && (
-            <span className="loading loading-bars loading-sm"></span>
-          )}
+          {loading && <span className="loading loading-bars loading-sm"></span>}
           রিসেট লিংক পাঠান
         </button>
       </fieldset>

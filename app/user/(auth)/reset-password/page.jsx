@@ -21,5 +21,5 @@ export default function ResetPasswordPage() {
         </Link>
       </p>
     </div>
-  )
+  );
 }

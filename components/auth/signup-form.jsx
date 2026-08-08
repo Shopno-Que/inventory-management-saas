@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { useRef, useState } from "react";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { createClient } from "@/lib/supabase/client";
 
 export default function SignupForm() {
   const router = useRouter();
-  
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const formRef = useRef(null);
@@ -37,15 +37,18 @@ export default function SignupForm() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
-          // more data could be pass
+          emailRedirectTo: `${window.location.origin}/user/auth/confirm?next=/user/profile`,
+          data: { full_name: fullName },
         },
       });
       if (error) throw error;
       formRef.current?.reset();
       router.push("/user/register-success");
     } catch (error) {
-      setMessage({ type: "error", text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।" })
+      setMessage({
+        type: "error",
+        text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+      });
     } finally {
       setLoading(false);
     }
@@ -56,10 +59,9 @@ export default function SignupForm() {
       {message && (
         <div
           role="alert"
-          className={`alert mb-5 ${message.type === "success"
-              ? "alert-success"
-              : "alert-error"
-            }`}
+          className={`alert mb-5 ${
+            message.type === "success" ? "alert-success" : "alert-error"
+          }`}
         >
           <span>{message.text}</span>
         </div>
@@ -85,9 +87,7 @@ export default function SignupForm() {
             />
           </div>
 
-          <p className="validator-hint hidden">
-            আপনার পূর্ণ নাম লিখুন।
-          </p>
+          <p className="validator-hint hidden">আপনার পূর্ণ নাম লিখুন।</p>
         </div>
 
         {/* Email */}
@@ -108,9 +108,7 @@ export default function SignupForm() {
             />
           </div>
 
-          <p className="validator-hint hidden">
-            একটি সঠিক ইমেইল ঠিকানা লিখুন।
-          </p>
+          <p className="validator-hint hidden">একটি সঠিক ইমেইল ঠিকানা লিখুন।</p>
         </div>
 
         {/* Password */}
@@ -158,9 +156,7 @@ export default function SignupForm() {
             />
           </div>
 
-          <p className="validator-hint hidden">
-            একই পাসওয়ার্ড পুনরায় লিখুন।
-          </p>
+          <p className="validator-hint hidden">একই পাসওয়ার্ড পুনরায় লিখুন।</p>
         </div>
 
         <button
@@ -168,9 +164,7 @@ export default function SignupForm() {
           type="submit"
           disabled={loading}
         >
-          {loading && (
-            <span className="loading loading-bars loading-sm"></span>
-          )}
+          {loading && <span className="loading loading-bars loading-sm"></span>}
           অ্যাকাউন্ট তৈরি করুন
         </button>
       </fieldset>

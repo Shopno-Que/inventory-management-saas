@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { useRef, useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -31,11 +31,13 @@ export default function LoginForm() {
         password,
       });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
       formRef.current?.reset();
-      router.push("/");
+      router.replace("/user/profile");
     } catch (error) {
-      setMessage({ type: "error", text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।" })
+      setMessage({
+        type: "error",
+        text: error ? error.message : "কোন সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+      });
     } finally {
       setLoading(false);
     }
@@ -46,15 +48,14 @@ export default function LoginForm() {
       {message && (
         <div
           role="alert"
-          className={`alert mb-5 ${message.type === "success"
-              ? "alert-success"
-              : "alert-error"
-            }`}
+          className={`alert mb-5 ${
+            message.type === "success" ? "alert-success" : "alert-error"
+          }`}
         >
           <span>{message.text}</span>
         </div>
       )}
-      
+
       <fieldset className="grid gap-5" disabled={loading}>
         <div className="form-control w-full">
           <label htmlFor="email" className="label mb-1">
@@ -62,10 +63,7 @@ export default function LoginForm() {
           </label>
 
           <div className="input validator w-full">
-            <FaEnvelope
-              className="text-base-content/50"
-              aria-hidden="true"
-            />
+            <FaEnvelope className="text-base-content/50" aria-hidden="true" />
             <input
               id="email"
               name="email"
@@ -75,9 +73,7 @@ export default function LoginForm() {
             />
           </div>
 
-          <p className="validator-hint hidden">
-            একটি সঠিক ইমেইল ঠিকানা লিখুন।
-          </p>
+          <p className="validator-hint hidden">একটি সঠিক ইমেইল ঠিকানা লিখুন।</p>
         </div>
 
         <div className="form-control w-full">

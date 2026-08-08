@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1785733791236,
-      "tag": "0000_colorful_lake",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1785734314099,
-      "tag": "0001_hesitant_gunslinger",
+      "when": 1786161441779,
+      "tag": "0000_mixed_ben_urich",
       "breakpoints": true
     }
   ]
