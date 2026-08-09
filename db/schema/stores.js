@@ -3,25 +3,19 @@ import { supabaseAuthUser } from "./users";
 
 export const stores = pgTable("stores", {
     id: uuid("id").primaryKey(),
-
     name: varchar("name").notNull(),
-
+    ownerId: uuid("owner_id")
+        .notNull()
+        .references(() => supabaseAuthUser.id),
     slug: varchar("slug").notNull().unique(),
-
     logoUrl: text("logo_url"),
-
     currencyCode: varchar("currency_code"),
-
     timezone: varchar("timezone"),
-
     countryCode: varchar("country_code"),
-
     isActive: boolean("is_active"),
-
     createdAt: timestamp("created_at", {
         withTimezone: true,
     }),
-
     updatedAt: timestamp("updated_at", {
         withTimezone: true,
     }),
