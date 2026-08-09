@@ -14,7 +14,7 @@ export default function ProfileForm({
     name,
     email,
 }) {
-    const [currentName, setCurrentName] = useState(name || "");
+    const [currentName, setCurrentName] = useState(name || "<কোন নাম দেওয়া নেই>");
 
     const [nameEditing, setNameEditing] = useState(false);
     const [emailEditing, setEmailEditing] = useState(false);

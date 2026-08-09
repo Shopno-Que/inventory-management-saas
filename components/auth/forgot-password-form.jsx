@@ -27,7 +27,7 @@ export default function ForgotPasswordForm() {
       if (error) throw error;
       setMessage({
         type: "success",
-        text: "পাসওয়ার্ড রিসেটের নির্দেশনা আপনার ইমেইলে পাঠানো হয়েছে। ইমেইল না পেলে স্প্যাম ফোল্ডারও দেখে নিন।",
+        text: "যদি এই মেইল রেজিস্টার্ড থাকে তাহলে একটি পাসওয়ার্ড রিসেট নির্দেশনা মেইল করা হয়েছে। ইনবক্সে না পেলে স্প্যাম বক্স চেক করুন।",
       });
     } catch (error) {
       setMessage({
