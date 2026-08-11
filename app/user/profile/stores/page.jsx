@@ -61,7 +61,7 @@ export default async function Page() {
           </p>
         </div>
 
-        <Link href="/user/stores/new" className="btn btn-primary">
+        <Link href="/stores/new" className="btn btn-primary">
           <FiPlus size={18} />
           নতুন স্টোর
         </Link>
@@ -78,7 +78,7 @@ export default async function Page() {
               আপনার প্রথম স্টোর তৈরি করে শুরু করুন।
             </p>
 
-            <Link href="/user/stores/new" className="btn btn-primary mt-2">
+            <Link href="/stores/new" className="btn btn-primary mt-2">
               <FiPlus size={18} />
               নতুন স্টোর তৈরি করুন
             </Link>
@@ -137,7 +137,7 @@ export default async function Page() {
 
                   <div className="card-actions mt-4">
                     <Link
-                      href={`/user/stores/${store.slug}`}
+                      href={`/stores/${store.slug}`}
                       className="btn btn-primary btn-sm w-full"
                     >
                       স্টোরে যান

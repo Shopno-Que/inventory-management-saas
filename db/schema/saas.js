@@ -1,33 +1,33 @@
 import {pgTable, uuid, varchar, timestamp, boolean, unique, primaryKey} from "drizzle-orm/pg-core";
 
-import { supabaseAuthUser } from "./users";
+import { supabaseAuthUser } from "../ref-schema.js";
 
 export const saasMembers = pgTable(
     "saas_members",
     {
-        id: uuid("id").primaryKey(),
-
+        id: uuid("id")
+            .primaryKey()
+            .defaultRandom(),
         userId: uuid("user_id")
             .notNull()
             .references(() => supabaseAuthUser.id),
-
         status: varchar("status").notNull(),
-
         joinedAt: timestamp("joined_at", {
             withTimezone: true,
         }),
-
         createdAt: timestamp("created_at", {
             withTimezone: true,
         }),
     },
     (table) => [
-        unique("saas_members_user_unique").on(table.userId),
+        unique("saas_members_user_unique").on(
+            table.userId,
+        ),
     ],
 );
 
 export const saasRoles = pgTable("saas_roles", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").primaryKey().defaultRandom(),
 
     code: varchar("code").notNull().unique(),
 
@@ -37,7 +37,7 @@ export const saasRoles = pgTable("saas_roles", {
 });
 
 export const saasPermissions = pgTable("saas_permissions", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").primaryKey().defaultRandom(),
 
     code: varchar("code").notNull().unique(),
 

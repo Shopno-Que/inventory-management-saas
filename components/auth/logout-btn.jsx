@@ -1,11 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useNavigation } from "@/components/navigation/NavigationProvider"; import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LogoutButton() {
-  const router = useRouter();
+  const { push } = useNavigation();
 
   const [loading, setLoading] = useState(false);
 
@@ -13,8 +12,8 @@ export default function LogoutButton() {
     const supabase = createClient();
     setLoading(true);
     await supabase.auth.signOut();
+    push("/user/login");
     setLoading(false);
-    router.push("/user/login");
   };
 
   return (

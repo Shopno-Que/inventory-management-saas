@@ -1,6 +1,6 @@
 {
-  "id": "5c20b8f8-d859-4ccf-9500-8f720e39a7f6",
-  "prevId": "685789ca-fb7d-4586-a407-c28cf7c4f34b",
+  "id": "2df4edb5-937d-4c8f-83a9-9ac41a3206c2",
+  "prevId": "45378e55-5ff2-4e30-bb78-41dc38c35264",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -72,7 +72,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "user_id": {
           "name": "user_id",
@@ -101,10 +102,11 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "saas_members_user_id_supabase_auth_user_id_fk": {
-          "name": "saas_members_user_id_supabase_auth_user_id_fk",
+        "saas_members_user_id_users_id_fk": {
+          "name": "saas_members_user_id_users_id_fk",
           "tableFrom": "saas_members",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -137,7 +139,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "code": {
           "name": "code",
@@ -236,7 +239,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "code": {
           "name": "code",
@@ -281,7 +285,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "store_id": {
           "name": "store_id",
@@ -341,10 +346,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "store_invitations_invited_by_supabase_auth_user_id_fk": {
-          "name": "store_invitations_invited_by_supabase_auth_user_id_fk",
+        "store_invitations_invited_by_users_id_fk": {
+          "name": "store_invitations_invited_by_users_id_fk",
           "tableFrom": "store_invitations",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "invited_by"
           ],
@@ -356,6 +362,72 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.store_member_permissions": {
+      "name": "store_member_permissions",
+      "schema": "",
+      "columns": {
+        "member_id": {
+          "name": "member_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "permission_id": {
+          "name": "permission_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "effect": {
+          "name": "effect",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "store_member_permissions_member_id_store_members_id_fk": {
+          "name": "store_member_permissions_member_id_store_members_id_fk",
+          "tableFrom": "store_member_permissions",
+          "tableTo": "store_members",
+          "columnsFrom": [
+            "member_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "store_member_permissions_permission_id_store_permissions_id_fk": {
+          "name": "store_member_permissions_permission_id_store_permissions_id_fk",
+          "tableFrom": "store_member_permissions",
+          "tableTo": "store_permissions",
+          "columnsFrom": [
+            "permission_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "store_member_permissions_pk": {
+          "name": "store_member_permissions_pk",
+          "columns": [
+            "member_id",
+            "permission_id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -429,7 +501,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "store_id": {
           "name": "store_id",
@@ -483,10 +556,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "store_members_user_id_supabase_auth_user_id_fk": {
-          "name": "store_members_user_id_supabase_auth_user_id_fk",
+        "store_members_user_id_users_id_fk": {
+          "name": "store_members_user_id_users_id_fk",
           "tableFrom": "store_members",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -496,10 +570,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "store_members_invited_by_supabase_auth_user_id_fk": {
-          "name": "store_members_invited_by_supabase_auth_user_id_fk",
+        "store_members_invited_by_users_id_fk": {
+          "name": "store_members_invited_by_users_id_fk",
           "tableFrom": "store_members",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "invited_by"
           ],
@@ -533,7 +608,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "code": {
           "name": "code",
@@ -632,6 +708,13 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "store_id": {
+          "name": "store_id",
+          "type": "uuid",
+          "primaryKey": false,
           "notNull": true
         },
         "code": {
@@ -650,17 +733,33 @@
           "name": "is_system",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "store_roles_store_id_stores_id_fk": {
+          "name": "store_roles_store_id_stores_id_fk",
+          "tableFrom": "store_roles",
+          "tableTo": "stores",
+          "columnsFrom": [
+            "store_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "store_roles_code_unique": {
-          "name": "store_roles_code_unique",
+        "store_roles_store_code_unique": {
+          "name": "store_roles_store_code_unique",
           "nullsNotDistinct": false,
           "columns": [
+            "store_id",
             "code"
           ]
         }
@@ -677,13 +776,20 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         },
         "slug": {
           "name": "slug",
@@ -719,7 +825,8 @@
           "name": "is_active",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -735,7 +842,22 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "stores_owner_id_users_id_fk": {
+          "name": "stores_owner_id_users_id_fk",
+          "tableFrom": "stores",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "stores_slug_unique": {
@@ -746,25 +868,6 @@
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.supabase_auth_user": {
-      "name": "supabase_auth_user",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

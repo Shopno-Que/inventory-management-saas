@@ -1,2 +1,0 @@
-ALTER TABLE "stores" ADD COLUMN "owner_id" uuid NOT NULL;--> statement-breakpoint
-ALTER TABLE "stores" ADD CONSTRAINT "stores_owner_id_supabase_auth_user_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."supabase_auth_user"("id") ON DELETE no action ON UPDATE no action;

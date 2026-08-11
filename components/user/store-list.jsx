@@ -2,9 +2,54 @@
 
 import { useState } from "react";
 import { FaList, FaStore, FaThLarge } from "react-icons/fa";
+import SkeletonBlock from "@/components/skeleton/SkeletonBlock";
 
 export default function StoreList({ stores }) {
   const [view, setView] = useState("grid");
+
+  // If `stores` is not provided yet (loading on the client), show skeletons
+  if (stores == null) {
+    return (
+      <section className="grid gap-6">
+        <div className="flex flex-col gap-4 rounded-box border border-base-300 bg-base-100 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm text-base-content/55">স্টোর সমূহ</p>
+            <h1 className="text-2xl font-bold">আপনার স্টোর অ্যাক্সেস</h1>
+            <p className="mt-1 text-base-content/60">
+              লোড হচ্ছে — অনুগ্রহ করে অপেক্ষা করুন
+            </p>
+          </div>
+
+          <div className="btn-group">
+            <button type="button" className={`btn btn-primary`} disabled>
+              <FaThLarge className="mr-2" aria-hidden="true" /> গ্রিড
+            </button>
+            <button type="button" className={`btn btn-outline`} disabled>
+              <FaList className="mr-2" aria-hidden="true" /> লিস্ট
+            </button>
+          </div>
+        </div>
+
+        <div className={view === "grid" ? "grid gap-4 sm:grid-cols-2 xl:grid-cols-3" : "grid gap-3"}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <article key={i} className={`card border border-base-300 bg-base-100 shadow-sm`}>
+              <div className="p-5">
+                <div className="avatar mb-3">
+                  <div className="h-16 w-16 rounded-2xl bg-base-200" />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="h-5 w-40 rounded-md bg-base-200/60 animate-pulse" />
+                  <div className="h-4 w-24 rounded-md bg-base-200/60 animate-pulse" />
+                  <SkeletonBlock rows={3} className="mt-3" />
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="grid gap-6">

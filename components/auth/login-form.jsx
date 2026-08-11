@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useNavigation } from "@/components/navigation/NavigationProvider"; import { useRef, useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginForm() {
-  const router = useRouter();
+  const { replace } = useNavigation();
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -32,7 +31,7 @@ export default function LoginForm() {
       });
       if (error) throw error;
       formRef.current?.reset();
-      router.replace("/user/profile");
+      replace("/user/profile");
     } catch (error) {
       setMessage({
         type: "error",

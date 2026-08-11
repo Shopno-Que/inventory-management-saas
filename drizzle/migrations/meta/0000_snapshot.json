@@ -1,5 +1,5 @@
 {
-  "id": "685789ca-fb7d-4586-a407-c28cf7c4f34b",
+  "id": "45378e55-5ff2-4e30-bb78-41dc38c35264",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -101,10 +101,11 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "saas_members_user_id_supabase_auth_user_id_fk": {
-          "name": "saas_members_user_id_supabase_auth_user_id_fk",
+        "saas_members_user_id_users_id_fk": {
+          "name": "saas_members_user_id_users_id_fk",
           "tableFrom": "saas_members",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -341,10 +342,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "store_invitations_invited_by_supabase_auth_user_id_fk": {
-          "name": "store_invitations_invited_by_supabase_auth_user_id_fk",
+        "store_invitations_invited_by_users_id_fk": {
+          "name": "store_invitations_invited_by_users_id_fk",
           "tableFrom": "store_invitations",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "invited_by"
           ],
@@ -483,10 +485,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "store_members_user_id_supabase_auth_user_id_fk": {
-          "name": "store_members_user_id_supabase_auth_user_id_fk",
+        "store_members_user_id_users_id_fk": {
+          "name": "store_members_user_id_users_id_fk",
           "tableFrom": "store_members",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -496,10 +499,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "store_members_invited_by_supabase_auth_user_id_fk": {
-          "name": "store_members_invited_by_supabase_auth_user_id_fk",
+        "store_members_invited_by_users_id_fk": {
+          "name": "store_members_invited_by_users_id_fk",
           "tableFrom": "store_members",
-          "tableTo": "supabase_auth_user",
+          "tableTo": "users",
+          "schemaTo": "auth",
           "columnsFrom": [
             "invited_by"
           ],
@@ -685,6 +689,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "slug": {
           "name": "slug",
           "type": "varchar",
@@ -735,7 +745,22 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "stores_owner_id_users_id_fk": {
+          "name": "stores_owner_id_users_id_fk",
+          "tableFrom": "stores",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "stores_slug_unique": {
@@ -746,76 +771,6 @@
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.profiles": {
-      "name": "profiles",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "display_name": {
-          "name": "display_name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "profiles_id_supabase_auth_user_id_fk": {
-          "name": "profiles_id_supabase_auth_user_id_fk",
-          "tableFrom": "profiles",
-          "tableTo": "supabase_auth_user",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.supabase_auth_user": {
-      "name": "supabase_auth_user",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

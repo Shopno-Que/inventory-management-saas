@@ -1,12 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useNavigation } from "@/components/navigation/NavigationProvider"; import { useRef, useState } from "react";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignupForm() {
-  const router = useRouter();
+  const { push } = useNavigation();
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -43,7 +42,7 @@ export default function SignupForm() {
       });
       if (error) throw error;
       formRef.current?.reset();
-      router.push("/user/register-success");
+      push("/user/register-success");
     } catch (error) {
       setMessage({
         type: "error",

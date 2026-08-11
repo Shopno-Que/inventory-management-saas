@@ -1,21 +1,32 @@
 import {pgTable, uuid, varchar, text, timestamp, boolean, unique, primaryKey} from "drizzle-orm/pg-core";
-import { supabaseAuthUser } from "./users";
+import { supabaseAuthUser } from "../ref-schema.js";
 
 export const stores = pgTable("stores", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").primaryKey().defaultRandom().defaultRandom(),
+
     name: varchar("name").notNull(),
+
     ownerId: uuid("owner_id")
-        .notNull()
         .references(() => supabaseAuthUser.id),
+
     slug: varchar("slug").notNull().unique(),
+
     logoUrl: text("logo_url"),
+
     currencyCode: varchar("currency_code"),
+
     timezone: varchar("timezone"),
+
     countryCode: varchar("country_code"),
-    isActive: boolean("is_active"),
+
+    isActive: boolean("is_active")
+        .notNull()
+        .default(false),
+
     createdAt: timestamp("created_at", {
         withTimezone: true,
     }),
+
     updatedAt: timestamp("updated_at", {
         withTimezone: true,
     }),
@@ -24,7 +35,7 @@ export const stores = pgTable("stores", {
 export const storeMembers = pgTable(
     "store_members",
     {
-        id: uuid("id").primaryKey(),
+        id: uuid("id").primaryKey().defaultRandom(),
 
         storeId: uuid("store_id")
             .notNull()
@@ -54,18 +65,33 @@ export const storeMembers = pgTable(
     ],
 );
 
-export const storeRoles = pgTable("store_roles", {
-    id: uuid("id").primaryKey(),
+export const storeRoles = pgTable(
+    "store_roles",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
 
-    code: varchar("code").notNull().unique(),
+        storeId: uuid("store_id")
+            .notNull()
+            .references(() => stores.id),
 
-    name: varchar("name").notNull(),
+        code: varchar("code").notNull(),
 
-    isSystem: boolean("is_system"),
-});
+        name: varchar("name").notNull(),
+
+        isSystem: boolean("is_system")
+            .notNull()
+            .default(false),
+    },
+    (table) => [
+        unique("store_roles_store_code_unique").on(
+            table.storeId,
+            table.code,
+        ),
+    ],
+);
 
 export const storePermissions = pgTable("store_permissions", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").primaryKey().defaultRandom(),
 
     code: varchar("code").notNull().unique(),
 
@@ -110,8 +136,32 @@ export const storeMemberRoles = pgTable(
     ],
 );
 
+export const storeMemberPermissions = pgTable(
+    "store_member_permissions",
+    {
+        memberId: uuid("member_id")
+            .notNull()
+            .references(() => storeMembers.id),
+
+        permissionId: uuid("permission_id")
+            .notNull()
+            .references(() => storePermissions.id),
+
+        effect: varchar("effect").notNull(),
+    },
+    (table) => [
+        primaryKey({
+            name: "store_member_permissions_pk",
+            columns: [
+                table.memberId,
+                table.permissionId,
+            ],
+        }),
+    ],
+);
+
 export const storeInvitations = pgTable("store_invitations", {
-    id: uuid("id").primaryKey(),
+    id: uuid("id").primaryKey().defaultRandom(),
 
     storeId: uuid("store_id")
         .notNull()
