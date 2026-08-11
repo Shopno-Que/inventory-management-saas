@@ -6,19 +6,23 @@ import {
     useEffect,
     useState,
 } from "react";
-import { useRouter } from "next/navigation";
+import {
+    usePathname,
+    useRouter,
+} from "next/navigation";
 import FullPageSpinner from "@/components/skeleton/FullPageSpinner";
 
 const NavigationContext = createContext(null);
 
 export function NavigationProvider({ children }) {
     const router = useRouter();
+    const pathname = usePathname();
+
     const [navigating, setNavigating] = useState(false);
 
     useEffect(() => {
-        // Navigation has completed when the new route renders.
         setNavigating(false);
-    }, [router]);
+    }, [pathname]);
 
     const push = (url) => {
         setNavigating(true);
