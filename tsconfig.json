@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "next.config.js", "lib/utils.js", "lib/supabase/client.js", "lib/supabase/proxy.ts", "lib/supabase/server.ts"  ],
+, "next.config.mjs", "lib/utils.js", "lib/supabase/client.js", "lib/supabase/proxy.ts", "lib/supabase/server.ts"  ],
   "exclude": ["node_modules"]
 }
