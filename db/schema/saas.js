@@ -8,13 +8,19 @@ export const saasMembers = pgTable(
         id: uuid("id")
             .primaryKey()
             .defaultRandom(),
+
         userId: uuid("user_id")
             .notNull()
-            .references(() => supabaseAuthUser.id),
+            .references(() => supabaseAuthUser.id, {
+                onDelete: "cascade",
+            }),
+
         status: varchar("status").notNull(),
+
         joinedAt: timestamp("joined_at", {
             withTimezone: true,
         }),
+
         createdAt: timestamp("created_at", {
             withTimezone: true,
         }),
@@ -33,7 +39,7 @@ export const saasRoles = pgTable("saas_roles", {
 
     name: varchar("name").notNull(),
 
-    isSystem: boolean("is_system"),
+    isSystem: boolean("is_system").notNull().default(false),
 });
 
 export const saasPermissions = pgTable("saas_permissions", {
@@ -49,16 +55,23 @@ export const saasRolePermissions = pgTable(
     {
         roleId: uuid("role_id")
             .notNull()
-            .references(() => saasRoles.id),
+            .references(() => saasRoles.id, {
+                onDelete: "cascade",
+            }),
 
         permissionId: uuid("permission_id")
             .notNull()
-            .references(() => saasPermissions.id),
+            .references(() => saasPermissions.id, {
+                onDelete: "restrict",
+            }),
     },
     (table) => [
         primaryKey({
             name: "saas_role_permissions_pk",
-            columns: [table.roleId, table.permissionId],
+            columns: [
+                table.roleId,
+                table.permissionId,
+            ],
         }),
     ],
 );
@@ -68,16 +81,23 @@ export const saasMemberRoles = pgTable(
     {
         memberId: uuid("member_id")
             .notNull()
-            .references(() => saasMembers.id),
+            .references(() => saasMembers.id, {
+                onDelete: "cascade",
+            }),
 
         roleId: uuid("role_id")
             .notNull()
-            .references(() => saasRoles.id),
+            .references(() => saasRoles.id, {
+                onDelete: "cascade",
+            }),
     },
     (table) => [
         primaryKey({
             name: "saas_member_roles_pk",
-            columns: [table.memberId, table.roleId],
+            columns: [
+                table.memberId,
+                table.roleId,
+            ],
         }),
     ],
 );

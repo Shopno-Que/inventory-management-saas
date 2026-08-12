@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import {
     FaEnvelope,
     FaLock,
@@ -9,6 +9,7 @@ import {
     FaUser,
 } from "react-icons/fa";
 import { createClient } from "@/lib/supabase/client";
+import { deleteAccountAction } from "@/server/delete-profile";
 
 export default function ProfileForm({
     name,
@@ -19,6 +20,13 @@ export default function ProfileForm({
     const [nameEditing, setNameEditing] = useState(false);
     const [emailEditing, setEmailEditing] = useState(false);
     const [passwordEditing, setPasswordEditing] = useState(false);
+
+    const [deleteConfirmation, setDeleteConfirmation] = useState("");
+    const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
+    const [deleteState, deleteAction, deletePending] = useActionState(
+        deleteAccountAction,
+        null
+    );
 
     const [nameLoading, setNameLoading] = useState(false);
     const [emailLoading, setEmailLoading] = useState(false);
@@ -518,6 +526,98 @@ export default function ProfileForm({
                                 </fieldset>
                             </form>
                         </>
+                    )}
+                </div>
+            </section>
+
+            {/* Danger Zone */}
+            <section className="card border border-error/30 bg-base-100 shadow-sm">
+                <div className="card-body">
+                    <h2 className="card-title text-error">
+                        Danger Zone
+                    </h2>
+
+                    <p className="text-sm text-base-content/60">
+                        আপনার অ্যাকাউন্ট স্থায়ীভাবে মুছে ফেলুন।
+                        এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।
+                    </p>
+
+                    {!deleteAccountOpen ? (
+                        <button
+                            type="button"
+                            className="btn btn-error w-fit"
+                            onClick={() => {
+                                setDeleteAccountOpen(true);
+                            }}
+                        >
+                            অ্যাকাউন্ট মুছে ফেলুন
+                        </button>
+                    ) : (
+                        <form
+                            action={deleteAction}
+                            className="mt-2 rounded-lg border border-error/30 bg-error/5 p-4"
+                        >
+
+                            <div className="mt-4 grid gap-2">
+                                <label
+                                    htmlFor="deleteConfirmation"
+                                    className="label"
+                                >
+                                    <span className="label-text">
+                                        নিশ্চিত করতে <strong>DELETE</strong> লিখুন
+                                    </span>
+                                </label>
+
+                                <input
+                                    id="deleteConfirmation"
+                                    name="confirmation"
+                                    type="text"
+                                    className="input input-bordered w-full max-w-md"
+                                    placeholder="DELETE"
+                                    value={deleteConfirmation}
+                                    onChange={(e) => setDeleteConfirmation(e.target.value)}
+                                    required
+                                    autoComplete="off"
+                                />
+                            </div>
+
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                <button
+                                    type="button"
+                                    className="btn"
+                                    disabled={deletePending}
+                                    onClick={() => {
+                                        setDeleteAccountOpen(false);
+                                    }}
+                                >
+                                    বাতিল
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    className="btn btn-error"
+                                    disabled={deletePending || deleteConfirmation !== "DELETE"}
+                                >
+                                    {deletePending && (
+                                        <span className="loading loading-bars loading-sm" />
+                                    )}
+
+                                    অ্যাকাউন্ট মুছে ফেলুন
+                                </button>
+                            </div>
+
+                            {deleteState?.message && (
+                                <div
+                                    role="alert"
+                                    className={`alert mt-5 ${deleteState.success
+                                            ? "alert-success"
+                                            : "alert-error"
+                                        }`}
+                                >
+                                    <span>{deleteState.message}</span>
+                                </div>
+                            )}
+                        </form>
                     )}
                 </div>
             </section>

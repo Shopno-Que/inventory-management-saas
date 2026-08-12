@@ -240,10 +240,6 @@ export async function createStore(prevState, formData) {
             });
 
         if (error) {
-            console.error(
-                "Supabase signup failed:",
-                error,
-            );
 
             return {
                 ...initialState,
@@ -348,10 +344,6 @@ export async function createStore(prevState, formData) {
             requiresConfirmation,
         };
     } catch (error) {
-        console.error(
-            "Store creation failed:",
-            error,
-        );
 
         return {
             ...initialState,
