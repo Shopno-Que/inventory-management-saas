@@ -91,7 +91,6 @@ export async function deleteAccountAction(prevState, formData) {
         await adminSupabase.auth.admin.deleteUser(user.id);
 
     if (deleteError) {
-        console.error("Account deletion failed:", deleteError);
         return {
             success: false,
             message:
