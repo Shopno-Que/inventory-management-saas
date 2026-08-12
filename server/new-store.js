@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/db";
+import { eq } from "drizzle-orm";
 import {
     stores,
     storeMembers,
@@ -351,4 +352,32 @@ export async function createStore(prevState, formData) {
                 "স্টোর তৈরি করা যায়নি। আবার চেষ্টা করুন।",
         };
     }
+}
+
+export async function checkSlugAvailability(slug) {
+    const normalizedSlug = slug.trim().toLowerCase();
+
+    if (
+        normalizedSlug.length < 2 ||
+        normalizedSlug.length > 100 ||
+        !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedSlug)
+    ) {
+        return {
+            available: false,
+            reason: "invalid",
+        };
+    }
+
+    const existingStore = await db
+        .select({ id: stores.id })
+        .from(stores)
+        .where(eq(stores.slug, normalizedSlug))
+        .limit(1);
+
+    return {
+        available: existingStore.length === 0,
+        reason: existingStore.length === 0
+            ? null
+            : "taken",
+    };
 }
