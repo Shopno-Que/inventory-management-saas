@@ -7,7 +7,9 @@ export const stores = pgTable("stores", {
     name: varchar("name").notNull(),
 
     ownerId: uuid("owner_id")
-        .references(() => supabaseAuthUser.id),
+        .references(() => supabaseAuthUser.id, {
+            onDelete: "cascade",
+        }),
 
     slug: varchar("slug").notNull().unique(),
 
@@ -39,15 +41,22 @@ export const storeMembers = pgTable(
 
         storeId: uuid("store_id")
             .notNull()
-            .references(() => stores.id),
+            .references(() => stores.id, {
+                onDelete: "cascade",
+            }),
 
         userId: uuid("user_id")
             .notNull()
-            .references(() => supabaseAuthUser.id),
+            .references(() => supabaseAuthUser.id, {
+                onDelete: "cascade",
+            }),
 
         status: varchar("status").notNull(),
 
-        invitedBy: uuid("invited_by").references(() => supabaseAuthUser.id),
+        invitedBy: uuid("invited_by")
+            .references(() => supabaseAuthUser.id, {
+                onDelete: "set null",
+            }),
 
         joinedAt: timestamp("joined_at", {
             withTimezone: true,
@@ -72,7 +81,9 @@ export const storeRoles = pgTable(
 
         storeId: uuid("store_id")
             .notNull()
-            .references(() => stores.id),
+            .references(() => stores.id, {
+                onDelete: "cascade",
+            }),
 
         code: varchar("code").notNull(),
 
@@ -103,11 +114,15 @@ export const storeRolePermissions = pgTable(
     {
         roleId: uuid("role_id")
             .notNull()
-            .references(() => storeRoles.id),
+            .references(() => storeRoles.id, {
+                onDelete: "cascade",
+            }),
 
         permissionId: uuid("permission_id")
             .notNull()
-            .references(() => storePermissions.id),
+            .references(() => storePermissions.id, {
+                onDelete: "cascade",
+            }),
     },
     (table) => [
         primaryKey({
@@ -122,11 +137,15 @@ export const storeMemberRoles = pgTable(
     {
         memberId: uuid("member_id")
             .notNull()
-            .references(() => storeMembers.id),
+            .references(() => storeMembers.id, {
+                onDelete: "cascade",
+            }),
 
         roleId: uuid("role_id")
             .notNull()
-            .references(() => storeRoles.id),
+            .references(() => storeRoles.id, {
+                onDelete: "cascade",
+            }),
     },
     (table) => [
         primaryKey({
@@ -141,11 +160,15 @@ export const storeMemberPermissions = pgTable(
     {
         memberId: uuid("member_id")
             .notNull()
-            .references(() => storeMembers.id),
+            .references(() => storeMembers.id, {
+                onDelete: "cascade",
+            }),
 
         permissionId: uuid("permission_id")
             .notNull()
-            .references(() => storePermissions.id),
+            .references(() => storePermissions.id, {
+                onDelete: "cascade",
+            }),
 
         effect: varchar("effect").notNull(),
     },
@@ -165,13 +188,16 @@ export const storeInvitations = pgTable("store_invitations", {
 
     storeId: uuid("store_id")
         .notNull()
-        .references(() => stores.id),
+        .references(() => stores.id, {
+            onDelete: "cascade",
+        }),
 
     email: varchar("email").notNull(),
 
     invitedBy: uuid("invited_by")
-        .notNull()
-        .references(() => supabaseAuthUser.id),
+        .references(() => supabaseAuthUser.id, {
+            onDelete: "set null",
+        }),
 
     status: varchar("status").notNull(),
 

@@ -15,6 +15,27 @@
       "when": 1786426716844,
       "tag": "0001_eminent_robbie_robertson",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786533714774,
+      "tag": "0002_rare_winter_soldier",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786534197307,
+      "tag": "0003_blue_dust",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786534524617,
+      "tag": "0004_little_wonder_man",
+      "breakpoints": true
     }
   ]
 }
