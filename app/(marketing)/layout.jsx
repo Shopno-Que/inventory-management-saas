@@ -1,7 +1,9 @@
 import { Hind_Siliguri, Noto_Sans_Bengali } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 import NextTopLoader from "nextjs-toploader";
 import { NavigationProvider } from "@/components/navigation/NavigationProvider";
+import Header from "@/components/marketing/header";
+import Footer from "@/components/marketing/footer";
 
 const hindSiliguri = Hind_Siliguri({
   display: "swap",
@@ -32,7 +34,9 @@ export default function RootLayout({children}) {
       <body className="font-sans">
         <NextTopLoader color="#422ad5" showSpinner={false} />
         <NavigationProvider>
+          <Header />
           {children}
+          <Footer />
         </NavigationProvider>
       </body>
     </html>
