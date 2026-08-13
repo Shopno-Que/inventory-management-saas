@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { checkSlugAvailability } from "@/server/new-store";
 
 export default function StoreInformationStep({
     form,
@@ -8,10 +9,50 @@ export default function StoreInformationStep({
     onNext,
     pending,
 }) {
+    const [slugStatus, setSlugStatus] = useState("idle");
     const [errors, setErrors] = useState({
         name: false,
         slug: false,
     });
+
+    useEffect(() => {
+        const slug = form.slug.trim();
+
+        setSlugStatus("idle");
+
+        if (
+            slug.length < 2 ||
+            slug.length > 100 ||
+            !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)
+        ) {
+            return;
+        }
+
+        setSlugStatus("checking");
+
+        let cancelled = false;
+
+        const timer = setTimeout(async () => {
+            try {
+                const result = await checkSlugAvailability(slug);
+
+                if (!cancelled) {
+                    setSlugStatus(
+                        result.available ? "available" : "unavailable"
+                    );
+                }
+            } catch {
+                if (!cancelled) {
+                    setSlugStatus("idle");
+                }
+            }
+        }, 500);
+
+        return () => {
+            cancelled = true;
+            clearTimeout(timer);
+        };
+    }, [form.slug]);
 
     const [slugManuallyEdited, setSlugManuallyEdited] =
         useState(false);
@@ -52,7 +93,7 @@ export default function StoreInformationStep({
             slug: slugInvalid,
         });
 
-        if (nameInvalid || slugInvalid) {
+        if (nameInvalid || slugInvalid || slugStatus !== "available") {
             return;
         }
 
@@ -237,6 +278,24 @@ export default function StoreInformationStep({
                         এবং হাইফেন ব্যবহার করুন।
                     </p>
                 )}
+
+                {slugStatus === "checking" && (
+                    <p className="mt-1 text-sm text-base-content/60">
+                        যাচাই করা হচ্ছে...
+                    </p>
+                )}
+
+                {slugStatus === "unavailable" && (
+                    <p className="mt-1 text-sm text-error">
+                        এই স্টোর URL ইতিমধ্যে ব্যবহার করা হয়েছে।
+                    </p>
+                )}
+
+                {slugStatus === "available" && (
+                    <p className="mt-1 text-sm text-success">
+                        এই স্টোর URL ব্যবহার করা যাবে।
+                    </p>
+                )}
             </div>
 
             {/* Next */}
@@ -245,7 +304,7 @@ export default function StoreInformationStep({
                     type="button"
                     className="btn btn-primary"
                     onClick={handleNext}
-                    disabled={pending}
+                    disabled={pending || slugStatus !== "available"}
                 >
                     পরবর্তী
                 </button>
