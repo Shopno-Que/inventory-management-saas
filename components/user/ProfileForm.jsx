@@ -15,7 +15,7 @@ export default function ProfileForm({
     name,
     email,
 }) {
-    const [currentName, setCurrentName] = useState(name || "<কোন নাম দেওয়া নেই>");
+    const [currentName, setCurrentName] = useState(name);
 
     const [nameEditing, setNameEditing] = useState(false);
     const [emailEditing, setEmailEditing] = useState(false);
@@ -130,7 +130,7 @@ export default function ProfileForm({
 
             setEmailMessage({
                 type: "success",
-                text: "নতুন ইমেইলে একটি নিশ্চিতকরণ ইমেইল পাঠানো হয়েছে।",
+                text: `ইমেইল পরিবর্তনের অনুরোধ করা হয়েছে। ${newEmail}-এ একটি নিশ্চিতকরণ ইমেইল পাঠানো হয়েছে। পরিবর্তন সম্পন্ন করতে আপনার বর্তমান এবং নতুন—দুই ইমেইলেই পাঠানো নিশ্চিতকরণ লিংকে ক্লিক করুন।`,
             });
         } catch (error) {
             setEmailMessage({
@@ -139,6 +139,7 @@ export default function ProfileForm({
             });
         } finally {
             setEmailLoading(false);
+            setEmailEditing(false);
         }
     };
 
@@ -200,13 +201,20 @@ export default function ProfileForm({
                     <div className="grid gap-5">
                         {/* Name */}
                         <div>
+                            {nameEditing ?
+                            <label htmlFor="name" form="nameChange" className="mb-2 block text-sm text-base-content/55">
+                                নাম
+                            </label>
+                            :
                             <p className="mb-1 text-sm text-base-content/55">
                                 নাম
                             </p>
+                            }
 
                             <div className="flex items-center gap-3">
                                 {nameEditing ? (
                                     <form
+                                        id="nameChange"
                                         onSubmit={handleNameSubmit}
                                         className="flex flex-1 items-center gap-2"
                                     >
@@ -250,7 +258,7 @@ export default function ProfileForm({
                                     </form>
                                 ) : (
                                     <p className="font-medium">
-                                        {currentName}
+                                        {currentName || "<কোন নাম দেওয়া নেই>"}
                                     </p>
                                 )}
 
@@ -286,19 +294,62 @@ export default function ProfileForm({
 
                         {/* Email */}
                         <div>
-                            <div className="flex items-center justify-between gap-4">
-                                <div className="flex min-w-0 items-center gap-3">
+                            {emailEditing ?
+                                <label htmlFor="newEmail" form="emailChange" className="mb-2 block text-sm text-base-content/55">
+                                    ইমেইল
+                                </label>
+                                :
+                                <p className="mb-1 text-sm text-base-content/55">
+                                    ইমেইল
+                                </p>
+                            }
+                            <div className="flex items-center gap-3">
+                                {emailEditing ? (
+                                    <form
+                                        id="emailChange"
+                                        onSubmit={handleEmailSubmit}
+                                        className="flex flex-1 items-center gap-2"
+                                    >
+                                        <fieldset
+                                            className="flex flex-1 items-center gap-2"
+                                            disabled={emailLoading}
+                                        >
+                                            <div className="input validator w-full">
+                                                <FaEnvelope
+                                                    className="text-base-content/50"
+                                                    aria-hidden="true"
+                                                />
 
-                                    <div className="min-w-0">
-                                        <p className="mb-1 text-sm text-base-content/55">
-                                            ইমেইল
-                                        </p>
+                                                <input
+                                                    id="newEmail"
+                                                    name="newEmail"
+                                                    type="email"
+                                                    placeholder="নতুন ইমেইল"
+                                                    required
+                                                    autoFocus
+                                                />
+                                            </div>
 
-                                        <p className="break-all font-medium">
-                                            {email}
-                                        </p>
-                                    </div>
-                                </div>
+                                            <button
+                                                type="submit"
+                                                className="btn btn-primary"
+                                                disabled={emailLoading}
+                                            >
+                                                {emailLoading && (
+                                                    <span className="loading loading-bars loading-sm" />
+                                                )}
+
+                                                {emailLoading
+                                                    ? "সংরক্ষণ হচ্ছে..."
+                                                    : "সংরক্ষণ"}
+                                            </button>
+                                        </fieldset>
+                                    </form>
+                                ) : (
+                                    <p className="font-medium break-all">
+                                        {email}
+                                    </p>
+                                )}
 
                                 <button
                                     type="button"
@@ -317,72 +368,16 @@ export default function ProfileForm({
                                 </button>
                             </div>
 
-                            {emailEditing && (
-                                <form
-                                    onSubmit={handleEmailSubmit}
-                                    className="mt-4 grid gap-4"
+                            {emailMessage && (
+                                <div
+                                    role="alert"
+                                    className={`alert mt-3 ${emailMessage.type === "success"
+                                            ? "alert-success"
+                                            : "alert-error"
+                                        }`}
                                 >
-                                    <fieldset
-                                        className="grid gap-4"
-                                        disabled={emailLoading}
-                                    >
-                                        <div className="form-control w-full">
-                                            <label
-                                                htmlFor="newEmail"
-                                                className="label mb-1"
-                                            >
-                                                <span className="label-text font-medium">
-                                                    নতুন ইমেইল
-                                                </span>
-                                            </label>
-
-                                            <div className="input validator w-full">
-                                                <FaEnvelope
-                                                    className="text-base-content/50"
-                                                    aria-hidden="true"
-                                                />
-
-                                                <input
-                                                    id="newEmail"
-                                                    name="newEmail"
-                                                    type="email"
-                                                    placeholder="you@example.com"
-                                                    required
-                                                />
-                                            </div>
-
-                                            <p className="validator-hint hidden">
-                                                একটি সঠিক ইমেইল ঠিকানা লিখুন।
-                                            </p>
-                                        </div>
-
-                                        {emailMessage && (
-                                            <div
-                                                role="alert"
-                                                className={`alert ${emailMessage.type === "success"
-                                                    ? "alert-success"
-                                                    : "alert-error"
-                                                    }`}
-                                            >
-                                                {emailMessage.text}
-                                            </div>
-                                        )}
-
-                                        <button
-                                            className="btn btn-primary w-fit"
-                                            type="submit"
-                                            disabled={emailLoading}
-                                        >
-                                            {emailLoading && (
-                                                <span className="loading loading-bars loading-sm" />
-                                            )}
-
-                                            {emailLoading
-                                                ? "আপডেট হচ্ছে..."
-                                                : "ইমেইল পরিবর্তন করুন"}
-                                        </button>
-                                    </fieldset>
-                                </form>
+                                    {emailMessage.text}
+                                </div>
                             )}
                         </div>
                     </div>
