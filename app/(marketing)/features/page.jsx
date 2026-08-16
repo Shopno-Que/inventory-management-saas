@@ -100,7 +100,7 @@ export default function FeaturesPage() {
                         অ্যাকাউন্ট তৈরি করে আপনার প্রথম দোকান সেটআপ করুন।
                     </p>
 
-                    <Link href="/user/register" className="btn btn-primary mt-6">
+                    <Link href="/stores/new" className="btn btn-primary mt-6">
                         বিনামূল্যে শুরু করুন
                     </Link>
                 </div>

@@ -32,11 +32,11 @@ export default async function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               {user ? (
                 <Link href="/user/profile" className="btn btn-primary">
-                  আমার দোকানে যান
+                  ড্যাশবোর্ড
                 </Link>
               ) : (
                 <>
-                  <Link href="/user/register" className="btn btn-primary">
+                  <Link href="/stores/new" className="btn btn-primary">
                     বিনামূল্যে শুরু করুন
                   </Link>
 
@@ -108,7 +108,7 @@ export default async function Home() {
 
           {!user && (
             <Link
-              href="/user/register"
+              href="/stores/new"
               className="btn btn-primary mt-6"
             >
               বিনামূল্যে শুরু করুন

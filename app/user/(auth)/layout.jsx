@@ -1,9 +1,19 @@
 import AuthBanner from "@/components/auth/auth-banner";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function AuthLayout({ children }) {
+export default async function AuthLayout({ children }) {
+  const supabase = await createClient();
+  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  
+  if (user) {
+    redirect("/user/profile");
+  }
+
   return (
-    // Route groups keep auth URLs clean (/user/login, /user/register) while this shared
-    // Server Component layout removes duplicated banner and spacing markup.
     <section className="grid min-h-screen bg-base-100 lg:grid-cols-[1.08fr_0.92fr]">
       <AuthBanner />
 

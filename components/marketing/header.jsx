@@ -10,7 +10,7 @@ export default function Header() {
                         href="/"
                         className="text-xl font-bold text-base-content"
                     >
-                        আপনার SaaS
+                        হিসাব খাতা
                     </Link>
                 </div>
 
@@ -47,7 +47,7 @@ export default function Header() {
                     </Link>
 
                     <Link
-                        href="/user/register"
+                        href="/stores/new"
                         className="btn btn-primary"
                     >
                         শুরু করুন

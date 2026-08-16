@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaChartPie, FaCog, FaStore, FaUserCircle } from "react-icons/fa";
+import AvatarMenu from "@/components/common/avatar-dropdown"
 
 const navigation = [
   { href: "/user/profile/stores", label: "স্টোর সমূহ", icon: FaChartPie },
@@ -26,17 +27,7 @@ export default function ProfileShell({ children, user }) {
             </Link>
           </div>
           <div className="navbar-end gap-3">
-            <div className="hidden text-right sm:block">
-              <p className="text-sm font-medium">
-                {user.name || "আপনার অ্যাকাউন্ট"}
-              </p>
-              <p className="text-xs text-base-content/55">{user.email}</p>
-            </div>
-            <div className="avatar avatar-placeholder">
-              <div className="w-10 rounded-full bg-primary text-primary-content">
-                <span>{initial}</span>
-              </div>
-            </div>
+            <AvatarMenu user={user} />
           </div>
         </div>
       </header>

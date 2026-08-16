@@ -1,20 +1,7 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-
 import ForgotPasswordForm from "@/components/auth/forgot-password-form";
-import { createClient } from "@/lib/supabase/server";
 
 export default async function ForgotPasswordPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    redirect("/user/profile");
-  }
-
   return (
     <div className="w-full max-w-md space-y-6">
       <header className="space-y-2 text-center">

@@ -1,21 +1,9 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import GoogleButton from "@/components/auth/google-login-btn";
 
 import LoginForm from "@/components/auth/login-form";
-import { createClient } from "@/lib/supabase/server";
 
 export default async function LoginPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (user) {
-    redirect("/user/profile");
-  }
-
   return (
     <div className="w-full max-w-md space-y-6">
       <header className="space-y-2 text-center">

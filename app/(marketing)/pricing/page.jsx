@@ -12,7 +12,7 @@ const plans = [
             "স্টক ব্যবস্থাপনা",
         ],
         button: "বিনামূল্যে শুরু করুন",
-        href: "/user/register",
+        href: "/stores/new",
     },
     {
         name: "বেসিক",
@@ -27,7 +27,7 @@ const plans = [
             "কর্মী যোগ করার সুবিধা",
         ],
         button: "শুরু করুন",
-        href: "/user/register",
+        href: "/stores/new",
         popular: true,
     },
     {
@@ -44,7 +44,7 @@ const plans = [
             "ভূমিকা ও অনুমতি",
         ],
         button: "শুরু করুন",
-        href: "/user/register",
+        href: "/stores/new",
     },
 ];
 

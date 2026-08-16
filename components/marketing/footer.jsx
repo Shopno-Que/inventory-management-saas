@@ -10,7 +10,7 @@ export default function Footer() {
                             href="/"
                             className="text-xl font-bold text-base-content"
                         >
-                            আপনার SaaS
+                            হিসাব খাতা
                         </Link>
 
                         <p className="mt-3 max-w-md text-sm leading-6 text-base-content/60">
@@ -43,7 +43,7 @@ export default function Footer() {
 
                             <li>
                                 <Link
-                                    href="/user/register"
+                                    href="/stores/new"
                                     className="hover:text-base-content"
                                 >
                                     শুরু করুন
@@ -96,7 +96,7 @@ export default function Footer() {
                 </div>
 
                 <div className="mt-10 border-t border-base-300 pt-6 text-sm text-base-content/50">
-                    © {new Date().getFullYear()} আপনার SaaS. সর্বস্বত্ব সংরক্ষিত।
+                    © {new Date().getFullYear()} হিসাব খাতা. সর্বস্বত্ব সংরক্ষিত।
                 </div>
             </div>
         </footer>
