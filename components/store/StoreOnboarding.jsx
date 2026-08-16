@@ -217,7 +217,7 @@ export default function StoreOnboarding({ user }) {
                                         >
                                             <span>
                                                 {form.email} ঠিকানার ইনবক্স এবং স্প্যাম ফোল্ডার
-                                                পরীক্ষা করুন।
+                                                চেক করুন।
                                             </span>
                                         </div>
 

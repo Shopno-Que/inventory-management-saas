@@ -1,5 +1,6 @@
 "use server";
 
+import { supabaseAuthUser as users } from "@/db/ref-schema";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
@@ -227,6 +228,7 @@ export async function createStore(prevState, formData) {
         /*
          * Create Supabase account.
          */
+        const storeUrl = `/stores/${slug}`;
         const { data, error } =
             await supabase.auth.signUp({
                 email,
@@ -236,7 +238,7 @@ export async function createStore(prevState, formData) {
                         full_name: fullName,
                     },
                     emailRedirectTo:
-                        `${process.env.NEXT_PUBLIC_SITE_URL}/user/auth/confirm`,
+                        `${process.env.NEXT_PUBLIC_SITE_URL}/user/auth/callback?next=${encodeURIComponent(`/stores/${slug}`)}`,
                 },
             });
 
@@ -377,6 +379,33 @@ export async function checkSlugAvailability(slug) {
     return {
         available: existingStore.length === 0,
         reason: existingStore.length === 0
+            ? null
+            : "taken",
+    };
+}
+
+export async function checkEmailAvailability(email) {
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const emailRegex =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(normalizedEmail)) {
+        return {
+            available: false,
+            reason: "invalid",
+        };
+    }
+
+    const existingUser = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, normalizedEmail))
+        .limit(1);
+
+    return {
+        available: existingUser.length === 0,
+        reason: existingUser.length === 0
             ? null
             : "taken",
     };

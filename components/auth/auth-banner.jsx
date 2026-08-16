@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 // Server Component: this panel is static UI plus next/image, so it stays out of
 // the client bundle and remains cheap to stream from the shared auth layout.
@@ -18,17 +19,17 @@ export default function AuthBanner() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_26rem)]" />
 
       <div className="absolute inset-x-0 bottom-0 p-10 text-neutral-content xl:p-14">
-        <div className="mb-8 inline-flex items-center gap-3">
+        <Link href="/" className="mb-8 inline-flex items-center gap-3">
           <div className="grid size-11 place-items-center rounded-box bg-primary font-bold text-primary-content">
             HK
           </div>
           <div>
             <p className="font-semibold">হিসাব খাতা</p>
             <p className="text-sm text-neutral-content/65">
-              ইনভেন্টরি ও পিওএস সলিউশন
+              ইনভেন্টরি ও POS সলিউশন
             </p>
           </div>
-        </div>
+        </Link>
 
         <div className="mb-5 h-1 w-16 rounded-full bg-primary" />
         <h2 className="max-w-xl text-4xl font-bold leading-tight">

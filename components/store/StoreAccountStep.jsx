@@ -1,8 +1,55 @@
 "use client";
 
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { checkEmailAvailability } from "@/server/new-store";
+import { useEffect, useState } from "react";
 
 export default function StoreAccountStep({ form, updateForm, onBack, onNext, pending, }) {
+    const [emailStatus, setEmailStatus] = useState("idle");
+    useEffect(() => {
+        const email = form.email.trim().toLowerCase();
+
+        setEmailStatus("idle");
+
+        if (!email) {
+            return;
+        }
+
+        const emailRegex =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            return;
+        }
+
+        setEmailStatus("checking");
+
+        let cancelled = false;
+
+        const timer = setTimeout(async () => {
+            try {
+                const result =
+                    await checkEmailAvailability(email);
+
+                if (!cancelled) {
+                    setEmailStatus(
+                        result.available
+                            ? "available"
+                            : "unavailable"
+                    );
+                }
+            } catch {
+                if (!cancelled) {
+                    setEmailStatus("idle");
+                }
+            }
+        }, 500);
+
+        return () => {
+            cancelled = true;
+            clearTimeout(timer);
+        };
+    }, [form.email]);
     const passwordsMatch = !form.password || !form.confirmPassword || form.password === form.confirmPassword;
 
     const handleNext = (event) => {
@@ -16,6 +63,10 @@ export default function StoreAccountStep({ form, updateForm, onBack, onNext, pen
         }
 
         if (!passwordsMatch) {
+            return;
+        }
+
+        if (emailStatus !== "available") {
             return;
         }
 
@@ -124,8 +175,7 @@ export default function StoreAccountStep({ form, updateForm, onBack, onNext, pen
                             value={form.email}
                             onChange={(event) =>
                                 updateForm({
-                                    email:
-                                        event.target.value,
+                                    email: event.target.value.toLowerCase(),
                                 })
                             }
                             placeholder="you@example.com"
@@ -136,6 +186,24 @@ export default function StoreAccountStep({ form, updateForm, onBack, onNext, pen
                     <p className="validator-hint hidden">
                         একটি সঠিক ইমেইল ঠিকানা লিখুন।
                     </p>
+
+                    {emailStatus === "checking" && (
+                        <p className="mt-1 text-sm text-base-content/60">
+                            যাচাই করা হচ্ছে...
+                        </p>
+                    )}
+
+                    {emailStatus === "unavailable" && (
+                        <p className="mt-1 text-sm text-error">
+                            এই ইমেইল ইতিমধ্যে ব্যবহার করা হয়েছে।
+                        </p>
+                    )}
+
+                    {emailStatus === "available" && (
+                        <p className="mt-1 text-sm text-success">
+                            এই ইমেইল ব্যবহার করা যাবে।
+                        </p>
+                    )}
                 </div>
 
                 {/* Password */}
@@ -247,6 +315,9 @@ export default function StoreAccountStep({ form, updateForm, onBack, onNext, pen
                         type="button"
                         className="btn btn-primary"
                         onClick={handleNext}
+                        disabled={
+                            emailStatus !== "available"
+                        }
                     >
                         পরবর্তী
                     </button>

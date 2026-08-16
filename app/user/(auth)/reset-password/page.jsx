@@ -1,7 +1,6 @@
 import ResetPasswordForm from "@/components/auth/reset-password-form";
 import Link from "next/link";
 
-
 export default function ResetPasswordPage() {
   return (
     <div className="w-full max-w-md space-y-6">
