@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   FiBarChart2,
-  FiBox,
   FiHome,
   FiMenu,
   FiPackage,
@@ -15,12 +14,14 @@ import {
 
 const navigation = [
   { label: "Overview", icon: FiHome, href: "" },
-  { label: "Sales", icon: FiShoppingCart },
+  { label: "Sales", icon: FiShoppingCart, href: "/sales" },
   { label: "Products", icon: FiPackage, href: "/products" },
-  { label: "Inventory", icon: FiBox },
+  { label: "Customers", icon: FiUsers, href: "/customers" },
+  { label: "Expenses", icon: FiBarChart2, href: "/expenses" },
   { label: "Reports", icon: FiBarChart2 },
-  { label: "Team", icon: FiUsers },
-  { label: "Settings", icon: FiSettings },
+  { label: "Staff", icon: FiUsers, href: "/staff" },
+  { label: "Plan", icon: FiSettings, href: "/plan" },
+  { label: "Settings", icon: FiSettings, href: "/settings" },
 ];
 
 function StoreMark({ store }) {

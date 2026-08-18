@@ -40,3 +40,106 @@ export const products = pgTable(
     unique("products_store_sku_unique").on(table.storeId, table.sku),
   ],
 );
+
+export const customers = pgTable(
+  "customers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    storeId: uuid("store_id")
+      .notNull()
+      .references(() => stores.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    email: varchar("email", { length: 255 }),
+    phone: varchar("phone", { length: 40 }),
+    company: varchar("company", { length: 200 }),
+    notes: text("notes"),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("customers_store_id_idx").on(table.storeId),
+    unique("customers_store_email_unique").on(table.storeId, table.email),
+  ],
+);
+
+export const sales = pgTable(
+  "sales",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    storeId: uuid("store_id")
+      .notNull()
+      .references(() => stores.id, { onDelete: "cascade" }),
+    customerId: uuid("customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+    invoiceNumber: varchar("invoice_number", { length: 50 }).notNull(),
+    saleDate: timestamp("sale_date", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    dueDate: timestamp("due_date", { withTimezone: true }),
+    status: varchar("status", { length: 30 }).notNull().default("paid"),
+    itemDescription: text("item_description").notNull(),
+    quantity: numeric("quantity", { precision: 12, scale: 2 })
+      .notNull()
+      .default("1"),
+    unitPrice: numeric("unit_price", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    subtotal: numeric("subtotal", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    tax: numeric("tax", { precision: 12, scale: 2 }).notNull().default("0"),
+    discount: numeric("discount", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    total: numeric("total", { precision: 12, scale: 2 }).notNull().default("0"),
+    notes: text("notes"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("sales_store_id_idx").on(table.storeId),
+    unique("sales_store_invoice_number_unique").on(
+      table.storeId,
+      table.invoiceNumber,
+    ),
+  ],
+);
+
+export const expenses = pgTable(
+  "expenses",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    storeId: uuid("store_id")
+      .notNull()
+      .references(() => stores.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    category: varchar("category", { length: 80 }),
+    vendor: varchar("vendor", { length: 200 }),
+    amount: numeric("amount", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    expenseDate: timestamp("expense_date", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    paymentMethod: varchar("payment_method", { length: 50 }),
+    status: varchar("status", { length: 30 }).notNull().default("paid"),
+    notes: text("notes"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [index("expenses_store_id_idx").on(table.storeId)],
+);

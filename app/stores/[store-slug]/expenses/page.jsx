@@ -2,23 +2,24 @@ import { and, desc, eq, ilike, or } from "drizzle-orm";
 import Link from "next/link";
 import { FiEdit2, FiPlus, FiSearch } from "react-icons/fi";
 import DeleteButton from "@/components/crud/DeleteButton";
-import {deleteProduct} from "@/server/products";
+import { deleteExpense } from "@/server/expenses";
 import { db } from "@/db";
-import { products } from "@/db/schema/store";
+import { expenses } from "@/db/schema/store";
 import { stores } from "@/db/schema/stores";
 
-export const metadata = { title: "Products | Hishab Khata" };
+export const metadata = { title: "Expenses | Hishab Khata" };
 
-function formatPrice(value, currencyCode) {
+function formatMoney(value, currencyCode) {
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: currencyCode || "USD",
-  }).format(Number(value));
+  }).format(Number(value || 0));
 }
 
-export default async function ProductsPage({ params, searchParams }) {
+export default async function ExpensesPage({ params, searchParams }) {
   const { "store-slug": slug } = await params;
   const { q = "", error = "" } = await searchParams;
+
   const [store] = await db
     .select({ id: stores.id, currencyCode: stores.currencyCode })
     .from(stores)
@@ -28,22 +29,22 @@ export default async function ProductsPage({ params, searchParams }) {
   const search = typeof q === "string" ? q.trim() : "";
   const filter = search
     ? and(
-        eq(products.storeId, store.id),
+        eq(expenses.storeId, store.id),
         or(
-          ilike(products.name, `%${search}%`),
-          ilike(products.sku, `%${search}%`),
-          ilike(products.barcode, `%${search}%`),
+          ilike(expenses.title, `%${search}%`),
+          ilike(expenses.category, `%${search}%`),
+          ilike(expenses.vendor, `%${search}%`),
         ),
       )
-    : eq(products.storeId, store.id);
+    : eq(expenses.storeId, store.id);
 
-  const productList = await db
+  const expenseList = await db
     .select()
-    .from(products)
+    .from(expenses)
     .where(filter)
-    .orderBy(desc(products.createdAt));
+    .orderBy(desc(expenses.expenseDate));
 
-  const productsUrl = `/stores/${slug}/products`;
+  const expensesUrl = `/stores/${slug}/expenses`;
 
   return (
     <div className="space-y-6">
@@ -54,17 +55,17 @@ export default async function ProductsPage({ params, searchParams }) {
               <li>
                 <Link href={`/stores/${slug}`}>Overview</Link>
               </li>
-              <li>Products</li>
+              <li>Expenses</li>
             </ul>
           </div>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">Products</h1>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight">Expenses</h1>
           <p className="mt-2 text-base-content/60">
-            Manage the products your store sells.
+            Track operating costs and vendor payments.
           </p>
         </div>
-        <Link href={`${productsUrl}/new`} className="btn btn-primary">
+        <Link href={`${expensesUrl}/new`} className="btn btn-primary">
           <FiPlus size={18} aria-hidden="true" />
-          New product
+          New expense
         </Link>
       </div>
 
@@ -74,13 +75,13 @@ export default async function ProductsPage({ params, searchParams }) {
         </div>
       )}
 
-      <form action={productsUrl} className="flex gap-2">
+      <form action={expensesUrl} className="flex gap-2">
         <label className="input w-full sm:max-w-md">
           <FiSearch size={18} aria-hidden="true" />
           <input
             name="q"
             defaultValue={search}
-            placeholder="Search name, SKU, or barcode"
+            placeholder="Search title, category, or vendor"
           />
         </label>
         <button type="submit" className="btn">
@@ -89,22 +90,22 @@ export default async function ProductsPage({ params, searchParams }) {
       </form>
 
       <section className="card border border-base-300 bg-base-100 shadow-sm">
-        {productList.length === 0 ? (
+        {expenseList.length === 0 ? (
           <div className="card-body items-center py-16 text-center">
             <h2 className="card-title">
-              {search ? "No matching products" : "No products yet"}
+              {search ? "No matching expenses" : "No expenses yet"}
             </h2>
             <p className="max-w-md text-sm text-base-content/60">
               {search
                 ? "Try another search term."
-                : "Create your first product to begin building your catalogue."}
+                : "Create your first expense to track spending."}
             </p>
             {!search && (
               <Link
-                href={`${productsUrl}/new`}
+                href={`${expensesUrl}/new`}
                 className="btn btn-primary mt-3"
               >
-                Create product
+                Create expense
               </Link>
             )}
           </div>
@@ -113,9 +114,9 @@ export default async function ProductsPage({ params, searchParams }) {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>SKU</th>
-                  <th>Sale price</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Amount</th>
                   <th>Status</th>
                   <th>
                     <span className="sr-only">Actions</span>
@@ -123,41 +124,39 @@ export default async function ProductsPage({ params, searchParams }) {
                 </tr>
               </thead>
               <tbody>
-                {productList.map((product) => (
-                  <tr key={product.id}>
+                {expenseList.map((expense) => (
+                  <tr key={expense.id}>
                     <td>
-                      <div className="font-medium">{product.name}</div>
+                      <div className="font-medium">{expense.title}</div>
                       <div className="text-sm text-base-content/60">
-                        {product.barcode || product.unit}
+                        {expense.vendor || "No vendor"}
                       </div>
                     </td>
-                    <td className="font-mono text-sm">{product.sku || "—"}</td>
-                    <td>
-                      {formatPrice(product.salePrice, store.currencyCode)}
-                    </td>
+                    <td>{expense.category || "—"}</td>
+                    <td>{formatMoney(expense.amount, store.currencyCode)}</td>
                     <td>
                       <span
-                        className={`badge ${product.isActive ? "badge-success badge-soft" : "badge-ghost"}`}
+                        className={`badge ${expense.status === "paid" ? "badge-success badge-soft" : "badge-ghost"}`}
                       >
-                        {product.isActive ? "Active" : "Inactive"}
+                        {expense.status}
                       </span>
                     </td>
                     <td>
                       <div className="flex justify-end gap-1">
                         <Link
-                          href={`${productsUrl}/${product.id}/edit`}
+                          href={`${expensesUrl}/${expense.id}/edit`}
                           className="btn btn-ghost btn-sm btn-square"
-                          aria-label={`Edit ${product.name}`}
+                          aria-label={`Edit ${expense.title}`}
                         >
                           <FiEdit2 aria-hidden="true" />
                         </Link>
                         <DeleteButton
-                          action={deleteProduct}
-                          id={product.id}
-                          fieldName="productId"
+                          action={deleteExpense}
+                          id={expense.id}
+                          fieldName="expenseId"
                           storeSlug={slug}
-                          itemName={product.name}
-                          itemType="product"
+                          itemName={expense.title}
+                          itemType="expense"
                         />
                       </div>
                     </td>

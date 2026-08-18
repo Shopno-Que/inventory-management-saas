@@ -43,6 +43,20 @@
       "when": 1786946555630,
       "tag": "0005_talented_typhoid_mary",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786949996864,
+      "tag": "0006_clever_johnny_blaze",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1786951740371,
+      "tag": "0007_young_wallop",
+      "breakpoints": true
     }
   ]
 }

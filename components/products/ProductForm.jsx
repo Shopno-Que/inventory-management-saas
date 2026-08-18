@@ -9,7 +9,7 @@ import {
   FaTag,
 } from "react-icons/fa";
 import { deleteProduct } from "@/server/products";
-import DeleteProductButton from "@/components/products/DeleteProductButton";
+import DeleteButton from "@/components/crud/DeleteButton";
 
 export default function ProductForm({ action, error, product, storeSlug }) {
 
@@ -268,10 +268,13 @@ return (
       {/* Actions */}
       <div className="mt-2 flex flex-col-reverse gap-2 border-t border-base-300 pt-5 sm:flex-row sm:items-center sm:justify-between">
         {isEdit && (
-          <DeleteProductButton
-            product={product}
+          <DeleteButton
+            action={deleteProduct}
+            id={product.id}
+            fieldName="productId"
             storeSlug={storeSlug}
-            variant="text"
+            itemName={product.name}
+            itemType="product"
           />
         )}
 
