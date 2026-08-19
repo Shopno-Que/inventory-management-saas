@@ -2,7 +2,7 @@ import {pgTable, uuid, varchar, text, timestamp, boolean, unique, primaryKey} fr
 import { supabaseAuthUser } from "../ref-schema.js";
 
 export const stores = pgTable("stores", {
-    id: uuid("id").primaryKey().defaultRandom().defaultRandom(),
+    id: uuid("id").primaryKey().defaultRandom(),
 
     name: varchar("name").notNull(),
 

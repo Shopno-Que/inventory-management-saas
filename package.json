@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "biome check",
     "db:seed": "node ./db/seed/index.js",
@@ -36,5 +36,6 @@
     "drizzle-kit": "^0.31.10",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "browserslist": "> 1%"
 }
