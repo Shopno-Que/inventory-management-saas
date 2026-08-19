@@ -74,6 +74,74 @@ export const storeMembers = pgTable(
     ],
 );
 
+export const storeTransferRequests = pgTable(
+    "store_transfer_requests",
+    {
+        id: uuid("id")
+            .primaryKey()
+            .defaultRandom(),
+
+        storeId: uuid("store_id")
+            .notNull()
+            .references(() => stores.id, {
+                onDelete: "cascade",
+            }),
+
+        fromUserId: uuid("from_user_id")
+            .notNull()
+            .references(() => supabaseAuthUser.id, {
+                onDelete: "cascade",
+            }),
+
+        toUserId: uuid("to_user_id")
+            .references(() => supabaseAuthUser.id, {
+                onDelete: "cascade",
+            }),
+
+        targetEmail: varchar("target_email", {
+            length: 320,
+        }).notNull(),
+
+        status: varchar("status", {
+            length: 40,
+        })
+            .notNull()
+            .default("pending"),
+
+        token: varchar("token", {
+            length: 128,
+        })
+            .notNull()
+            .unique(),
+
+        expiresAt: timestamp("expires_at", {
+            withTimezone: true,
+        }).notNull(),
+
+        acceptedAt: timestamp("accepted_at", {
+            withTimezone: true,
+        }),
+
+        confirmedAt: timestamp("confirmed_at", {
+            withTimezone: true,
+        }),
+
+        completedAt: timestamp("completed_at", {
+            withTimezone: true,
+        }),
+
+        createdAt: timestamp("created_at", {
+            withTimezone: true,
+        })
+            .notNull()
+            .defaultNow(),
+
+        updatedAt: timestamp("updated_at", {
+            withTimezone: true,
+        }),
+    },
+);
+
 export const storeRoles = pgTable(
     "store_roles",
     {

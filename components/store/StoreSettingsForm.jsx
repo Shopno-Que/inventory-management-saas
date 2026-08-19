@@ -7,9 +7,11 @@ import {
     FaMoneyBillWave,
     FaPencilAlt,
     FaStore,
-    FaTimes,
+    FaTimes, FaEnvelope, FaTimes
 } from "react-icons/fa";
-import { updateStoreRegionalSettings, updateStoreName, deleteStore } from "@/server/stores";
+import {
+    updateStoreRegionalSettings, updateStoreName, deleteStore, requestStoreOwnershipTransfer, acceptStoreOwnershipTransfer,
+    declineStoreOwnershipTransfer, } from "@/server/stores";
 
 export function RegionalSettings({ store, storeSlug }) {
     const [editing, setEditing] = useState(false);
@@ -337,22 +339,102 @@ export function StoreNameField({ store, storeSlug }) {
     );
 }
 
-export function TransferStoreOwnershipForm() {
-    return (
-        <div className="mt-4">
-            <div className="alert alert-info">
-                <div>
-                    <h3 className="font-semibold">
-                        Ownership transfer is coming soon
-                    </h3>
+export default function TransferStoreOwnershipForm({
+    store,
+    storeSlug,
+}) {
+    const [state, formAction, pending] = useActionState(
+        requestStoreOwnershipTransfer,
+        {
+            error: "",
+            success: "",
+        },
+    );
 
-                    <p className="mt-1 text-sm text-base-content/70">
-                        You'll be able to securely transfer your store
-                        ownership to another registered account.
+    return (
+        <form action={formAction}>
+            <input
+                type="hidden"
+                name="storeSlug"
+                value={storeSlug}
+            />
+
+            {state.error && (
+                <div
+                    role="alert"
+                    className="alert alert-error mb-5"
+                >
+                    <span>{state.error}</span>
+                </div>
+            )}
+
+            {state.success && (
+                <div
+                    role="status"
+                    className="alert alert-success mb-5"
+                >
+                    <span>{state.success}</span>
+                </div>
+            )}
+
+            <fieldset className="grid gap-5">
+                {/* Target email */}
+                <div className="form-control w-full">
+                    <label
+                        htmlFor="targetEmail"
+                        className="label mb-1"
+                    >
+                        <span className="label-text font-medium">
+                            New owner email{" "}
+                            <span className="text-error">*</span>
+                        </span>
+                    </label>
+
+                    <div className="input validator w-full">
+                        <FaEnvelope
+                            className="text-base-content/50"
+                            aria-hidden="true"
+                        />
+
+                        <input
+                            id="targetEmail"
+                            name="targetEmail"
+                            type="email"
+                            placeholder="e.g. owner@example.com"
+                            required
+                            maxLength={320}
+                            autoComplete="email"
+                            title="Enter the email address of the new owner"
+                        />
+                    </div>
+
+                    <p className="validator-hint hidden">
+                        Enter a valid email address.
+                    </p>
+
+                    <p className="label">
+                        <span className="label-text-alt text-base-content/50">
+                            The person must have a Hishab Khata account
+                            to accept the transfer.
+                        </span>
                     </p>
                 </div>
-            </div>
-        </div>
+
+                {/* Confirmation notice */}
+                <div className="alert alert-warning alert-soft">
+                    <span className="text-sm">
+                        Ownership will not change immediately. The new
+                        owner must accept the transfer, and you must
+                        confirm it afterward.
+                    </span>
+                </div>
+
+                {/* Actions */}
+                <div className="mt-2 flex justify-end border-t border-base-300 pt-5">
+                    <SubmitButton pending={pending} />
+                </div>
+            </fieldset>
+        </form>
     );
 }
 
@@ -483,6 +565,117 @@ function SubmitButton({ pending }) {
             )}
 
             {pending ? "Saving..." : "Save changes"}
+        </button>
+    );
+}
+
+export default function AcceptStoreTransferForm({
+    token,
+}) {
+    const [acceptState, acceptAction] = useActionState(
+        acceptStoreOwnershipTransfer,
+        {
+            error: "",
+            success: "",
+        },
+    );
+
+    const [declineState, declineAction] = useActionState(
+        declineStoreOwnershipTransfer,
+        initialState,
+    );
+
+    const error =
+        acceptState.error || declineState.error;
+
+    const success =
+        acceptState.success || declineState.success;
+
+    return (
+        <div className="space-y-4">
+            {error && (
+                <div
+                    role="alert"
+                    className="alert alert-error"
+                >
+                    <span>{error}</span>
+                </div>
+            )}
+
+            {success && (
+                <div
+                    role="status"
+                    className="alert alert-success"
+                >
+                    <span>{success}</span>
+                </div>
+            )}
+
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <form action={declineAction}>
+                    <input
+                        type="hidden"
+                        name="token"
+                        value={token}
+                    />
+
+                    <DeclineButton />
+                </form>
+
+                <form action={acceptAction}>
+                    <input
+                        type="hidden"
+                        name="token"
+                        value={token}
+                    />
+
+                    <AcceptButton />
+                </form>
+            </div>
+        </div>
+    );
+}
+
+function AcceptButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={pending}
+        >
+            {pending ? (
+                <span className="loading loading-bars loading-sm" />
+            ) : (
+                <FaCheck aria-hidden="true" />
+            )}
+
+            {pending
+                ? "Accepting..."
+                : "Accept transfer"}
+        </button>
+    );
+}
+
+function DeclineButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <button
+            type="submit"
+            className="btn btn-ghost text-error"
+            disabled={pending}
+        >
+            {pending ? (
+                <span className="loading loading-bars loading-sm" />
+            ) : (
+                <FaTimes aria-hidden="true" />
+            )}
+
+            {pending
+                ? "Declining..."
+                : "Decline"}
         </button>
     );
 }

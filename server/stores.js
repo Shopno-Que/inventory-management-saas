@@ -2,11 +2,11 @@
 
 import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-
 import { db } from "@/db";
-import { stores } from "@/db/schema/stores";
+import { stores, storeTransferRequests } from "@/db/schema/stores";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import crypto from "crypto";
 
 export async function updateStoreName(prevState, formData) {
     const storeSlug = formData.get("storeSlug");
@@ -233,4 +233,148 @@ export async function deleteStore(prevState, formData) {
         .where(eq(stores.id, store.id));
 
     redirect("/user/profile/stores");
+}
+
+export async function requestStoreOwnershipTransfer(
+    prevState,
+    formData,
+) {
+    const storeSlug = formData.get("storeSlug");
+    const targetEmail = String(
+        formData.get("targetEmail") || "",
+    )
+        .trim()
+        .toLowerCase();
+
+    if (!storeSlug) {
+        return {
+            error: "Store slug is missing.",
+            success: "",
+        };
+    }
+
+    if (!targetEmail) {
+        return {
+            error: "Target email is required.",
+            success: "",
+        };
+    }
+
+    if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            targetEmail,
+        )
+    ) {
+        return {
+            error: "Please enter a valid email address.",
+            success: "",
+        };
+    }
+
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        redirect("/user/login");
+    }
+
+    const [store] = await db
+        .select({
+            id: stores.id,
+            name: stores.name,
+        })
+        .from(stores)
+        .where(
+            and(
+                eq(stores.slug, storeSlug),
+                eq(stores.ownerId, user.id),
+            ),
+        )
+        .limit(1);
+
+    if (!store) {
+        return {
+            error: "Store not found.",
+            success: "",
+        };
+    }
+
+    if (
+        user.email?.toLowerCase() === targetEmail
+    ) {
+        return {
+            error:
+                "You cannot transfer ownership to yourself.",
+            success: "",
+        };
+    }
+
+    const [existingRequest] = await db
+        .select({
+            id: storeTransferRequests.id,
+        })
+        .from(storeTransferRequests)
+        .where(
+            and(
+                eq(
+                    storeTransferRequests.storeId,
+                    store.id,
+                ),
+                eq(
+                    storeTransferRequests.targetEmail,
+                    targetEmail,
+                ),
+                eq(
+                    storeTransferRequests.status,
+                    "pending",
+                ),
+            ),
+        )
+        .limit(1);
+
+    if (existingRequest) {
+        return {
+            error:
+                "A pending ownership transfer already exists for this email.",
+            success: "",
+        };
+    }
+
+    const token = crypto.randomBytes(48).toString("hex");
+
+    const expiresAt = new Date(
+        Date.now() + 48 * 60 * 60 * 1000,
+    );
+
+    await db.insert(storeTransferRequests).values({
+        storeId: store.id,
+        fromUserId: user.id,
+        targetEmail,
+        status: "pending",
+        token,
+        expiresAt,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    });
+
+    revalidatePath(
+        `/stores/${storeSlug}/settings`,
+    );
+
+    return {
+        error: "",
+        success:
+            "Ownership transfer request created successfully.",
+    };
+}
+
+export async function acceptStoreOwnershipTransfer() {
+    
+}
+
+export async function declineStoreOwnershipTransfer() {
+
 }
