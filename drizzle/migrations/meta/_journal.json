@@ -57,6 +57,13 @@
       "when": 1786951740371,
       "tag": "0007_young_wallop",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1787484220990,
+      "tag": "0008_brief_jubilee",
+      "breakpoints": true
     }
   ]
 }
