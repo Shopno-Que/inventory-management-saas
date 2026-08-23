@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import SaleForm from "@/components/sales/SaleForm";
 import { db } from "@/db";
 import { customers, sales } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { updateSale } from "@/server/sales";
 
 export const metadata = { title: "Edit sale | Hishab Khata" };

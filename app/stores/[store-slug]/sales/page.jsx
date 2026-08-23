@@ -7,7 +7,7 @@ import { deleteSale } from "@/server/sales";
 import InvoicePdfButton from "@/components/sales/InvoicePdfButton";
 import { db } from "@/db";
 import { customers, sales } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 
 export const metadata = { title: "Sales | Hishab Khata" };
 
@@ -31,13 +31,13 @@ export default async function SalesPage({ params, searchParams }) {
   const search = typeof q === "string" ? q.trim() : "";
   const filter = search
     ? and(
-        eq(sales.storeId, store.id),
-        or(
-          ilike(sales.invoiceNumber, `%${search}%`),
-          ilike(sales.itemDescription, `%${search}%`),
-          ilike(sales.status, `%${search}%`),
-        ),
-      )
+      eq(sales.storeId, store.id),
+      or(
+        ilike(sales.invoiceNumber, `%${search}%`),
+        ilike(sales.itemDescription, `%${search}%`),
+        ilike(sales.status, `%${search}%`),
+      ),
+    )
     : eq(sales.storeId, store.id);
 
   const saleList = await db

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { createClient } from "@/lib/supabase/server";
 
 import { RegionalSettings, StoreNameField, TransferStoreOwnershipForm, DeleteStoreForm } from "@/components/store/StoreSettingsForm";
@@ -62,37 +62,37 @@ export default async function StoreSettingsPage({ params }) {
       </div>
       {/* Store Information */}
       <section className="card border border-base-300 bg-base-100 shadow-sm">
-          <div className="card-body">
-              <h2 className="card-title">
-                  Store information
-              </h2>
+        <div className="card-body">
+          <h2 className="card-title">
+            Store information
+          </h2>
 
-              <div className="grid gap-5">
-                  {/* Store name */}
-                  <StoreNameField
-                      store={store}
-                      storeSlug={slug}
-                  />
+          <div className="grid gap-5">
+            {/* Store name */}
+            <StoreNameField
+              store={store}
+              storeSlug={slug}
+            />
 
-                  {/* Slug */}
-                  <div>
-                      <p className="mb-1 text-sm text-base-content/55">
-                          Store slug
-                      </p>
+            {/* Slug */}
+            <div>
+              <p className="mb-1 text-sm text-base-content/55">
+                Store slug
+              </p>
 
-                      <div className="flex items-center gap-3">
-                          <p className="font-medium break-all">
-                              {store.slug}
-                          </p>
-                      </div>
-
-                      <p className="mt-1 text-sm text-base-content/50">
-                          This is used in your store URL and
-                          cannot be changed here.
-                      </p>
-                  </div>
+              <div className="flex items-center gap-3">
+                <p className="font-medium break-all">
+                  {store.slug}
+                </p>
               </div>
+
+              <p className="mt-1 text-sm text-base-content/50">
+                This is used in your store URL and
+                cannot be changed here.
+              </p>
+            </div>
           </div>
+        </div>
       </section>
 
       {/* Regional Settings */}
@@ -112,7 +112,7 @@ export default async function StoreSettingsPage({ params }) {
           <div className="divider my-0" />
 
           <RegionalSettings
-              store={store}
+            store={store}
             storeSlug={slug}
           />
         </div>

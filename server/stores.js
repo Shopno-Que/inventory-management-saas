@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
 import { db } from "@/db";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 

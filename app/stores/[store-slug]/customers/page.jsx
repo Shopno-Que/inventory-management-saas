@@ -5,7 +5,7 @@ import DeleteButton from "@/components/crud/DeleteButton";
 import { deleteCustomer } from "@/server/customers";
 import { db } from "@/db";
 import { customers } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 
 export const metadata = { title: "Customers | Hishab Khata" };
 
@@ -22,14 +22,14 @@ export default async function CustomersPage({ params, searchParams }) {
   const search = typeof q === "string" ? q.trim() : "";
   const filter = search
     ? and(
-        eq(customers.storeId, store.id),
-        or(
-          ilike(customers.name, `%${search}%`),
-          ilike(customers.email, `%${search}%`),
-          ilike(customers.phone, `%${search}%`),
-          ilike(customers.company, `%${search}%`),
-        ),
-      )
+      eq(customers.storeId, store.id),
+      or(
+        ilike(customers.name, `%${search}%`),
+        ilike(customers.email, `%${search}%`),
+        ilike(customers.phone, `%${search}%`),
+        ilike(customers.company, `%${search}%`),
+      ),
+    )
     : eq(customers.storeId, store.id);
 
   const customerList = await db

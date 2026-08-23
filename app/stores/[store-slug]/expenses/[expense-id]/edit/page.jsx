@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import ExpenseForm from "@/components/expenses/ExpenseForm";
 import { db } from "@/db";
 import { expenses } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { updateExpense } from "@/server/expenses";
 
 export const metadata = { title: "Edit expense | Hishab Khata" };

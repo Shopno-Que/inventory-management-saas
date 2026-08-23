@@ -3,7 +3,7 @@ import Link from "next/link";
 import SaleForm from "@/components/sales/SaleForm";
 import { db } from "@/db";
 import { customers } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { createSale } from "@/server/sales";
 
 export const metadata = { title: "New sale | Hishab Khata" };

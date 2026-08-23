@@ -4,7 +4,7 @@ import { FiPlus } from "react-icons/fi";
 import { FaStore } from "react-icons/fa";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/db";
-import { stores, storeMembers } from "@/db/schema/stores";
+import { stores, storeMembers } from "@/db/schema/store";
 import { and, eq, or } from "drizzle-orm";
 
 export const metadata = {
@@ -70,7 +70,7 @@ export default async function Page() {
       {accessibleStores.length === 0 ? (
         <div className="card border border-base-300 bg-base-100 shadow-sm">
           <div className="card-body items-center py-12 text-center">
-            <FaStore size={40} className="text-base-content/40"  />
+            <FaStore size={40} className="text-base-content/40" />
 
             <h2 className="card-title mt-2">কোনো স্টোর নেই</h2>
 

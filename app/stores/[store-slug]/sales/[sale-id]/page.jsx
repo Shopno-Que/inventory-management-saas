@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/db";
 import { customers, sales } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import InvoicePdfButton from "@/components/sales/InvoicePdfButton";
 
 export const metadata = { title: "Invoice | Hishab Khata" };
@@ -37,10 +37,10 @@ export default async function SaleDetailsPage({ params }) {
 
   const customer = sale.customerId
     ? await db
-        .select()
-        .from(customers)
-        .where(eq(customers.id, sale.customerId))
-        .limit(1)
+      .select()
+      .from(customers)
+      .where(eq(customers.id, sale.customerId))
+      .limit(1)
     : [];
   const customerName = customer[0]?.name || "Walk-in customer";
 
@@ -69,10 +69,10 @@ export default async function SaleDetailsPage({ params }) {
             Edit
           </Link>
           <InvoicePdfButton
-              store={store}
-              sale={sale}
-              customerName={customerName}
-              slug={slug}
+            store={store}
+            sale={sale}
+            customerName={customerName}
+            slug={slug}
           />
         </div>
       </div>

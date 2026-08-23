@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import CustomerForm from "@/components/customers/CustomerForm";
 import { db } from "@/db";
 import { customers } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { updateCustomer } from "@/server/customers";
 
 export const metadata = { title: "Edit customer | Hishab Khata" };

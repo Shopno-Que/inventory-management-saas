@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import Link from "next/link";
 import ExpenseForm from "@/components/expenses/ExpenseForm";
 import { db } from "@/db";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { createExpense } from "@/server/expenses";
 
 export const metadata = { title: "New expense | Hishab Khata" };

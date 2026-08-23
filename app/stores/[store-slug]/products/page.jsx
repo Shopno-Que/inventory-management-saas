@@ -2,10 +2,10 @@ import { and, desc, eq, ilike, or } from "drizzle-orm";
 import Link from "next/link";
 import { FiEdit2, FiPlus, FiSearch } from "react-icons/fi";
 import DeleteButton from "@/components/crud/DeleteButton";
-import {deleteProduct} from "@/server/products";
+import { deleteProduct } from "@/server/products";
 import { db } from "@/db";
 import { products } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 
 export const metadata = { title: "Products | Hishab Khata" };
 
@@ -28,13 +28,13 @@ export default async function ProductsPage({ params, searchParams }) {
   const search = typeof q === "string" ? q.trim() : "";
   const filter = search
     ? and(
-        eq(products.storeId, store.id),
-        or(
-          ilike(products.name, `%${search}%`),
-          ilike(products.sku, `%${search}%`),
-          ilike(products.barcode, `%${search}%`),
-        ),
-      )
+      eq(products.storeId, store.id),
+      or(
+        ilike(products.name, `%${search}%`),
+        ilike(products.sku, `%${search}%`),
+        ilike(products.barcode, `%${search}%`),
+      ),
+    )
     : eq(products.storeId, store.id);
 
   const productList = await db

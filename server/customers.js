@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { customers } from "@/db/schema/store";
-import { storeMembers, stores } from "@/db/schema/stores";
+import { storeMembers, stores } from "@/db/schema/store";
 import { createClient } from "@/lib/supabase/server";
 
 function textValue(formData, name, maxLength) {

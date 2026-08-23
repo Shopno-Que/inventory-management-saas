@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import ProductForm from "@/components/products/ProductForm";
 import { db } from "@/db";
 import { products } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 import { updateProduct } from "@/server/products";
 
 export const metadata = { title: "Edit product | Hishab Khata" };

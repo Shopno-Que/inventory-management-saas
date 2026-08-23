@@ -2,7 +2,7 @@ import { and, eq, or } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import StoreDashboardShell from "@/components/store/StoreDashboardShell";
 import { db } from "@/db";
-import { storeMembers, stores } from "@/db/schema/stores";
+import { storeMembers, stores } from "@/db/schema/store";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";

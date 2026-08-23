@@ -5,7 +5,7 @@ import DeleteButton from "@/components/crud/DeleteButton";
 import { deleteExpense } from "@/server/expenses";
 import { db } from "@/db";
 import { expenses } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 
 export const metadata = { title: "Expenses | Hishab Khata" };
 
@@ -29,13 +29,13 @@ export default async function ExpensesPage({ params, searchParams }) {
   const search = typeof q === "string" ? q.trim() : "";
   const filter = search
     ? and(
-        eq(expenses.storeId, store.id),
-        or(
-          ilike(expenses.title, `%${search}%`),
-          ilike(expenses.category, `%${search}%`),
-          ilike(expenses.vendor, `%${search}%`),
-        ),
-      )
+      eq(expenses.storeId, store.id),
+      or(
+        ilike(expenses.title, `%${search}%`),
+        ilike(expenses.category, `%${search}%`),
+        ilike(expenses.vendor, `%${search}%`),
+      ),
+    )
     : eq(expenses.storeId, store.id);
 
   const expenseList = await db

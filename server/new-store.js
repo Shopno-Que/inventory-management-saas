@@ -7,8 +7,7 @@ import { eq } from "drizzle-orm";
 import {
     stores,
     storeMembers,
-} from "@/db/schema/stores";
-import { createDefaultStoreRoles } from "@/db/store-default-roles";
+} from "@/db/schema/store";
 import { initialState } from "@/components/store/StoreOnboarding";
 
 export async function createStore(prevState, formData) {
@@ -323,15 +322,6 @@ export async function createStore(prevState, formData) {
                         "Store member was not created.",
                     );
                 }
-
-                /*
-                 * Create default store roles
-                 * and their permissions.
-                 */
-                await createDefaultStoreRoles(
-                    store.id,
-                    tx,
-                );
 
                 return {
                     storeId: store.id,

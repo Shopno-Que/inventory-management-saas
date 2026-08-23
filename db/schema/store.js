@@ -1,15 +1,78 @@
-import {
-  boolean,
-  index,
-  numeric,
-  pgTable,
-  text,
-  timestamp,
-  unique,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
-import { stores } from "./stores";
+import { boolean,index,numeric,pgTable,text,timestamp,unique,uuid,varchar } from "drizzle-orm/pg-core";
+import { supabaseAuthUser } from "../ref-schema";
+
+export const stores = pgTable("stores", {
+  id: uuid("id").primaryKey().defaultRandom(),
+
+  name: varchar("name").notNull(),
+
+  ownerId: uuid("owner_id")
+    .references(() => supabaseAuthUser.id, {
+      onDelete: "cascade",
+    }),
+
+  slug: varchar("slug").notNull().unique(),
+
+  logoUrl: text("logo_url"),
+
+  currencyCode: varchar("currency_code"),
+
+  timezone: varchar("timezone"),
+
+  countryCode: varchar("country_code"),
+
+  isActive: boolean("is_active")
+    .notNull()
+    .default(false),
+
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+  }),
+
+  updatedAt: timestamp("updated_at", {
+    withTimezone: true,
+  }),
+});
+
+export const storeMembers = pgTable(
+  "store_members",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    storeId: uuid("store_id")
+      .notNull()
+      .references(() => stores.id, {
+        onDelete: "cascade",
+      }),
+
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => supabaseAuthUser.id, {
+        onDelete: "cascade",
+      }),
+
+    status: varchar("status").notNull(),
+
+    invitedBy: uuid("invited_by")
+      .references(() => supabaseAuthUser.id, {
+        onDelete: "set null",
+      }),
+
+    joinedAt: timestamp("joined_at", {
+      withTimezone: true,
+    }),
+
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+    }),
+  },
+  (table) => [
+    unique("store_members_store_user_unique").on(
+      table.storeId,
+      table.userId,
+    ),
+  ],
+);
 
 export const products = pgTable(
   "products",

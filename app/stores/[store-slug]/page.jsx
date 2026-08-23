@@ -9,7 +9,7 @@ import {
 } from "react-icons/fi";
 import { db } from "@/db";
 import { customers, expenses, products, sales } from "@/db/schema/store";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/store";
 
 export const metadata = {
   title: "Store dashboard | Hishab Khata",
