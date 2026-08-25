@@ -1,23 +1,22 @@
 import { and, eq, or } from "drizzle-orm";
-import { redirect } from "next/navigation";
-import StoreDashboardShell from "@/components/store/StoreDashboardShell";
 import { db } from "@/db";
 import { storeMembers, stores } from "@/db/schema/store";
+import Image from "next/image";
+import DashboardHeader from "@/components/dashboard/dashbaord-header";
+import DashboardSidebar from "@/components/dashboard/dashbaord-sidebar";
+import { storeNavigation } from "./navigation";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { FaStore } from "react-icons/fa6";
 
-export const dynamic = "force-dynamic";
-
-export default async function StoreLayout({ children, params }) {
-  const { "store-slug": slug } = await params;
+export default async function ProfileLayout({ children, params }) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/user/login");
-  }
-
+  if (!user) redirect("/user/login");
+  const { "store-slug": slug } = await params;
   const [store] = await db
     .select({
       id: stores.id,
@@ -51,11 +50,28 @@ export default async function StoreLayout({ children, params }) {
   }
 
   return (
-    <StoreDashboardShell
-      store={store}
-      user={{ email: user.email || "Account" }}
-    >
-      {children}
-    </StoreDashboardShell>
+    <>
+      <DashboardSidebar
+        baseUrl={`/stores/${store.slug}`}
+        brand={{
+          name: store.name ? store.name : store.slug,
+          handle: `@${store.slug}`,
+          mark: store.logoUrl ? <Image src={store.logoUrl} alt={`${store.name} logo`} width={40} height={40} className="h-10 w-10 rounded-full object-cover"/> : <FaStore size={24} className="" />
+        }}
+        navigation={storeNavigation}
+      />
+
+      <div className="min-h-screen lg:pl-72">
+        <DashboardHeader
+          title={store.name ? store.name : store.slug}
+          subtitle={"@" +store.slug}
+          user={user}
+        />
+
+        <main className="mx-auto w-full max-w-7xl p-4 sm:p-6">
+          {children}
+        </main>
+      </div>
+    </>
   );
 }

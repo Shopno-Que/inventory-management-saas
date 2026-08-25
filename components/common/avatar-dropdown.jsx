@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaUser, FaStore, FaGear, FaRightFromBracket } from "react-icons/fa6";
+import { FaUser, FaStore } from "react-icons/fa6";
 
 import LogoutButton from "@/components/auth/logout-btn";
 
